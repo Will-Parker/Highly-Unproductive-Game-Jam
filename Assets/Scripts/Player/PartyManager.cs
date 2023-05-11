@@ -33,7 +33,7 @@ public class PartyManager : MonoBehaviour
         
     }
 
-    public void rotateAllies()
+    public void RotatePartyPositions()
     {
         Ally temp = allies[0];
         allies[0] = allies[1];

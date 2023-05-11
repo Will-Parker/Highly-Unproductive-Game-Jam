@@ -5,19 +5,22 @@ using UnityEngine.InputSystem;
 
 public class CharacterControl : MonoBehaviour
 {
+    // Reference to PartyManager component
+    private PartyManager pm;
     // Unity New Input System Controls
     private Controls controls;
-    // point player moves toward
-    [SerializeField] private Transform movePoint;
+    // points each ally moves toward
+    private Vector3[] movePoints = new Vector3[4]; // hardcoded to 4
     // impassable layer
     [SerializeField] private LayerMask impassableLayer;
-
+    // how quickly it moves to next tile
     [SerializeField] [Range(0, 20)] private float moveSpeed;
 
     private void Awake()
     {
-        if (movePoint == null)
-            Debug.Log("Move Point not assigned");
+        pm = GetComponent<PartyManager>();
+        if (pm == null)
+            Debug.Log("PartyManager component not added");
 
         // Enable Gameplay controls
         controls = new Controls();
@@ -27,36 +30,44 @@ public class CharacterControl : MonoBehaviour
 
     private void Start()
     {
-        movePoint.parent = null;
+        for (int i = 0; i < 4; i++)
+            movePoints[i] = pm.allies[i].transform.position;
     }
 
     private void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+        for (int i = 0; i < 4; i++)
+            pm.allies[i].transform.position = Vector3.MoveTowards(pm.allies[i].transform.position, movePoints[i], moveSpeed * Time.deltaTime);
     }
 
     private void Move_performed(InputAction.CallbackContext context)
     {
         Vector2 inputVector = context.ReadValue<Vector2>();
-        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
+        if (Vector3.Distance(pm.allies[0].transform.position, movePoints[0]) <= 0.05f)
         {
-            transform.position = movePoint.position;
+            for (int i = 0; i < 4; i++)
+                pm.allies[i].transform.position = movePoints[i];
+
             if (Mathf.Abs(inputVector.x) == 1f)
             {
                 Vector2 moveDir = new (inputVector.x, 0f);
-                RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(transform.position), moveDir, 1f, impassableLayer);
+                RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
                 if (!ray)
                 {
-                    movePoint.position += Vec2ToVec3(moveDir);
+                    movePoints[0] += Vec2ToVec3(moveDir);
+                    for (int i = 1; i < 4; i++)
+                        movePoints[i] = pm.allies[i - 1].transform.position;
                 }
             }
             else if (Mathf.Abs(inputVector.y) == 1f)
             {
                 Vector2 moveDir = new (0f, inputVector.y);
-                RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(transform.position), moveDir, 1f, impassableLayer);
+                RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
                 if (!ray)
                 {
-                    movePoint.position += Vec2ToVec3(moveDir);
+                    movePoints[0] += Vec2ToVec3(moveDir);
+                    for (int i = 1; i < 4; i++)
+                        movePoints[i] = pm.allies[i - 1].transform.position;
                 }
             }
         }

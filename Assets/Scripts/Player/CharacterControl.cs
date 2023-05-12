@@ -78,7 +78,9 @@ public class CharacterControl : MonoBehaviour
             {
                 Vector2 moveDir = new (inputVector.x, 0f);
                 RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
-                if (!ray)
+                if (!ray 
+                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[1].transform.position)) > 0.05f
+                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[2].transform.position)) > 0.05f)
                 {
                     MoveParty(moveDir);
                     StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
@@ -88,7 +90,9 @@ public class CharacterControl : MonoBehaviour
             {
                 Vector2 moveDir = new (0f, inputVector.y);
                 RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
-                if (!ray)
+                if (!ray
+                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[1].transform.position)) > 0.05f
+                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[2].transform.position)) > 0.05f)
                 {
                     MoveParty(moveDir);
                     StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));

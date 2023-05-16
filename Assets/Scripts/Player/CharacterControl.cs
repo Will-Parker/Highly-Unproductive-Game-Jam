@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Helpers;
 
 public class CharacterControl : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class CharacterControl : MonoBehaviour
 
         prevTail = new Vector3(pm.allies[3].transform.position.x - 1, pm.allies[3].transform.position.y, pm.allies[3].transform.position.z);
 
-        //Time.timeScale = 0.1f;
+        Time.timeScale = 0.1f;
     }
 
     private void Update()
@@ -69,10 +70,11 @@ public class CharacterControl : MonoBehaviour
                     for (int i = 0; i < 4; i++)
                     {
                         pm.allies[i].transform.position = movePoints[i];
+                        pm.allies[i].UpdateAnim(false);
                         //UpdateAnim(i, false);
                     }
-                        
                     moveState = MoveState.NotMoving;
+                    FindObjectOfType<GameStateManager>().EndTurn();
                 }
             }
         }
@@ -119,11 +121,13 @@ public class CharacterControl : MonoBehaviour
     private void MoveParty(Vector2 moveDir)
     {
         movePoints[0] += Vec2ToVec3(moveDir);
+        pm.allies[0].UpdateAnim(true, moveDir);
         //UpdateAnim(0, true, moveDir);
         prevTail = pm.allies[3].transform.position;
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
+            pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
             //UpdateAnim(i, true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
         }
         moveState = MoveState.Moving;
@@ -138,24 +142,15 @@ public class CharacterControl : MonoBehaviour
         pm.RotatePartyPositions();
 
         prevTail = pm.allies[3].transform.position;
+        pm.allies[0].UpdateAnim(true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
         //UpdateAnim(0, true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
+            pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
             //UpdateAnim(i, true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
         }
     }
-
-    private Vector2 Vec3ToVec2(Vector3 v)
-    {
-        return new Vector2(v.x, v.y);
-    }
-
-    private Vector3 Vec2ToVec3(Vector2 v)
-    {
-        return new Vector3(v.x, v.y, 0f);
-    }
-
 
     private enum MoveState
     {
@@ -203,20 +198,5 @@ public class CharacterControl : MonoBehaviour
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, newAlpha);
             yield return null;
         }
-    }
-
-    private void UpdateAnim(int index, bool isMoving, Vector2 moveDir)
-    {
-        if (isMoving)
-        {
-            pm.allies[index].anim.SetFloat("Horizontal", moveDir.x);
-            pm.allies[index].anim.SetFloat("Vertical", moveDir.y);
-        }
-        pm.allies[index].anim.SetBool("isMoving", isMoving);
-    }
-
-    private void UpdateAnim(int index, bool isMoving)
-    {
-        pm.allies[index].anim.SetBool("isMoving", isMoving);
     }
 }

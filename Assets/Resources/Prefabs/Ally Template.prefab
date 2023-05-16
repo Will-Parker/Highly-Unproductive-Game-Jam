@@ -99,8 +99,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  anim: {fileID: 4726922826561997921}
-  health: 0
 --- !u!95 &4726922826561997921
 Animator:
   serializedVersion: 5
@@ -109,7 +107,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7556322738131457251}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 3c706873c8eab8c44b429e277c60a9ac, type: 2}
   m_CullingMode: 0

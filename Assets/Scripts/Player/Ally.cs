@@ -2,18 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ally : MonoBehaviour
+public class Ally : Entity
 {
     public AllyType type;
     public Animator anim;
 
-    [HideInInspector] private float maxHealth;
-    [HideInInspector] public float health;
-
     private void Awake()
     {
-        if (anim == null)
-            Debug.Log("Assign Animator in Inspector");
+        anim = GetComponent<Animator>();
     }
 
     // Start is called before the first frame update
@@ -41,6 +37,22 @@ public class Ally : MonoBehaviour
     void Update()
     {
         
+    }
+    public void UpdateAnim(bool isMoving, Vector2 moveDir)
+    {
+        Debug.Log("Update Anim");
+        if (isMoving)
+        {
+            anim.SetFloat("Horizontal", moveDir.x);
+            anim.SetFloat("Vertical", moveDir.y);
+        }
+        anim.SetBool("isMoving", isMoving);
+    }
+
+    public void UpdateAnim(bool isMoving)
+    {
+        Debug.Log("Update Anim");
+        anim.SetBool("isMoving", isMoving);
     }
 }
 

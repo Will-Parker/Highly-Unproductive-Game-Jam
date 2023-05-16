@@ -36,9 +36,14 @@ public class CharacterControl : MonoBehaviour
     private void Start()
     {
         for (int i = 0; i < 4; i++)
+        {
             movePoints[i] = pm.allies[i].transform.position;
+            //pm.allies[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+        }
 
         prevTail = new Vector3(pm.allies[3].transform.position.x - 1, pm.allies[3].transform.position.y, pm.allies[3].transform.position.z);
+
+        //Time.timeScale = 0.1f;
     }
 
     private void Update()
@@ -62,7 +67,11 @@ public class CharacterControl : MonoBehaviour
                 if (Vector3.Distance(pm.allies[0].transform.position, movePoints[0]) <= 0.05f)
                 {
                     for (int i = 0; i < 4; i++)
+                    {
                         pm.allies[i].transform.position = movePoints[i];
+                        //UpdateAnim(i, false);
+                    }
+                        
                     moveState = MoveState.NotMoving;
                 }
             }
@@ -99,8 +108,6 @@ public class CharacterControl : MonoBehaviour
                 }
             }
         }
-        // TODO: animate movement
-        // TODO: move camera (actually probably not handled here)
     }
 
     private void SpecialAction_performed(InputAction.CallbackContext context)
@@ -112,9 +119,13 @@ public class CharacterControl : MonoBehaviour
     private void MoveParty(Vector2 moveDir)
     {
         movePoints[0] += Vec2ToVec3(moveDir);
+        //UpdateAnim(0, true, moveDir);
         prevTail = pm.allies[3].transform.position;
         for (int i = 1; i < 4; i++)
+        {
             movePoints[i] = pm.allies[i - 1].transform.position;
+            //UpdateAnim(i, true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
+        }
         moveState = MoveState.Moving;
     }
 
@@ -127,8 +138,12 @@ public class CharacterControl : MonoBehaviour
         pm.RotatePartyPositions();
 
         prevTail = pm.allies[3].transform.position;
+        //UpdateAnim(0, true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
         for (int i = 1; i < 4; i++)
+        {
             movePoints[i] = pm.allies[i - 1].transform.position;
+            //UpdateAnim(i, true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
+        }
     }
 
     private Vector2 Vec3ToVec2(Vector3 v)
@@ -149,6 +164,7 @@ public class CharacterControl : MonoBehaviour
         Rotating
     }
 
+    // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html
     private IEnumerator SpriteFadeOutFadeIn(SpriteRenderer sr, float duration)
     {
         float elapsedTime = 0;
@@ -176,7 +192,6 @@ public class CharacterControl : MonoBehaviour
         RotateParty();
     }
 
-    // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html
     private IEnumerator SpriteFade(SpriteRenderer sr, float endValue, float duration)
     {
         float elapsedTime = 0;
@@ -188,5 +203,20 @@ public class CharacterControl : MonoBehaviour
             sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, newAlpha);
             yield return null;
         }
+    }
+
+    private void UpdateAnim(int index, bool isMoving, Vector2 moveDir)
+    {
+        if (isMoving)
+        {
+            pm.allies[index].anim.SetFloat("Horizontal", moveDir.x);
+            pm.allies[index].anim.SetFloat("Vertical", moveDir.y);
+        }
+        pm.allies[index].anim.SetBool("isMoving", isMoving);
+    }
+
+    private void UpdateAnim(int index, bool isMoving)
+    {
+        pm.allies[index].anim.SetBool("isMoving", isMoving);
     }
 }

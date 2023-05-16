@@ -5,9 +5,16 @@ using UnityEngine;
 public class Ally : MonoBehaviour
 {
     public AllyType type;
+    public Animator anim;
 
     [HideInInspector] private float maxHealth;
     [HideInInspector] public float health;
+
+    private void Awake()
+    {
+        if (anim == null)
+            Debug.Log("Assign Animator in Inspector");
+    }
 
     // Start is called before the first frame update
     void Start()

@@ -39,7 +39,7 @@ public class CharacterControl : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             movePoints[i] = pm.allies[i].transform.position;
-            //pm.allies[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            pm.allies[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         }
 
         prevTail = new Vector3(pm.allies[3].transform.position.x - 1, pm.allies[3].transform.position.y, pm.allies[3].transform.position.z);
@@ -71,7 +71,6 @@ public class CharacterControl : MonoBehaviour
                     {
                         pm.allies[i].transform.position = movePoints[i];
                         pm.allies[i].UpdateAnim(false);
-                        //UpdateAnim(i, false);
                     }
                     moveState = MoveState.NotMoving;
                     FindObjectOfType<GameStateManager>().EndTurn();
@@ -122,13 +121,11 @@ public class CharacterControl : MonoBehaviour
     {
         movePoints[0] += Vec2ToVec3(moveDir);
         pm.allies[0].UpdateAnim(true, moveDir);
-        //UpdateAnim(0, true, moveDir);
         prevTail = pm.allies[3].transform.position;
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
             pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
-            //UpdateAnim(i, true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
         }
         moveState = MoveState.Moving;
     }
@@ -143,12 +140,10 @@ public class CharacterControl : MonoBehaviour
 
         prevTail = pm.allies[3].transform.position;
         pm.allies[0].UpdateAnim(true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
-        //UpdateAnim(0, true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
             pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
-            //UpdateAnim(i, true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
         }
     }
 
@@ -185,18 +180,5 @@ public class CharacterControl : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         RotateParty();
-    }
-
-    private IEnumerator SpriteFade(SpriteRenderer sr, float endValue, float duration)
-    {
-        float elapsedTime = 0;
-        float startValue = sr.color.a;
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float newAlpha = Mathf.Lerp(startValue, endValue, elapsedTime / duration);
-            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, newAlpha);
-            yield return null;
-        }
     }
 }

@@ -1,12 +1,11 @@
 using UnityEngine;
 public class Entity : MonoBehaviour, IEntity
 {
-    //protected Animator anim;
+    protected Animator anim;
     protected float maxHealth;
     protected float health;
-    /*public void UpdateAnim(bool isMoving, Vector2 moveDir)
+    public void UpdateAnim(bool isMoving, Vector2 moveDir)
     {
-        Debug.Log("Update Anim");
         if (isMoving)
         {
             anim.SetFloat("Horizontal", moveDir.x);
@@ -17,9 +16,8 @@ public class Entity : MonoBehaviour, IEntity
 
     public void UpdateAnim(bool isMoving)
     {
-        Debug.Log("Update Anim");
         anim.SetBool("isMoving", isMoving);
-    }*/
+    }
 
     public void TakeDamage(float damage) 
     {

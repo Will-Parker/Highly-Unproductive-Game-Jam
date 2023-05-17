@@ -5,7 +5,6 @@ using UnityEngine;
 public class Ally : Entity
 {
     public AllyType type;
-    public Animator anim;
 
     private void Awake()
     {
@@ -37,22 +36,6 @@ public class Ally : Entity
     void Update()
     {
         
-    }
-    public void UpdateAnim(bool isMoving, Vector2 moveDir)
-    {
-        Debug.Log("Update Anim");
-        if (isMoving)
-        {
-            anim.SetFloat("Horizontal", moveDir.x);
-            anim.SetFloat("Vertical", moveDir.y);
-        }
-        anim.SetBool("isMoving", isMoving);
-    }
-
-    public void UpdateAnim(bool isMoving)
-    {
-        Debug.Log("Update Anim");
-        anim.SetBool("isMoving", isMoving);
     }
 }
 

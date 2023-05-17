@@ -39,12 +39,12 @@ public class CharacterControl : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             movePoints[i] = pm.allies[i].transform.position;
-            pm.allies[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            //pm.allies[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
         }
 
         prevTail = new Vector3(pm.allies[3].transform.position.x - 1, pm.allies[3].transform.position.y, pm.allies[3].transform.position.z);
 
-        Time.timeScale = 0.1f;
+        //Time.timeScale = 0.1f;
     }
 
     private void Update()
@@ -70,7 +70,7 @@ public class CharacterControl : MonoBehaviour
                     for (int i = 0; i < 4; i++)
                     {
                         pm.allies[i].transform.position = movePoints[i];
-                        pm.allies[i].UpdateAnim(false);
+                        //pm.allies[i].UpdateAnim(false);
                     }
                     moveState = MoveState.NotMoving;
                     FindObjectOfType<GameStateManager>().EndTurn();
@@ -120,12 +120,12 @@ public class CharacterControl : MonoBehaviour
     private void MoveParty(Vector2 moveDir)
     {
         movePoints[0] += Vec2ToVec3(moveDir);
-        pm.allies[0].UpdateAnim(true, moveDir);
+        //pm.allies[0].UpdateAnim(true, moveDir);
         prevTail = pm.allies[3].transform.position;
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
-            pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
+            //pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
         }
         moveState = MoveState.Moving;
     }
@@ -139,11 +139,11 @@ public class CharacterControl : MonoBehaviour
         pm.RotatePartyPositions();
 
         prevTail = pm.allies[3].transform.position;
-        pm.allies[0].UpdateAnim(true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
+        //pm.allies[0].UpdateAnim(true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
-            pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
+            //pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
         }
     }
 

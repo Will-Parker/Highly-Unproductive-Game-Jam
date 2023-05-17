@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Impassable
+    uniqueID: 2323745967
+    locked: 0
+  - name: Entities
+    uniqueID: 2953673939
+    locked: 0

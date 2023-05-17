@@ -2,18 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ally : MonoBehaviour
+public class Ally : Entity
 {
     public AllyType type;
-    public Animator anim;
-
-    [HideInInspector] private float maxHealth;
-    [HideInInspector] public float health;
 
     private void Awake()
     {
-        if (anim == null)
-            Debug.Log("Assign Animator in Inspector");
+        anim = GetComponent<Animator>();
     }
 
     // Start is called before the first frame update

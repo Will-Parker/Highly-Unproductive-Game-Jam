@@ -2269,6 +2269,11 @@ MonoBehaviour:
   aiState: 0
   moveSpeed: 5
   maxPursuitTime: 20
+  impassableLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  detectRadius: 15
+  viewAngle: 120
   hasFinishedTurn: 0
 --- !u!1 &1013222938
 GameObject:

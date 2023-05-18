@@ -81,31 +81,37 @@ public class CharacterControl : MonoBehaviour
 
     private void Move_performed(InputAction.CallbackContext context)
     {
-        Vector2 inputVector = context.ReadValue<Vector2>();
-        if (moveState == MoveState.NotMoving)
+        GameStateManager gsm = FindObjectOfType<GameStateManager>();
+        if (gsm.GetGameState() == GameState.Player)
         {
-            if (Mathf.Abs(inputVector.x) == 1f)
+            Vector2 inputVector = context.ReadValue<Vector2>();
+            if (moveState == MoveState.NotMoving)
             {
-                Vector2 moveDir = new (inputVector.x, 0f);
-                RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
-                if (!ray 
-                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[1].transform.position)) > 0.05f
-                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[2].transform.position)) > 0.05f)
+                if (Mathf.Abs(inputVector.x) == 1f)
                 {
-                    MoveParty(moveDir);
-                    StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+                    Vector2 moveDir = new(inputVector.x, 0f);
+                    RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
+                    if (!ray
+                        && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[1].transform.position)) > 0.05f
+                        && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[2].transform.position)) > 0.05f
+                        && !WillLandOnEnemy(moveDir))
+                    {
+                        MoveParty(moveDir);
+                        StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+                    }
                 }
-            }
-            else if (Mathf.Abs(inputVector.y) == 1f)
-            {
-                Vector2 moveDir = new (0f, inputVector.y);
-                RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
-                if (!ray
-                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[1].transform.position)) > 0.05f
-                    && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[2].transform.position)) > 0.05f)
+                else if (Mathf.Abs(inputVector.y) == 1f)
                 {
-                    MoveParty(moveDir);
-                    StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+                    Vector2 moveDir = new(0f, inputVector.y);
+                    RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(pm.allies[0].transform.position), moveDir, 1f, impassableLayer);
+                    if (!ray
+                        && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[1].transform.position)) > 0.05f
+                        && Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(pm.allies[2].transform.position)) > 0.05f
+                        && !WillLandOnEnemy(moveDir))
+                    {
+                        MoveParty(moveDir);
+                        StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+                    }
                 }
             }
         }
@@ -113,8 +119,12 @@ public class CharacterControl : MonoBehaviour
 
     private void SpecialAction_performed(InputAction.CallbackContext context)
     {
-        StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
-        StartCoroutine(WaitToRotate(1f / moveSpeed));
+        GameStateManager gsm = FindObjectOfType<GameStateManager>();
+        if (gsm.GetGameState() == GameState.Player)
+        {
+            StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
     }
 
     private void MoveParty(Vector2 moveDir)
@@ -180,5 +190,16 @@ public class CharacterControl : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         RotateParty();
+    }
+
+    private bool WillLandOnEnemy(Vector2 moveDir)
+    {
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
+        foreach (Enemy enemy in enemies)
+        {
+            if (Vector2.Distance(Vec3ToVec2(pm.allies[0].transform.position) + moveDir, Vec3ToVec2(enemy.transform.position)) <= 0.05f)
+                return true;
+        }
+        return false;
     }
 }

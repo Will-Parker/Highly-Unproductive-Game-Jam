@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using static Helpers;
+using Utils;
 public enum AIState
 {
     Wander,
@@ -96,12 +97,12 @@ public class Enemy : Entity
         switch (aiState)
         {
             case AIState.Wander:
-                // determine good directions
-                var dirs = GetGoodDirections();
-                // random pick good direction
-                if (dirs != null)
+                // determine good next point
+                var points = GetValidNeighbors(Vec3ToVec2(transform.position));
+                // random pick good next point
+                if (points != null)
                 {
-                    movePoint = transform.position + Vec2ToVec3(dirs[Mathf.FloorToInt(Random.Range(0, dirs.Count))]);
+                    movePoint = Vec2ToVec3(points[Mathf.FloorToInt(Random.Range(0, points.Count))]);
                     IsMoving = true;
                     UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
                 }
@@ -110,6 +111,32 @@ public class Enemy : Entity
                 break;
             case AIState.Pursue:
                 // pathfind 
+                int shortestPathDist = int.MaxValue;
+                foreach (Ally ally in pm.allies)
+                {
+                    var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(ally.transform.position));
+                    if (path != null)
+                    {
+                        string log = "Path is ";
+                        foreach (Vector2Int tile in path)
+                        {
+                            log += tile + ", ";
+                        }
+                        Debug.Log(log);
+                        if (path.Count < shortestPathDist)
+                        {
+                            shortestPathDist = path.Count;
+                            movePoint = Vec2IntToVec3(path[1]);
+                            IsMoving = true;
+                        }
+                    }
+                    else
+                        Debug.Log("Path is null");
+                }
+                if (IsMoving)
+                {
+                    UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
+                }
                 break;
             case AIState.Attack:
                 // damage target ally (may want to wait until animation after that is implemented)
@@ -164,12 +191,12 @@ public class Enemy : Entity
 
         if (viewableAllies.Count > 0)
         {
-            targetAlly = GetAllyWithMinHealthFromListExcludingDead(viewableAllies);
+            //targetAlly = GetAllyWithMinHealthFromListExcludingDead(viewableAllies);
             return true;
         }
         else
         {
-            targetAlly = null;
+            //targetAlly = null;
             return false;
         }
     }
@@ -182,22 +209,125 @@ public class Enemy : Entity
         return allies.MinObject(ally => ally.GetHealth());
     }
 
-    private List<Vector2> GetGoodDirections()
+    private List<Vector2> GetValidNeighbors(Vector2 point)
     {
         var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-        var goodDirs = new List<Vector2>();
+        var valid = new List<Vector2>();
         foreach (var dir in dirs)
         {
-            RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(transform.position), dir, 1f, impassableLayer);
+            RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(point), dir, 1f, impassableLayer);
             if (!ray)
             {
-                // TEMP need to check allies and enemies' move point (if valid)
-                goodDirs.Add(dir);
+                Vector3 targetNeighbor = Vec2ToVec3(point + dir);
+                //if (pm.allies.All(ally => ally.transform.position != targetNeighbor)) 
+                //{
+                    List<Vector3> enemyMovePoints = new ();
+                    foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+                    {
+                        if (enemy.IsMoving)
+                        {
+                            enemyMovePoints.Add(enemy.movePoint);
+                        }
+                    }
+
+                    if (enemyMovePoints.All(mp => mp != targetNeighbor)) 
+                    {
+                        valid.Add(dir + point);
+                    }
+                //}
             }
         }
-        if (goodDirs.Count > 0)
-            return goodDirs;
+        if (valid.Count > 0)
+            return valid;
         else
             return null;
     }
+
+
+
+    private List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
+    {
+        List<Vector2Int> totalPath = new() { current };
+        while (cameFrom.ContainsKey(current)) {
+            Debug.Log(current);
+            current = cameFrom[current];
+            totalPath = new List<Vector2Int>(totalPath.Prepend(current));
+        }
+        return totalPath;
+    }
+
+    // A* finds a path from start to goal.
+    // h is the heuristic function. h(n) estimates the cost to reach goal from node n.
+    private List<Vector2Int> AStar(Vector2Int start, Vector2Int goal)
+    {
+        // The set of discovered nodes that may need to be (re-)expanded.
+        // Initially, only the start node is known.
+        // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+        var openSetPQ = new PriorityQueue<Vector2Int, int>(new List<System.ValueTuple<Vector2Int, int>>() { (start, 0) });
+        var openSetArr = new List<Vector2Int>() { start };
+
+        // For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from the start
+        // to n currently known.
+        var cameFrom = new Dictionary<Vector2Int, Vector2Int>();
+
+        // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
+        var gScore = new Dictionary<Vector2Int, int> { [start] = 0 };
+
+        // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
+        // how cheap a path could be from start to finish if it goes through n.
+        var fScore = new Dictionary<Vector2Int, int> { [start] = ManhattanDistance(start, goal) };
+
+        while (openSetPQ.Count > 0)
+        {
+            // This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
+            var current = openSetPQ.Dequeue();
+            openSetArr.Remove(current);
+            if (current.Equals(goal))
+                return ReconstructPath(cameFrom, current);
+
+            // get neighboors of current
+            List<Vector2> neighbors = GetValidNeighbors(Vec2IntToVec2(current));
+            foreach (Vector2 n in neighbors)
+            {
+                Vector2Int neighbor = Vec2ToVec2Int(n);
+                // d(current,neighbor) is the weight of the edge from current to neighbor
+                // tentative_gScore is the distance from start to the neighbor through current
+                var tentativeGScore = gScore[current] + 1;
+                if (gScore.ContainsKey(neighbor))
+                {
+                    if (tentativeGScore < gScore[neighbor])
+                    {
+                        // This path to neighbor is better than any previous one. Record it!
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
+                        if (!openSetArr.Contains(neighbor))
+                        {
+                            openSetPQ.Enqueue(neighbor, tentativeGScore);
+                            openSetArr.Add(neighbor);
+                        }
+                    }
+                }
+                else
+                {
+                    if (tentativeGScore < int.MaxValue)
+                    {
+                        // This path to neighbor is better than any previous one. Record it!
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeGScore;
+                        fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
+                        if (!openSetArr.Contains(neighbor))
+                        {
+                            openSetPQ.Enqueue(neighbor, tentativeGScore);
+                            openSetArr.Add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+
 }

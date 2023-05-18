@@ -15,6 +15,26 @@ public static class Helpers
         return new Vector3(v.x, v.y, 0f);
     }
 
+    public static Vector2 Vec2IntToVec2(Vector2Int v)
+    {
+        return new Vector2(v.x + 0.5f, v.y + 0.5f);
+    }
+
+    public static Vector2Int Vec2ToVec2Int(Vector2 v)
+    {
+        return new Vector2Int(Mathf.RoundToInt(v.x - 0.5f), Mathf.RoundToInt(v.y - 0.5f));
+    }
+
+    public static Vector2Int Vec3ToVec2Int(Vector3 v)
+    {
+        return new Vector2Int(Mathf.RoundToInt(v.x - 0.5f), Mathf.RoundToInt(v.y - 0.5f));
+    }
+
+    public static Vector3 Vec2IntToVec3(Vector2Int v)
+    {
+        return new Vector3(v.x + 0.5f, v.y + 0.5f, 0f);
+    }
+
     public static T MaxObject<T, U>(this IEnumerable<T> source, Func<T, U> selector)
       where U : IComparable<U>
     {
@@ -73,4 +93,21 @@ public static class Helpers
         if (first) throw new InvalidOperationException("Sequence is empty.");
         return minObj;
     }
+
+    public static int ManhattanDistance(Vector3Int a, Vector3Int b)
+    {
+        checked
+        {
+            return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y) + Mathf.Abs(a.z - b.z);
+        }
+    }
+
+    public static int ManhattanDistance(Vector2Int a, Vector2Int b)
+    {
+        checked
+        {
+            return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+        }
+    }
+
 }

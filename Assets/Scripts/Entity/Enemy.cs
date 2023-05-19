@@ -61,6 +61,8 @@ public class Enemy : Entity
 
     public void UpdateAIState()
     {
+        //foreach (Transform child in debug)
+        //    Destroy(child.gameObject);
         hasFinishedTurn = false;
         switch (aiState)
         {
@@ -68,7 +70,10 @@ public class Enemy : Entity
                 pursuitTime = 0;
                 // if the player is one space away of us turn to face & attack
                 if (AdjacentAttackablesCheck())
+                {
                     aiState = AIState.Attack;
+                    //Debug.Log("" + gameObject + ": Wander -> Attack");
+                }
                 // elif the player is nearby or in line of sight pursue
                 else if (Vector3.Distance(transform.position, pm.allies[0].transform.position) <= detectRadius
                         || Vector3.Distance(transform.position, pm.allies[1].transform.position) <= detectRadius
@@ -76,18 +81,22 @@ public class Enemy : Entity
                         || Vector3.Distance(transform.position, pm.allies[3].transform.position) <= detectRadius
                         || FieldOfViewCheck())
                 {
-                    Debug.Log("Wander -> Pursue");
                     aiState = AIState.Pursue;
+                    //Debug.Log("" + gameObject + ": Wander -> Pursue");
                 }
                 break;
             case AIState.Pursue:
                 // if the player is in front of us attack
                 if (AdjacentAttackablesCheck())
+                {
                     aiState = AIState.Attack;
+                    //Debug.Log("" + gameObject + ": Pursue -> Attack");
+                }
                 // elif pursuit time > max pursuit time return to wander
                 else if (pursuitTime > maxPursuitTime)
                 {
                     aiState = AIState.Wander;
+                    //Debug.Log("" + gameObject + ": Pursue -> Wander");
                     pursuitTime = 0;
                 }
                 break;
@@ -95,12 +104,14 @@ public class Enemy : Entity
                 pursuitTime = 0;
                 // if the player is in front of us attack
                 if (AdjacentAttackablesCheck())
+                {
                     aiState = AIState.Attack;
+                }
                 // else pursue
                 else
                 {
                     aiState = AIState.Pursue;
-                    Debug.Log("Attack -> Pursue");
+                    //Debug.Log("" + gameObject + ": Attack -> Pursue");
                 }
                 break;
         }
@@ -125,51 +136,76 @@ public class Enemy : Entity
                 break;
             case AIState.Pursue:
                 // pathfind 
-                /* Old Code that targeted closest ally
-                int shortestPathDist = int.MaxValue;
+
+                //Debug.Log(this + " starting A*");
+                // Target ally on shortest path
+                //int shortestPathDist = int.MaxValue;
+                //foreach (Ally ally in pm.allies)
+                //{
+                //    if (ally.GetHealth() > 0)
+                //    {
+                //        var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(ally.transform.position));
+                //        if (path != null)
+                //        {
+                //            //string log = "Path is "; foreach (Vector2Int tile in path) { log += tile + ", "; } Debug.Log(log);
+                //            //Debug.Log(log);
+                //            if (path.Count < shortestPathDist)
+                //            {
+                //                shortestPathDist = path.Count;
+                //                movePoint = Vec2IntToVec3(path[1]);
+                //                IsMoving = true;
+                //            }
+                //        }
+                //    }
+                //}
+
+                // Target ally on naive shortest distance
+                int naiveShortestDist = int.MaxValue;
+                Ally naiveClosestAlly = null;
                 foreach (Ally ally in pm.allies)
                 {
-                    var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(ally.transform.position));
+                    if (ally.GetHealth() > 0)
+                    {
+                        int naiveDist = ManhattanDistance(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(ally.transform.position));
+                        if (naiveDist < naiveShortestDist)
+                        {
+                            naiveShortestDist = naiveDist;
+                            naiveClosestAlly = ally;
+                        }
+                    }
+                }
+                if (naiveClosestAlly != null)
+                {
+                    var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(naiveClosestAlly.transform.position));
                     if (path != null)
                     {
-                        string log = "Path is ";
-                        foreach (Vector2Int tile in path)
+                        if (path.Count > 1)
                         {
-                            log += tile + ", ";
-                        }
-                        Debug.Log(log);
-                        if (path.Count < shortestPathDist)
-                        {
-                            shortestPathDist = path.Count;
+                            // string log = "Path is "; foreach (Vector2Int tile in path) { log += tile + ", "; } Debug.Log(log);
                             movePoint = Vec2IntToVec3(path[1]);
                             IsMoving = true;
                         }
                     }
-                    else
-                        Debug.Log("Path is null");
-                }*/
-                foreach (Transform child in debug)
-                {
-                    Destroy(child.gameObject);
                 }
-                var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(pm.allies[0].transform.position));
-                if (path != null)
-                {
-                    //string log = "Path is ";
-                    //foreach (Vector2Int tile in path)
-                    //{
-                    //    log += tile + ", ";
-                    //}
-                    //Debug.Log(log);
-                    movePoint = Vec2IntToVec3(path[1]);
-                    IsMoving = true;
-                }
-                else
-                    Debug.Log("Path is null");
+
+                // Target ally in first postition
+                //var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(pm.allies[0].transform.position));
+                //if (path != null)
+                //{
+                //    //string log = "Path is "; foreach (Vector2Int tile in path) { log += tile + ", "; } Debug.Log(log);
+                //    movePoint = Vec2IntToVec3(path[1]);
+                //    IsMoving = true;
+                //}
+                //else
+                //    Debug.Log("Path is null");
                 if (IsMoving)
                 {
                     UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
                     pursuitTime++;
+                } 
+                else
+                {
+                    hasFinishedTurn = true;
                 }
                 break;
             case AIState.Attack:
@@ -259,18 +295,21 @@ public class Enemy : Entity
             if (!ray)
             {
                 Vector3 targetNeighbor = Vec2ToVec3(point + dir);
-                //if (pm.allies.All(ally => ally.transform.position != targetNeighbor)) 
-                //{
+                if (pm.allies.All(ally => ally.transform.position != targetNeighbor)) 
+                {
                     List<Vector3> enemyClaimedPosition = new ();
                     foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                     {
-                        if (enemy.IsMoving)
+                        if (enemy != this)
                         {
-                            enemyClaimedPosition.Add(enemy.movePoint);
-                        } 
-                        else
-                        {
-                            enemyClaimedPosition.Add(enemy.transform.position);
+                            if (enemy.IsMoving)
+                            {
+                                enemyClaimedPosition.Add(enemy.movePoint);
+                            }
+                            else
+                            {
+                                enemyClaimedPosition.Add(enemy.transform.position);
+                            }
                         }
                     }
 
@@ -278,7 +317,7 @@ public class Enemy : Entity
                     {
                         valid.Add(dir + point);
                     }
-                //}
+                }
             }
         }
         if (valid.Count > 0)
@@ -293,9 +332,9 @@ public class Enemy : Entity
     {
         List<Vector2Int> totalPath = new() { current };
         while (cameFrom.ContainsKey(current)) {
-            GameObject x = Instantiate(Resources.Load("Prefabs/Debug", typeof(GameObject)), Vec2IntToVec3(current), Quaternion.identity, debug) as GameObject;
-            x.GetComponent<SpriteRenderer>().color = Color.red;
-            x.GetComponent<SpriteRenderer>().sortingOrder = 10;
+            //GameObject x = Instantiate(Resources.Load("Prefabs/Debug", typeof(GameObject)), Vec2IntToVec3(current), Quaternion.identity, debug) as GameObject;
+            //x.GetComponent<SpriteRenderer>().color = Color.red;
+            //x.GetComponent<SpriteRenderer>().sortingOrder = 10;
             current = cameFrom[current];
             totalPath = new List<Vector2Int>(totalPath.Prepend(current));
         }
@@ -337,50 +376,57 @@ public class Enemy : Entity
 
             // This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
             var current = openSet.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+            if (openSet[current] > 5)
+            {
+                //Debug.Log("Path was greater than 5 which so we take min fScore path\n"
+                //    + "Start was " + start + "\n"
+                //    + "Goal was " + goal);
+                return ReconstructPath(cameFrom, fScore.Aggregate((l, r) => l.Value < r.Value ? l : r).Key);
+            }
             openSet.Remove(current);
-            GameObject x = Instantiate(Resources.Load("Prefabs/Debug", typeof(GameObject)), Vec2IntToVec3(current), Quaternion.identity, debug) as GameObject;
-            x.GetComponent<SpriteRenderer>().color = Color.blue;
+            //GameObject x = Instantiate(Resources.Load("Prefabs/Debug", typeof(GameObject)), Vec2IntToVec3(current), Quaternion.identity, debug) as GameObject;
+            //x.GetComponent<SpriteRenderer>().color = Color.blue;
 
-            if (current.Equals(goal))
+            //if (current.Equals(goal))
+            if (Vector2Int.Distance(current, goal) == 1)
                 return ReconstructPath(cameFrom, current);
 
             // get neighboors of current
             List<Vector2> neighbors = GetValidNeighbors(Vec2IntToVec2(current));
-            foreach (Vector2 n in neighbors)
+            if (neighbors != null)
             {
-                Vector2Int neighbor = Vec2ToVec2Int(n);
-                // d(current,neighbor) is the weight of the edge from current to neighbor
-                // tentative_gScore is the distance from start to the neighbor through current
-                var tentativeGScore = gScore[current] + 1;
-                if (gScore.ContainsKey(neighbor))
+                foreach (Vector2 n in neighbors)
                 {
-                    if (tentativeGScore < gScore[neighbor])
+                    Vector2Int neighbor = Vec2ToVec2Int(n);
+                    // d(current,neighbor) is the weight of the edge from current to neighbor
+                    // tentative_gScore is the distance from start to the neighbor through current
+                    var tentativeGScore = gScore[current] + 1;
+                    if (gScore.ContainsKey(neighbor))
                     {
-                        // This path to neighbor is better than any previous one. Record it!
+                        if (tentativeGScore < gScore[neighbor])
+                        {
+                            // This path to neighbor is better than any previous one. Record it!
+                            cameFrom[neighbor] = current;
+                            gScore[neighbor] = tentativeGScore;
+                            //fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
+                            fScore[neighbor] = ManhattanDistance(neighbor, goal);
+                            openSet[neighbor] = tentativeGScore;
+                        }
+                    }
+                    else
+                    {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
-                        fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
-                        //if (!openSet.ContainsKey(neighbor))
-                        //{
-                        //    openSet.Add(neighbor, tentativeGScore);
-                        //} 
+                        //fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
+                        fScore[neighbor] = ManhattanDistance(neighbor, goal);
                         openSet[neighbor] = tentativeGScore;
                     }
                 }
-                else
-                {
-                    cameFrom[neighbor] = current;
-                    gScore[neighbor] = tentativeGScore;
-                    fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
-                    //if (!openSet.ContainsKey(neighbor))
-                    //{
-                    //    openSet.Add(neighbor, tentativeGScore);
-                    //} 
-                    openSet[neighbor] = tentativeGScore;
-                }
             }
         }
-
+        Debug.LogWarning("A* could not find goal in accesible area\n"
+            + "Start was " + start + "\n"
+            + "Goal was " + goal);
         return null;
     }
 

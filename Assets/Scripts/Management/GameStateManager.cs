@@ -7,6 +7,8 @@ public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager instance;
     [SerializeField] private GameState gameState = GameState.Player;
+    private int turn = 1;
+
     private void Awake()
     {
         if (instance == null)
@@ -39,6 +41,8 @@ public class GameStateManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Player:
+                turn++;
+                Debug.Log("Turn " + turn);
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                 {
                     enemy.UpdateAIState();

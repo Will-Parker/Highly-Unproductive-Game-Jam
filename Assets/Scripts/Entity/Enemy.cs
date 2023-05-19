@@ -19,13 +19,15 @@ public class Enemy : Entity
     [SerializeField] [Range(0, 50)] private int maxPursuitTime = 25; // max number of turns the AI is willing to keep pursuing the player before giving up
     private int pursuitTime = 0;
     [SerializeField] private LayerMask impassableLayer;
-    [SerializeField] [Range(0, 20)] private float detectRadius = 15;
+    [SerializeField] [Range(0, 20)] private float detectRadius = 5;
     [SerializeField] [Range(0, 360)] private float viewAngle = 120;
     public bool hasFinishedTurn = false;
     private PartyManager pm;
     private Vector3 movePoint;
     public bool IsMoving { get; private set; }
     private Ally targetAlly;
+
+    public Transform debug;
 
     private void Awake()
     {
@@ -35,6 +37,7 @@ public class Enemy : Entity
     private void Start()
     {
         IsMoving = false;
+        facingDirection = Vector2.up;
     }
     private void Update()
     {
@@ -62,6 +65,7 @@ public class Enemy : Entity
         switch (aiState)
         {
             case AIState.Wander:
+                pursuitTime = 0;
                 // if the player is one space away of us turn to face & attack
                 if (AdjacentAttackablesCheck())
                     aiState = AIState.Attack;
@@ -71,7 +75,10 @@ public class Enemy : Entity
                         || Vector3.Distance(transform.position, pm.allies[2].transform.position) <= detectRadius
                         || Vector3.Distance(transform.position, pm.allies[3].transform.position) <= detectRadius
                         || FieldOfViewCheck())
+                {
+                    Debug.Log("Wander -> Pursue");
                     aiState = AIState.Pursue;
+                }
                 break;
             case AIState.Pursue:
                 // if the player is in front of us attack
@@ -79,15 +86,22 @@ public class Enemy : Entity
                     aiState = AIState.Attack;
                 // elif pursuit time > max pursuit time return to wander
                 else if (pursuitTime > maxPursuitTime)
+                {
                     aiState = AIState.Wander;
+                    pursuitTime = 0;
+                }
                 break;
             case AIState.Attack:
+                pursuitTime = 0;
                 // if the player is in front of us attack
                 if (AdjacentAttackablesCheck())
                     aiState = AIState.Attack;
                 // else pursue
                 else
+                {
                     aiState = AIState.Pursue;
+                    Debug.Log("Attack -> Pursue");
+                }
                 break;
         }
     }
@@ -111,6 +125,7 @@ public class Enemy : Entity
                 break;
             case AIState.Pursue:
                 // pathfind 
+                /* Old Code that targeted closest ally
                 int shortestPathDist = int.MaxValue;
                 foreach (Ally ally in pm.allies)
                 {
@@ -132,10 +147,29 @@ public class Enemy : Entity
                     }
                     else
                         Debug.Log("Path is null");
+                }*/
+                foreach (Transform child in debug)
+                {
+                    Destroy(child.gameObject);
                 }
+                var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(pm.allies[0].transform.position));
+                if (path != null)
+                {
+                    //string log = "Path is ";
+                    //foreach (Vector2Int tile in path)
+                    //{
+                    //    log += tile + ", ";
+                    //}
+                    //Debug.Log(log);
+                    movePoint = Vec2IntToVec3(path[1]);
+                    IsMoving = true;
+                }
+                else
+                    Debug.Log("Path is null");
                 if (IsMoving)
                 {
                     UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
+                    pursuitTime++;
                 }
                 break;
             case AIState.Attack:
@@ -143,6 +177,7 @@ public class Enemy : Entity
                 targetAlly.TakeDamage(30);
                 // reset pursuit timer
                 pursuitTime = 0;
+                hasFinishedTurn = true;
                 break;
         }
     }
@@ -164,6 +199,8 @@ public class Enemy : Entity
         if (dict.Count > 0)
         {
             Ally allyWithMinHealth = GetAllyWithMinHealthFromListExcludingDead(dict.Keys.ToList());
+            if (allyWithMinHealth == null)
+                return false;
             targetAlly = allyWithMinHealth;
             UpdateAnim(dict[allyWithMinHealth]);
             return true;
@@ -184,7 +221,7 @@ public class Enemy : Entity
             if (Vector2.Angle(facingDirection, directionToTarget) < viewAngle / 2)
             {
                 float distanceToTarget = Vector3.Distance(transform.position, ally.transform.position);
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, impassableLayer))
+                if (!Physics2D.Raycast(Vec3ToVec2(transform.position), directionToTarget, distanceToTarget, impassableLayer))
                     viewableAllies.Add(ally);
             }
         }
@@ -206,6 +243,9 @@ public class Enemy : Entity
     {
         allies.RemoveAll(ally => ally.GetHealth() <= 0);
 
+        if (allies.Count == 0)
+            return null;
+
         return allies.MinObject(ally => ally.GetHealth());
     }
 
@@ -221,16 +261,20 @@ public class Enemy : Entity
                 Vector3 targetNeighbor = Vec2ToVec3(point + dir);
                 //if (pm.allies.All(ally => ally.transform.position != targetNeighbor)) 
                 //{
-                    List<Vector3> enemyMovePoints = new ();
+                    List<Vector3> enemyClaimedPosition = new ();
                     foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                     {
                         if (enemy.IsMoving)
                         {
-                            enemyMovePoints.Add(enemy.movePoint);
+                            enemyClaimedPosition.Add(enemy.movePoint);
+                        } 
+                        else
+                        {
+                            enemyClaimedPosition.Add(enemy.transform.position);
                         }
                     }
 
-                    if (enemyMovePoints.All(mp => mp != targetNeighbor)) 
+                    if (enemyClaimedPosition.All(mp => mp != targetNeighbor)) 
                     {
                         valid.Add(dir + point);
                     }
@@ -249,7 +293,9 @@ public class Enemy : Entity
     {
         List<Vector2Int> totalPath = new() { current };
         while (cameFrom.ContainsKey(current)) {
-            Debug.Log(current);
+            GameObject x = Instantiate(Resources.Load("Prefabs/Debug", typeof(GameObject)), Vec2IntToVec3(current), Quaternion.identity, debug) as GameObject;
+            x.GetComponent<SpriteRenderer>().color = Color.red;
+            x.GetComponent<SpriteRenderer>().sortingOrder = 10;
             current = cameFrom[current];
             totalPath = new List<Vector2Int>(totalPath.Prepend(current));
         }
@@ -263,8 +309,8 @@ public class Enemy : Entity
         // The set of discovered nodes that may need to be (re-)expanded.
         // Initially, only the start node is known.
         // This is usually implemented as a min-heap or priority queue rather than a hash-set.
-        var openSetPQ = new PriorityQueue<Vector2Int, int>(new List<System.ValueTuple<Vector2Int, int>>() { (start, 0) });
-        var openSetArr = new List<Vector2Int>() { start };
+        var openSet = new Dictionary<Vector2Int, int>() { [start] = 0 };
+        //var openSetArr = new List<System.ValueTuple<Vector2Int, int>>() { (start, 0) };
 
         // For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from the start
         // to n currently known.
@@ -277,11 +323,24 @@ public class Enemy : Entity
         // how cheap a path could be from start to finish if it goes through n.
         var fScore = new Dictionary<Vector2Int, int> { [start] = ManhattanDistance(start, goal) };
 
-        while (openSetPQ.Count > 0)
+        //int iteration = 0;
+        while (openSet.Count > 0)
         {
+            //iteration++;
+            //string log = "Iteration: " + iteration;
+            //log += "\nOpen Set:";
+            //foreach (var kvp in openSet)
+            //{
+            //    log += "\n  Node: " + kvp.Key + ", Distance: " + kvp.Value;
+            //}
+            //Debug.Log(log);
+
             // This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
-            var current = openSetPQ.Dequeue();
-            openSetArr.Remove(current);
+            var current = openSet.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
+            openSet.Remove(current);
+            GameObject x = Instantiate(Resources.Load("Prefabs/Debug", typeof(GameObject)), Vec2IntToVec3(current), Quaternion.identity, debug) as GameObject;
+            x.GetComponent<SpriteRenderer>().color = Color.blue;
+
             if (current.Equals(goal))
                 return ReconstructPath(cameFrom, current);
 
@@ -301,27 +360,23 @@ public class Enemy : Entity
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeGScore;
                         fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
-                        if (!openSetArr.Contains(neighbor))
-                        {
-                            openSetPQ.Enqueue(neighbor, tentativeGScore);
-                            openSetArr.Add(neighbor);
-                        }
+                        //if (!openSet.ContainsKey(neighbor))
+                        //{
+                        //    openSet.Add(neighbor, tentativeGScore);
+                        //} 
+                        openSet[neighbor] = tentativeGScore;
                     }
                 }
                 else
                 {
-                    if (tentativeGScore < int.MaxValue)
-                    {
-                        // This path to neighbor is better than any previous one. Record it!
-                        cameFrom[neighbor] = current;
-                        gScore[neighbor] = tentativeGScore;
-                        fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
-                        if (!openSetArr.Contains(neighbor))
-                        {
-                            openSetPQ.Enqueue(neighbor, tentativeGScore);
-                            openSetArr.Add(neighbor);
-                        }
-                    }
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeGScore;
+                    fScore[neighbor] = tentativeGScore + ManhattanDistance(neighbor, goal);
+                    //if (!openSet.ContainsKey(neighbor))
+                    //{
+                    //    openSet.Add(neighbor, tentativeGScore);
+                    //} 
+                    openSet[neighbor] = tentativeGScore;
                 }
             }
         }

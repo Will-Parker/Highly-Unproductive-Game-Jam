@@ -37,6 +37,15 @@ public class Ally : Entity
     {
         
     }
+
+    public new void TakeDamage(float damage)
+    {
+        health = Mathf.Max(health - damage, 0);
+        if (health == 0)
+        {
+            GetComponent<SpriteRenderer>().color = Color.gray;
+        }
+    }
 }
 
 public enum AllyType

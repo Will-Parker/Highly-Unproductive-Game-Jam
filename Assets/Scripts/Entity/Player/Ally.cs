@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Helpers;
 
 public class Ally : Entity
 {
@@ -14,22 +15,7 @@ public class Ally : Entity
     // Start is called before the first frame update
     void Start()
     {
-        switch (type)
-        {
-            case AllyType.Boomerang:
-                maxHealth = 100f;
-                break;
-            case AllyType.Tank:
-                maxHealth = 200f;
-                break;
-            case AllyType.Healer:
-                maxHealth = 50f;
-                break;
-            case AllyType.Stun:
-                maxHealth = 80f;
-                break;
-        }
-        health = maxHealth;
+        InitializeStats();
     }
 
     // Update is called once per frame
@@ -40,18 +26,61 @@ public class Ally : Entity
 
     public new void TakeDamage(float damage)
     {
-        health = Mathf.Max(health - damage, 0);
-        if (health == 0)
+        Health = Mathf.Max(Health - damage, 0f);
+        if (Health == 0)
         {
             GetComponent<SpriteRenderer>().color = Color.gray;
         }
+    }
+
+    public void PeformSpecialAction()
+    {
+        // for now just attack enemy if there is an enemy one space ahead.
+        Enemy enemy = GetEnemyInfrontOf();
+        if (enemy != null)
+            enemy.TakeDamage(Attack);
+    }
+
+    private Enemy GetEnemyInfrontOf()
+    {
+        var enemies = new List<Enemy>(FindObjectsOfType<Enemy>());
+        foreach (Enemy enemy in enemies)
+        {
+            if (Vector2.Distance(Vec3ToVec2(transform.position) + facingDirection, Vec3ToVec2(enemy.transform.position)) <= 0.05f)
+                return enemy;
+        }
+        return null;
+    }
+
+    private void InitializeStats()
+    {
+        switch (type)
+        {
+            case AllyType.Apple:
+                MaxHealth = 20f;
+                Attack = 2f;
+                break;
+            case AllyType.Strawberry:
+                MaxHealth = 5f;
+                Attack = 0f;
+                break;
+            case AllyType.Lemon:
+                MaxHealth = 8f;
+                Attack = 0f;
+                break;
+            case AllyType.Blueberry:
+                MaxHealth = 10f;
+                Attack = 3f;
+                break;
+        }
+        Health = MaxHealth;
     }
 }
 
 public enum AllyType
 {
-    Boomerang,
-    Tank,
-    Healer,
-    Stun
+    Apple,
+    Strawberry,
+    Lemon,
+    Blueberry
 }

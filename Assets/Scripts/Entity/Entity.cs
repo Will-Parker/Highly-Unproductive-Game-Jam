@@ -1,9 +1,10 @@
 using UnityEngine;
-public class Entity : MonoBehaviour, IEntity
+public class Entity : MonoBehaviour
 {
     protected Animator anim;
-    protected float maxHealth;
-    protected float health;
+    [SerializeField] protected float MaxHealth;
+    public float Health { get; protected set; }
+    [SerializeField] protected float Attack;
     public Vector2 facingDirection;
     public void UpdateAnim(bool isMoving, Vector2 moveDir)
     {
@@ -27,10 +28,5 @@ public class Entity : MonoBehaviour, IEntity
     public void TakeDamage(float damage) 
     {
         throw new System.NotImplementedException("TakeDamage method Not filled out in subclass");
-    }
-
-    public float GetHealth()
-    {
-        return health;
     }
 }

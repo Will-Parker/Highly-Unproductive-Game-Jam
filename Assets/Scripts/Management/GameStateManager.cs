@@ -29,7 +29,8 @@ public class GameStateManager : MonoBehaviour
             case GameState.Player:
                 break;
             case GameState.Enemy:
-                Enemy[] enemies = FindObjectsOfType<Enemy>(); // probably should not update enemies array every frame
+                var enemies = new List<Enemy>(FindObjectsOfType<Enemy>()); // probably should not update enemies array every frame
+                enemies.RemoveAll(enemy => !enemy.isActiveAndEnabled);
                 if (enemies.All(enemy => enemy.hasFinishedTurn))
                     EndTurn();
                 break;
@@ -52,6 +53,8 @@ public class GameStateManager : MonoBehaviour
                 break;
             case GameState.Enemy:
                 gameState = GameState.Player;
+                if (FindObjectOfType<PartyManager>().allies[0].Health <= 0)
+                    FindObjectOfType<CharacterControl>().PassTurn();
                 break;
         }
     }

@@ -13,21 +13,21 @@ public enum AIState
 
 public class Enemy : Entity
 {
-    public AIState aiState;
-    // how quickly it moves to next tile
-    [SerializeField] [Range(0, 20)] private float moveSpeed = 5;
-    [SerializeField] [Range(0, 50)] private int maxPursuitTime = 25; // max number of turns the AI is willing to keep pursuing the player before giving up
+    [HideInInspector] public AIState aiState;
+    private readonly float moveSpeed = 5; // how quickly it moves to next tile
+    private readonly int maxPursuitTime = 25; // max number of turns the AI is willing to keep pursuing the player before giving up
     private int pursuitTime = 0;
-    [SerializeField] private LayerMask impassableLayer;
-    [SerializeField] [Range(0, 20)] private float detectRadius = 5;
-    [SerializeField] [Range(0, 360)] private float viewAngle = 120;
-    public bool hasFinishedTurn = false;
+    [SerializeField] 
+    private LayerMask impassableLayer;
+    private readonly float detectRadius = 5;
+    private readonly float viewAngle = 120;
+    [HideInInspector] public bool hasFinishedTurn = false;
     private PartyManager pm;
     private Vector3 movePoint;
     public bool IsMoving { get; private set; }
     private Ally targetAlly;
 
-    public Transform debug;
+    //public Transform debug;
 
     private void Awake()
     {
@@ -38,6 +38,7 @@ public class Enemy : Entity
     {
         IsMoving = false;
         facingDirection = Vector2.up;
+        Health = MaxHealth;
     }
     private void Update()
     {
@@ -136,35 +137,12 @@ public class Enemy : Entity
                 break;
             case AIState.Pursue:
                 // pathfind 
-
-                //Debug.Log(this + " starting A*");
-                // Target ally on shortest path
-                //int shortestPathDist = int.MaxValue;
-                //foreach (Ally ally in pm.allies)
-                //{
-                //    if (ally.GetHealth() > 0)
-                //    {
-                //        var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(ally.transform.position));
-                //        if (path != null)
-                //        {
-                //            //string log = "Path is "; foreach (Vector2Int tile in path) { log += tile + ", "; } Debug.Log(log);
-                //            //Debug.Log(log);
-                //            if (path.Count < shortestPathDist)
-                //            {
-                //                shortestPathDist = path.Count;
-                //                movePoint = Vec2IntToVec3(path[1]);
-                //                IsMoving = true;
-                //            }
-                //        }
-                //    }
-                //}
-
                 // Target ally on naive shortest distance
                 int naiveShortestDist = int.MaxValue;
                 Ally naiveClosestAlly = null;
                 foreach (Ally ally in pm.allies)
                 {
-                    if (ally.GetHealth() > 0)
+                    if (ally.Health > 0)
                     {
                         int naiveDist = ManhattanDistance(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(ally.transform.position));
                         if (naiveDist < naiveShortestDist)
@@ -187,17 +165,6 @@ public class Enemy : Entity
                         }
                     }
                 }
-
-                // Target ally in first postition
-                //var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(pm.allies[0].transform.position));
-                //if (path != null)
-                //{
-                //    //string log = "Path is "; foreach (Vector2Int tile in path) { log += tile + ", "; } Debug.Log(log);
-                //    movePoint = Vec2IntToVec3(path[1]);
-                //    IsMoving = true;
-                //}
-                //else
-                //    Debug.Log("Path is null");
                 if (IsMoving)
                 {
                     UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
@@ -210,11 +177,20 @@ public class Enemy : Entity
                 break;
             case AIState.Attack:
                 // damage target ally (may want to wait until animation after that is implemented)
-                targetAlly.TakeDamage(30);
+                targetAlly.TakeDamage(Attack);
                 // reset pursuit timer
                 pursuitTime = 0;
                 hasFinishedTurn = true;
                 break;
+        }
+    }
+
+    public new void TakeDamage(float damage)
+    {
+        Health = Mathf.Max(Health - damage, 0f);
+        if (Health == 0)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -277,12 +253,12 @@ public class Enemy : Entity
 
     private Ally GetAllyWithMinHealthFromListExcludingDead(List<Ally> allies)
     {
-        allies.RemoveAll(ally => ally.GetHealth() <= 0);
+        allies.RemoveAll(ally => ally.Health <= 0);
 
         if (allies.Count == 0)
             return null;
 
-        return allies.MinObject(ally => ally.GetHealth());
+        return allies.MinObject(ally => ally.Health);
     }
 
     private List<Vector2> GetValidNeighbors(Vector2 point)

@@ -7,6 +7,7 @@ public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager instance;
     [SerializeField] private GameState gameState = GameState.Player;
+    private UIManager uim;
     private int turn = 1;
 
     private void Awake()
@@ -20,6 +21,8 @@ public class GameStateManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+
+        uim = GetComponent<UIManager>();
     }
 
     private void Update()

@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 5320928164023995040}
+  m_Follow: {fileID: 8512465802868565425}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
@@ -102,10 +102,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4485695870642526993}
-  - {fileID: 5320928164023995040}
   - {fileID: 8512465802868565425}
   - {fileID: 8390320511962763101}
   - {fileID: 5914259123658639996}
+  - {fileID: 5320928164023995040}
   - {fileID: 5049933113030272439}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -139,10 +139,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allies:
-  - {fileID: 759267955870245932}
   - {fileID: 3854121804332927805}
   - {fileID: 3976297880390001105}
   - {fileID: 1246765379942311152}
+  - {fileID: 759267955870245932}
   virCam: {fileID: 750003564748319698}
 --- !u!1 &4485695870642526992
 GameObject:
@@ -272,11 +272,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8764511174724189505, guid: 13a0598b7d02d8e4da0eee42b5ad9b0e, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8764511174724189505, guid: 13a0598b7d02d8e4da0eee42b5ad9b0e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8764511174724189505, guid: 13a0598b7d02d8e4da0eee42b5ad9b0e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -316,7 +316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8764511174724189510, guid: 13a0598b7d02d8e4da0eee42b5ad9b0e, type: 3}
       propertyPath: m_Name
-      value: Ally 3
+      value: Strawberry
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 13a0598b7d02d8e4da0eee42b5ad9b0e, type: 3}
@@ -345,15 +345,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8617601988411577161, guid: 84c5a6a524ea2244781d4cbb9532c631, type: 3}
       propertyPath: m_Name
-      value: Ally 1
+      value: Blueberry
       objectReference: {fileID: 0}
     - target: {fileID: 8617601988411577166, guid: 84c5a6a524ea2244781d4cbb9532c631, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8617601988411577166, guid: 84c5a6a524ea2244781d4cbb9532c631, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.5
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 8617601988411577166, guid: 84c5a6a524ea2244781d4cbb9532c631, type: 3}
       propertyPath: m_LocalPosition.y
@@ -418,11 +418,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7880124127944683634, guid: 0ec4b37ea87d93844baa51a23524c4f4, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7880124127944683634, guid: 0ec4b37ea87d93844baa51a23524c4f4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.5
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7880124127944683634, guid: 0ec4b37ea87d93844baa51a23524c4f4, type: 3}
       propertyPath: m_LocalPosition.y
@@ -462,7 +462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7880124127944683637, guid: 0ec4b37ea87d93844baa51a23524c4f4, type: 3}
       propertyPath: m_Name
-      value: Ally 4
+      value: Lemon
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ec4b37ea87d93844baa51a23524c4f4, type: 3}
@@ -491,15 +491,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2443017303380270889, guid: 73dbfe4de2fcd2e4797c70234f52fee7, type: 3}
       propertyPath: m_Name
-      value: Ally 2
+      value: Apple
       objectReference: {fileID: 0}
     - target: {fileID: 2443017303380270894, guid: 73dbfe4de2fcd2e4797c70234f52fee7, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2443017303380270894, guid: 73dbfe4de2fcd2e4797c70234f52fee7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2443017303380270894, guid: 73dbfe4de2fcd2e4797c70234f52fee7, type: 3}
       propertyPath: m_LocalPosition.y

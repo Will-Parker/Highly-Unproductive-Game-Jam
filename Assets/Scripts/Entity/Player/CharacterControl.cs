@@ -120,8 +120,10 @@ public class CharacterControl : MonoBehaviour
     private void SpecialAction_performed(InputAction.CallbackContext context)
     {
         GameStateManager gsm = FindObjectOfType<GameStateManager>();
-        if (gsm.GetGameState() == GameState.Player)
+        if (gsm.GetGameState() == GameState.Player && moveState == MoveState.NotMoving)
         {
+            moveState = MoveState.SpecialAction;
+            pm.allies[0].PeformSpecialAction();
             StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
@@ -129,15 +131,17 @@ public class CharacterControl : MonoBehaviour
 
     private void MoveParty(Vector2 moveDir)
     {
+        moveState = MoveState.Moving;
         movePoints[0] += Vec2ToVec3(moveDir);
-        //pm.allies[0].UpdateAnim(true, moveDir);
+        pm.allies[0].facingDirection = moveDir;
+        //pm.allies[0].UpdateAnim(true, pm.allies[0].facingDirection);
         prevTail = pm.allies[3].transform.position;
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
-            //pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
+            pm.allies[i].facingDirection = Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position);
+            //pm.allies[i].UpdateAnim(true, pm.allies[i].facingDirection);
         }
-        moveState = MoveState.Moving;
     }
 
     private void RotateParty()
@@ -149,11 +153,13 @@ public class CharacterControl : MonoBehaviour
         pm.RotatePartyPositions();
 
         prevTail = pm.allies[3].transform.position;
-        //pm.allies[0].UpdateAnim(true, Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position));
+        pm.allies[0].facingDirection = Vec3ToVec2(movePoints[0] - pm.allies[0].transform.position);
+        //pm.allies[0].UpdateAnim(true, pm.allies[0].facingDirection));
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = pm.allies[i - 1].transform.position;
-            //pm.allies[i].UpdateAnim(true, Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position));
+            pm.allies[i].facingDirection = Vec3ToVec2(movePoints[i] - pm.allies[i].transform.position);
+            //pm.allies[i].UpdateAnim(true, pm.allies[i].facingDirection));
         }
     }
 
@@ -161,7 +167,9 @@ public class CharacterControl : MonoBehaviour
     {
         NotMoving,
         Moving,
-        Rotating
+        Rotating,
+        SpecialAction,
+        Dead
     }
 
     // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html
@@ -201,5 +209,12 @@ public class CharacterControl : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    public void PassTurn()
+    {
+        moveState = MoveState.Dead;
+        StartCoroutine(SpriteFadeOutFadeIn(pm.allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+        StartCoroutine(WaitToRotate(1f / moveSpeed));
     }
 }

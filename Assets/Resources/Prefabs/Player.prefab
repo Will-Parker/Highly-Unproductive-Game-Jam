@@ -122,10 +122,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81bcd3ccf6d92884cb0c07663d22d64b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impassableLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  moveSpeed: 5
 --- !u!114 &4485695870577170442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +140,10 @@ MonoBehaviour:
   - {fileID: 1246765379942311152}
   - {fileID: 759267955870245932}
   virCam: {fileID: 750003564748319698}
+  moveSpeed: 5
+  impassableLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &4485695870642526992
 GameObject:
   m_ObjectHideFlags: 0

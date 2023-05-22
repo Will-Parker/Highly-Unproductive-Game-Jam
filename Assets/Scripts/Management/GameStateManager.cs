@@ -58,7 +58,7 @@ public class GameStateManager : MonoBehaviour
             case GameState.Enemy:
                 gameState = GameState.Player;
                 if (FindObjectOfType<PartyManager>().allies[0].Health <= 0)
-                    FindObjectOfType<CharacterControl>().PassTurn();
+                    FindObjectOfType<PartyManager>().PassTurn();
                 break;
         }
     }

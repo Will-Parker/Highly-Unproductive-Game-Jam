@@ -17,8 +17,7 @@ public class Enemy : Entity
     private readonly float moveSpeed = 5; // how quickly it moves to next tile
     private readonly int maxPursuitTime = 25; // max number of turns the AI is willing to keep pursuing the player before giving up
     private int pursuitTime = 0;
-    [SerializeField] 
-    private LayerMask impassableLayer;
+    [SerializeField] private LayerMask impassableLayer;
     private readonly float detectRadius = 5;
     private readonly float viewAngle = 120;
     [HideInInspector] public bool hasFinishedTurn = false;

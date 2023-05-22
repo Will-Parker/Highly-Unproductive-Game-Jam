@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Helpers;
 
 public class Ally : Entity
 {
     public AllyType type;
+    private PartyManager pm;
+    [SerializeField] private LayerMask impassableLayer;
 
     private void Awake()
     {
@@ -39,6 +42,52 @@ public class Ally : Entity
         Enemy enemy = GetEnemyInfrontOf();
         if (enemy != null)
             enemy.TakeDamage(Attack);
+    }
+
+    public List<Vector2> GetEmptyNeighbors()
+    {
+        var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        var valid = new List<Vector2>(dirs);
+        foreach (var dir in dirs)
+        {
+            RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(transform.position), dir, 1f, impassableLayer);
+            if (!ray)
+            {
+                Vector3 targetNeighbor = transform.position + Vec2ToVec3(dir);
+                foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+                {
+                    if (enemy.transform.position == targetNeighbor)
+                        valid.Remove(targetNeighbor);
+                }
+            }
+        }
+        if (valid.Count > 0)
+            return valid;
+        else
+            return null;
+    }
+
+    public List<Vector2> GetEnemyNeighbors()
+    {
+        var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        var valid = new List<Vector2>();
+        foreach (var dir in dirs)
+        {
+            RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(transform.position), dir, 1f, impassableLayer);
+            if (!ray)
+            {
+                Vector3 targetNeighbor = transform.position + Vec2ToVec3(dir);
+                foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+                {
+                    if (enemy.transform.position == targetNeighbor)
+                        valid.Add(targetNeighbor);
+                }
+            }
+        }
+        if (valid.Count > 0)
+            return valid;
+        else
+            return null;
     }
 
     private Enemy GetEnemyInfrontOf()

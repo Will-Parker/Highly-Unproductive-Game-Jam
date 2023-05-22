@@ -11,9 +11,13 @@ PrefabInstance:
       propertyPath: type
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3135559400190016104, guid: 69c78d8d38a4ff84b8f2698355867d1b, type: 3}
+      propertyPath: impassableLayer.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 7556322738131457251, guid: 69c78d8d38a4ff84b8f2698355867d1b, type: 3}
       propertyPath: m_Name
-      value: Ally 2
+      value: Apple
       objectReference: {fileID: 0}
     - target: {fileID: 7556322738131457252, guid: 69c78d8d38a4ff84b8f2698355867d1b, type: 3}
       propertyPath: m_RootOrder

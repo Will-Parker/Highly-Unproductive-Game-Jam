@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using static Helpers;
+using System;
 
 public class PartyManager : MonoBehaviour
 {
@@ -17,6 +18,13 @@ public class PartyManager : MonoBehaviour
     [SerializeField] private LayerMask impassableLayer;
     private Vector3 prevTail;
 
+    private GameStateManager gsm;
+    private void Awake()
+    {
+        gsm = FindObjectOfType<GameStateManager>();
+        if (gsm == null)
+            Debug.LogWarning("No GSM in scene");
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -54,29 +62,47 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState != MoveState.NotMoving)
         {
-            for (int i = 0; i < 4; i++)
-                allies[i].transform.position = Vector3.MoveTowards(allies[i].transform.position, movePoints[i], moveSpeed * Time.deltaTime);
-
-            if (moveState == MoveState.Moving)
+            if (moveState == MoveState.Swap)
             {
+                allies[0].transform.position = Vector3.MoveTowards(allies[0].transform.position, movePoints[0], moveSpeed * Time.deltaTime);
+                allies[1].transform.position = Vector3.MoveTowards(allies[1].transform.position, movePoints[1], moveSpeed * Time.deltaTime);
                 if (Vector3.Distance(allies[0].transform.position, movePoints[0]) <= 0.05f)
                 {
-                    for (int i = 0; i < 4; i++)
-                        allies[i].transform.position = movePoints[i];
-                    RotateParty();
+                    allies[0].transform.position = movePoints[0];
+                    allies[1].transform.position = movePoints[1];
+                    allies[0].UpdateAnim(false, allies[0].facingDirection);
+                    allies[1].facingDirection = Vec3ToVec2(allies[1].transform.position - allies[2].transform.position);
+                    allies[1].UpdateAnim(false, allies[1].facingDirection);
+                    moveState = MoveState.NotMoving;
+                    gsm.EndTurn();
                 }
             }
-            else if (moveState == MoveState.Rotating)
+            else
             {
-                if (Vector3.Distance(allies[0].transform.position, movePoints[0]) <= 0.05f)
+                for (int i = 0; i < 4; i++)
+                    allies[i].transform.position = Vector3.MoveTowards(allies[i].transform.position, movePoints[i], moveSpeed * Time.deltaTime);
+
+                if (moveState == MoveState.Moving)
                 {
-                    for (int i = 0; i < 4; i++)
+                    if (Vector3.Distance(allies[0].transform.position, movePoints[0]) <= 0.05f)
                     {
-                        allies[i].transform.position = movePoints[i];
-                        //pm.allies[i].UpdateAnim(false);
+                        for (int i = 0; i < 4; i++)
+                            allies[i].transform.position = movePoints[i];
+                        RotateParty();
                     }
-                    moveState = MoveState.NotMoving;
-                    FindObjectOfType<GameStateManager>().EndTurn();
+                }
+                else if (moveState == MoveState.Rotating)
+                {
+                    if (Vector3.Distance(allies[0].transform.position, movePoints[0]) <= 0.05f)
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            allies[i].transform.position = movePoints[i];
+                            //allies[i].UpdateAnim(false);
+                        }
+                        moveState = MoveState.NotMoving;
+                        gsm.EndTurn();
+                    }
                 }
             }
         }
@@ -109,6 +135,37 @@ public class PartyManager : MonoBehaviour
         }
     }
 
+    public void AttemptAttack(Enemy enemy, Vector2 moveDir)
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            moveState = MoveState.Attack;
+            allies[0].facingDirection = moveDir;
+            allies[0].AttackEnemy(enemy);
+            StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
+    }
+
+    internal void AttemptSwap(Vector2 moveDir)
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            
+            allies[1].facingDirection = -moveDir;
+            //allies[1].UpdateAnim(true, pm.allies[1].facingDirection);
+            allies[0].facingDirection = moveDir;
+            //allies[0].UpdateAnim(true, pm.allies[0].facingDirection);
+
+            Ally temp = allies[0];
+            allies[0] = allies[1];
+            allies[1] = temp;
+            virCam.Follow = allies[0].transform;
+
+            moveState = MoveState.Swap;
+        }
+    }
+
     public void RotatePartyOrder()
     {
         Ally temp = allies[0];
@@ -121,7 +178,7 @@ public class PartyManager : MonoBehaviour
     }
     public void PassTurn()
     {
-        moveState = MoveState.Dead;
+        moveState = MoveState.PassingTurn;
         StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
         StartCoroutine(WaitToRotate(1f / moveSpeed));
     }
@@ -205,6 +262,8 @@ public class PartyManager : MonoBehaviour
         Moving,
         Rotating,
         SpecialAction,
-        Dead
+        PassingTurn,
+        Attack,
+        Swap
     }
 }

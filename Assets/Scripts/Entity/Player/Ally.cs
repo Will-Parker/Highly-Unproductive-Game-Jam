@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,6 +124,13 @@ public class Ally : Entity
                 break;
         }
         Health = MaxHealth;
+    }
+
+    public void AttackEnemy(Enemy enemy)
+    {
+        if (enemy != null)
+            enemy.TakeDamage(Attack);
+        // do attack anim
     }
 }
 

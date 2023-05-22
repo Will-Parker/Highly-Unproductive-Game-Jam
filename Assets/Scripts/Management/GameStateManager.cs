@@ -47,6 +47,7 @@ public class GameStateManager : MonoBehaviour
             case GameState.Player:
                 turn++;
                 Debug.Log("Turn " + turn);
+                uim.UpdateUI();
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                 {
                     enemy.UpdateAIState();

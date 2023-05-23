@@ -166,6 +166,18 @@ public class PartyManager : MonoBehaviour
         }
     }
 
+    internal void AttemptHealAlly(Ally ally)
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            moveState = MoveState.Heal;
+            allies[0].HealAlly(ally);
+            gsm.EndTurn();
+            StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
+    }
+
     public void AttemptHeavyAttack(Enemy enemy, Vector2 moveDir)
     {
         if (moveState == MoveState.NotMoving)
@@ -278,5 +290,6 @@ public enum MoveState
     PassingTurn,
     Attack,
     Swap,
-    HeavyAttack
+    HeavyAttack,
+    Heal
 }

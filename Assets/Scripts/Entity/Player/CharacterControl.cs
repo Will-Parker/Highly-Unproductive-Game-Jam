@@ -144,6 +144,15 @@ public class CharacterControl : MonoBehaviour
                         pm.AttemptMove(moveDir);
                     }
                     break;
+                case UIActionMode.Heal:
+                    foreach (Ally ally in pm.allies)
+                    {
+                        if (Vector3.Distance(ally.transform.position, mousePos) <= 0.05)
+                        {
+                            pm.AttemptHealAlly(ally);
+                        }
+                    }
+                    break;
             }
         }
     }

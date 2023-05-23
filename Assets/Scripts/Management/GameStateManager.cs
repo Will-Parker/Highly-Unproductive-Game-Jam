@@ -45,6 +45,8 @@ public class GameStateManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Player:
+                CharacterControl.controls.Gameplay.Disable();
+                gameState = GameState.Enemy;
                 turn++;
                 Debug.Log("Turn " + turn);
                 uim.UpdateUI();
@@ -53,12 +55,14 @@ public class GameStateManager : MonoBehaviour
                     enemy.UpdateAIState();
                     enemy.CalculateAction();
                 }
-                gameState = GameState.Enemy;
+                
                 break;
             case GameState.Enemy:
                 gameState = GameState.Player;
-                if (FindObjectOfType<PartyManager>().allies[0].Health <= 0)
-                    FindObjectOfType<PartyManager>().PassTurn();
+                PartyManager pm = FindObjectOfType<PartyManager>();
+                if (pm.allies[0].Health <= 0 || pm.moveState == MoveState.HeavyAttack)
+                    pm.PassTurn();
+                CharacterControl.controls.Gameplay.Enable();
                 break;
         }
     }

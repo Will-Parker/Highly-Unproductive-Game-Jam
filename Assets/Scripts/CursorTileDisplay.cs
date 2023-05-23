@@ -6,6 +6,7 @@ public class CursorTileDisplay : MonoBehaviour
 {
     private Grid grid;
     private ActionUIManager auim;
+    private PartyManager pm;
     [SerializeField] private Tilemap cursorMap = null;
     [SerializeField] private Tile cursorTile = null;
 
@@ -16,12 +17,13 @@ public class CursorTileDisplay : MonoBehaviour
     {
         grid = gameObject.GetComponent<Grid>();
         auim = FindObjectOfType<ActionUIManager>();
+        pm = FindObjectOfType<PartyManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (auim.mode ==  UIActionMode.HeavyAttack || auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun || auim.mode == UIActionMode.Bomb || auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack)
+        if (pm.moveState == MoveState.NotMoving && (auim.mode ==  UIActionMode.HeavyAttack || auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun || auim.mode == UIActionMode.Bomb || auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack))
         {
             // Mouse over -> highlight tile
             Vector3Int mousePos = GetMousePosition();
@@ -50,7 +52,7 @@ public class CursorTileDisplay : MonoBehaviour
         //}
     }
 
-    Vector3Int GetMousePosition()
+    public Vector3Int GetMousePosition()
     {
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         return grid.WorldToCell(mouseWorldPos);

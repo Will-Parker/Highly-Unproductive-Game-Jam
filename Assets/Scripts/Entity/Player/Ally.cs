@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,11 @@ public class Ally : Entity
     public AllyType type;
     private PartyManager pm;
     [SerializeField] private LayerMask impassableLayer;
+    public float HealStat { get; private set; } // how much HP to heal ally when healing
+    public float HeavyAttackStat { get; private set; } // how much to multiply attack when heavy attacking
+    public float StunStat { get; private set; } // how many turns to stun an enemy when stunning
+    public float BombStat { get; private set; } // how big the radius of the bomb is
+    public Dictionary<AllyType, Dictionary<StatType, float>> partnerBuffs;
 
     private void Awake()
     {
@@ -30,6 +36,7 @@ public class Ally : Entity
     public new void TakeDamage(float damage)
     {
         Health = Mathf.Max(Health - damage, 0f);
+        healthbar.SetHealth(Health);
         if (Health == 0)
         {
             GetComponent<SpriteRenderer>().color = Color.gray;
@@ -108,21 +115,52 @@ public class Ally : Entity
             case AllyType.Apple:
                 MaxHealth = 20f;
                 Attack = 2f;
+                HeavyAttackStat = 2f;
                 break;
             case AllyType.Strawberry:
                 MaxHealth = 5f;
                 Attack = 0f;
+                HealStat = 5f;
                 break;
             case AllyType.Lemon:
                 MaxHealth = 8f;
                 Attack = 0f;
+                StunStat = 1f;
                 break;
             case AllyType.Blueberry:
                 MaxHealth = 10f;
                 Attack = 3f;
+                BombStat = 1f;
                 break;
         }
         Health = MaxHealth;
+        healthbar.SetMaxHealth(MaxHealth);
+        healthbar.SetHealth(Health);
+    }
+
+    public void AttackEnemy(Enemy enemy)
+    {
+        if (enemy != null)
+            enemy.TakeDamage(Attack);
+        // do attack anim
+    }
+
+    internal void HeavyAttackEnemy(Enemy enemy)
+    {
+        if (enemy != null)
+            enemy.TakeDamage(Attack * HeavyAttackStat);
+    }
+
+    public void HealAlly(Ally ally)
+    {
+        ally.Heal(HealStat);
+        // do heal anim;
+    }
+
+    public void Heal(float health)
+    {
+        Health = Mathf.Min(Health + health, MaxHealth);
+        healthbar.SetHealth(Health);
     }
 }
 
@@ -132,4 +170,14 @@ public enum AllyType
     Strawberry,
     Lemon,
     Blueberry
+}
+
+public enum StatType
+{
+    MaxHealth,
+    Attack,
+    HeavyAttack,
+    Heal,
+    Stun,
+    Bomb,
 }

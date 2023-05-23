@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Helpers;
 
 public class ActionUIManager : MonoBehaviour
 {
@@ -180,7 +181,45 @@ public class ActionUIManager : MonoBehaviour
                 readBtn.gameObject.SetActive(true);
                 break;
         }
+        UpdateActionControls(newMode);
+    }
+
+    public void UpdateActionControls(UIActionMode newMode)
+    {
         mode = newMode;
+        switch (newMode)
+        {
+            case UIActionMode.None:
+                // 
+                break;
+            case UIActionMode.HeavyAttack:
+                //
+                break;
+            case UIActionMode.Heal:
+                //
+                break;
+            case UIActionMode.Stun:
+                //
+                break;
+            case UIActionMode.Bomb:
+                //
+                break;
+            case UIActionMode.Move:
+                //
+                break;
+            case UIActionMode.Attack:
+                //
+                break;
+            case UIActionMode.Swap:
+                pm.AttemptSwap(Vec3ToVec2(pm.allies[1].transform.position - pm.allies[0].transform.position));
+                break;
+            case UIActionMode.Rest:
+                //
+                break;
+            case UIActionMode.Read:
+                //
+                break;
+        }
     }
 
     public void ActionPressed(string btnType)

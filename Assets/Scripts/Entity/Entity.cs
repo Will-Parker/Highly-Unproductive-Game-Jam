@@ -2,6 +2,7 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     protected Animator anim;
+    [SerializeField] protected Healthbar healthbar = null;
     [SerializeField] protected float MaxHealth;
     public float Health { get; protected set; }
     [SerializeField] protected float Attack;

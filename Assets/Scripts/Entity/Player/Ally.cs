@@ -132,6 +132,12 @@ public class Ally : Entity
             enemy.TakeDamage(Attack);
         // do attack anim
     }
+
+    internal void HeavyAttackEnemy(Enemy enemy)
+    {
+        if (enemy != null)
+            enemy.TakeDamage(Attack * 3);
+    }
 }
 
 public enum AllyType

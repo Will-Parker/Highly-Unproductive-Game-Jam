@@ -35,6 +35,11 @@ public static class Helpers
         return new Vector3(v.x + 0.5f, v.y + 0.5f, 0f);
     }
 
+    public static Vector2Int Vec3IntToVec2Int(Vector3Int v)
+    {
+        return new Vector2Int(v.x, v.y);
+    }
+
     public static T MaxObject<T, U>(this IEnumerable<T> source, Func<T, U> selector)
       where U : IComparable<U>
     {

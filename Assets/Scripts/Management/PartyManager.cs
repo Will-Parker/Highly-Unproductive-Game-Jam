@@ -13,7 +13,7 @@ public class PartyManager : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera virCam;
     // how quickly it moves to next tile
     [SerializeField] [Range(0, 20)] private float moveSpeed;
-    private MoveState moveState = MoveState.NotMoving;
+    [HideInInspector] public MoveState moveState = MoveState.NotMoving;
     // impassable layer
     [SerializeField] private LayerMask impassableLayer;
     private Vector3 prevTail;
@@ -166,6 +166,19 @@ public class PartyManager : MonoBehaviour
         }
     }
 
+    public void AttemptHeavyAttack(Enemy enemy, Vector2 moveDir)
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            moveState = MoveState.HeavyAttack;
+            allies[0].facingDirection = moveDir;
+            allies[0].HeavyAttackEnemy(enemy);
+            gsm.EndTurn();
+            //StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            //StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
+    }
+
     public void RotatePartyOrder()
     {
         Ally temp = allies[0];
@@ -255,15 +268,15 @@ public class PartyManager : MonoBehaviour
         }
         return false;
     }
-
-    private enum MoveState
-    {
-        NotMoving,
-        Moving,
-        Rotating,
-        SpecialAction,
-        PassingTurn,
-        Attack,
-        Swap
-    }
+}
+public enum MoveState
+{
+    NotMoving,
+    Moving,
+    Rotating,
+    SpecialAction,
+    PassingTurn,
+    Attack,
+    Swap,
+    HeavyAttack
 }

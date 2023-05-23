@@ -60,7 +60,7 @@ public class GameStateManager : MonoBehaviour
             case GameState.Enemy:
                 gameState = GameState.Player;
                 PartyManager pm = FindObjectOfType<PartyManager>();
-                if (pm.allies[0].Health <= 0)
+                if (pm.allies[0].Health <= 0 || pm.moveState == MoveState.HeavyAttack)
                     pm.PassTurn();
                 CharacterControl.controls.Gameplay.Enable();
                 break;

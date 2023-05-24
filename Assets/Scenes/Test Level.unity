@@ -620,6 +620,7 @@ MonoBehaviour:
   swapBtn: {fileID: 1476045049}
   restBtn: {fileID: 1715594795}
   readBtn: {fileID: 410132358}
+  bombCursor: {fileID: 2805590361145580403}
 --- !u!1 &330719630
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,7 +1651,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 138786679
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -59870,6 +59871,73 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7863671855845504158, guid: 79098f8aed3321040a98938434a08f93, type: 3}
   m_PrefabInstance: {fileID: 717145928}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2805590361145580402
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612079119731589138, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195940267271736178, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_Name
+      value: Bomb Cursor
+      objectReference: {fileID: 0}
+    - target: {fileID: 7195940267271736178, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4460973702821566925, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+--- !u!1 &2805590361145580403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7195940267271736178, guid: 1db147fb06fd18f43b3f873d40630b3f, type: 3}
+  m_PrefabInstance: {fileID: 2805590361145580402}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4485695870570651182
 PrefabInstance:

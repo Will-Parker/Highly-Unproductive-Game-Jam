@@ -167,6 +167,14 @@ public class Ally : Entity
     {
         enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, StunStat));
     }
+
+    public void PlaceBomb(Vector3 bombLocation)
+    {
+        var bombGO = Instantiate(Resources.Load("Prefabs/Bomb", typeof(GameObject)), bombLocation, Quaternion.identity) as GameObject;
+        var bomb = bombGO.GetComponent<Bomb>();
+        bomb.bombRadius = Mathf.FloorToInt(BombStat);
+        bomb.bombTimer = 2; // ?
+    }
 }
 
 public enum AllyType

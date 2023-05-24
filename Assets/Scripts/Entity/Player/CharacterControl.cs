@@ -153,6 +153,15 @@ public class CharacterControl : MonoBehaviour
                         }
                     }
                     break;
+                case UIActionMode.Stun:
+                    foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+                    {
+                        if (Vector3.Distance(enemy.transform.position, mousePos) <= 0.05)
+                        {
+                            pm.AttemptStun(enemy);
+                        }
+                    }
+                    break;
             }
         }
     }

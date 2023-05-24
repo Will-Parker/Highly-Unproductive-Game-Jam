@@ -162,6 +162,11 @@ public class Ally : Entity
         Health = Mathf.Min(Health + health, MaxHealth);
         healthbar.SetHealth(Health);
     }
+
+    internal void StunEnemy(Enemy enemy)
+    {
+        enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, StunStat));
+    }
 }
 
 public enum AllyType

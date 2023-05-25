@@ -9,7 +9,7 @@ public class CursorTileDisplay : MonoBehaviour
     private PartyManager pm;
     [SerializeField] private Tilemap cursorMap = null;
     [SerializeField] private Tile cursorTile = null;
-    [SerializeField] private Tile bombTile = null;
+    [SerializeField] private ExtendedRuleTile bombTile = null;
 
     private Vector3Int previousMousePos = new Vector3Int();
 
@@ -44,7 +44,10 @@ public class CursorTileDisplay : MonoBehaviour
                 if (!mousePos.Equals(previousMousePos))
                 {
                     cursorMap.SetTile(previousMousePos, null); // Remove old bombTile
-                    cursorMap.SetTile(mousePos, cursorTile);
+                    cursorMap.SetTile(mousePos, bombTile);
+                    var a = (ExtendedRuleTile) cursorMap.GetTile(mousePos);
+                    Transform bombRad = a.m_DefaultGameObject.transform.GetChild(0);
+                    bombRad.localScale = Vector3.one * Mathf.FloorToInt((pm.allies[0].BombStat * 2) + 1);
                     previousMousePos = mousePos;
                 }
             }

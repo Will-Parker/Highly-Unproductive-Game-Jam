@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33b4e84cb87bd224385388a74cc09d1a, type: 3}
-  m_Name: ExtendedRuleTile
+  m_Name: Bomb
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 0}
-  m_DefaultGameObject: {fileID: 0}
+  m_DefaultSprite: {fileID: 21300000, guid: 91b92b75619417342905daa67f0319c7, type: 3}
+  m_DefaultGameObject: {fileID: 7195940267271736178, guid: d21970ed06a959f4db93babd27dea3d7, type: 3}
   m_DefaultColliderType: 1
   m_TilingRules: []
   type: 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static Helpers;
+using UnityEngine.Tilemaps;
 
 public class Ally : Entity
 {
@@ -172,8 +173,8 @@ public class Ally : Entity
     {
         var bombGO = Instantiate(Resources.Load("Prefabs/Bomb", typeof(GameObject)), bombLocation, Quaternion.identity) as GameObject;
         var bomb = bombGO.GetComponent<Bomb>();
-        bomb.bombRadius = Mathf.FloorToInt(BombStat);
-        bomb.bombTimer = 2; // ?
+        bomb.bombRadius = Mathf.FloorToInt((BombStat * 2) + 1);
+        bomb.bombDmg = Attack;
     }
 }
 

@@ -166,13 +166,34 @@ public class PartyManager : MonoBehaviour
         }
     }
 
+    internal void AttemptStun(Enemy enemy)
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            moveState = MoveState.Stun;
+            allies[0].StunEnemy(enemy);
+            StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
+    }
+
+    internal void AttemptPlaceBomb(Vector3 mousePos)
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            moveState = MoveState.Stun;
+            allies[0].PlaceBomb(mousePos);
+            StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
+    }
+
     internal void AttemptHealAlly(Ally ally)
     {
         if (moveState == MoveState.NotMoving)
         {
             moveState = MoveState.Heal;
             allies[0].HealAlly(ally);
-            gsm.EndTurn();
             StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
@@ -188,6 +209,20 @@ public class PartyManager : MonoBehaviour
             gsm.EndTurn();
             //StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             //StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
+    }
+
+    public void AttemptDetonate()
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            moveState = MoveState.Detonate;
+            foreach (Bomb bomb in FindObjectsOfType<Bomb>())
+            {
+                bomb.Explode();
+            }
+            StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
     }
 
@@ -291,5 +326,7 @@ public enum MoveState
     Attack,
     Swap,
     HeavyAttack,
-    Heal
+    Heal,
+    Stun,
+    Detonate
 }

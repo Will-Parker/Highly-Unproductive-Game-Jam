@@ -9,6 +9,7 @@ public class CursorTileDisplay : MonoBehaviour
     private PartyManager pm;
     [SerializeField] private Tilemap cursorMap = null;
     [SerializeField] private Tile cursorTile = null;
+    [SerializeField] private ExtendedRuleTile bombTile = null;
 
     private Vector3Int previousMousePos = new Vector3Int();
 
@@ -23,15 +24,36 @@ public class CursorTileDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (pm.moveState == MoveState.NotMoving && (auim.mode ==  UIActionMode.HeavyAttack || auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun || auim.mode == UIActionMode.Bomb || auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack))
+        if (pm.moveState == MoveState.NotMoving)
         {
-            // Mouse over -> highlight tile
-            Vector3Int mousePos = GetMousePosition();
-            if (!mousePos.Equals(previousMousePos))
+            if (auim.mode == UIActionMode.HeavyAttack || auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun || auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack)
             {
-                cursorMap.SetTile(previousMousePos, null); // Remove old hoverTile
-                cursorMap.SetTile(mousePos, cursorTile);
-                previousMousePos = mousePos;
+                // Mouse over -> highlight tile
+                Vector3Int mousePos = GetMousePosition();
+                if (!mousePos.Equals(previousMousePos))
+                {
+                    cursorMap.SetTile(previousMousePos, null); // Remove old hoverTile
+                    cursorMap.SetTile(mousePos, cursorTile);
+                    previousMousePos = mousePos;
+                }
+            }
+            else if (auim.mode == UIActionMode.Bomb)
+            {
+                // Mouse over -> bomb tile
+                Vector3Int mousePos = GetMousePosition();
+                if (!mousePos.Equals(previousMousePos))
+                {
+                    cursorMap.SetTile(previousMousePos, null); // Remove old bombTile
+                    cursorMap.SetTile(mousePos, bombTile);
+                    var a = (ExtendedRuleTile) cursorMap.GetTile(mousePos);
+                    Transform bombRad = a.m_DefaultGameObject.transform.GetChild(0);
+                    bombRad.localScale = Vector3.one * Mathf.FloorToInt((pm.allies[0].BombStat * 2) + 1);
+                    previousMousePos = mousePos;
+                }
+            }
+            else if (cursorMap.GetTile(previousMousePos) != null)
+            {
+                cursorMap.SetTile(previousMousePos, null);
             }
         } 
         else if (cursorMap.GetTile(previousMousePos) != null)

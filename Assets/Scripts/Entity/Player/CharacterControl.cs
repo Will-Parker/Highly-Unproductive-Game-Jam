@@ -31,6 +31,7 @@ public class CharacterControl : MonoBehaviour
         controls.Gameplay.Move.performed += Move_performed;
         controls.Gameplay.SpecialAction.performed += SpecialAction_performed;
         controls.Gameplay.Click.performed += Click_performed;
+        controls.Gameplay.Detonate.performed += Detonate_performed;
 
         controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
     }
@@ -153,7 +154,28 @@ public class CharacterControl : MonoBehaviour
                         }
                     }
                     break;
+                case UIActionMode.Stun:
+                    foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+                    {
+                        if (Vector3.Distance(enemy.transform.position, mousePos) <= 0.05)
+                        {
+                            pm.AttemptStun(enemy);
+                        }
+                    }
+                    break;
+                case UIActionMode.Bomb:
+                    pm.AttemptPlaceBomb(mousePos);
+                    break;
             }
+        }
+    }
+
+    private void Detonate_performed(InputAction.CallbackContext obj)
+    {
+        if (FindObjectsOfType<Bomb>().Length > 0)
+        {
+            auim.UpdateActionUI(UIActionMode.Detonate);
+            pm.AttemptDetonate();
         }
     }
 }

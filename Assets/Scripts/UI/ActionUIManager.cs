@@ -17,6 +17,7 @@ public class ActionUIManager : MonoBehaviour
     [SerializeField] private Button swapBtn;
     [SerializeField] private Button restBtn;
     [SerializeField] private Button readBtn;
+    [SerializeField] private Button detonateBtn;
     private void Awake()
     {
         pm = FindObjectOfType<PartyManager>();
@@ -67,6 +68,14 @@ public class ActionUIManager : MonoBehaviour
                     swapBtn.gameObject.SetActive(true);
                     restBtn.gameObject.SetActive(true);
                     readBtn.gameObject.SetActive(false); // for now just always disable read btn since signs are not added yet
+                    if (FindObjectsOfType<Bomb>().Length > 0)
+                    {
+                        detonateBtn.gameObject.SetActive(true);
+                    } 
+                    else
+                    {
+                        detonateBtn.gameObject.SetActive(false);
+                    }
                 }
                 else
                 {
@@ -79,6 +88,7 @@ public class ActionUIManager : MonoBehaviour
                     swapBtn.gameObject.SetActive(false);
                     restBtn.gameObject.SetActive(false);
                     readBtn.gameObject.SetActive(false);
+                    detonateBtn.gameObject.SetActive(false);
                 }
                 break;
             case UIActionMode.HeavyAttack:
@@ -91,6 +101,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Heal:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -102,6 +113,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Stun:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -113,6 +125,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Bomb:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -124,6 +137,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Move:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -135,6 +149,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Attack:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -146,6 +161,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Swap:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -157,6 +173,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(true);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Rest:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -168,6 +185,7 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(true);
                 readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Read:
                 heavyAttackBtn.gameObject.SetActive(false);
@@ -179,6 +197,19 @@ public class ActionUIManager : MonoBehaviour
                 swapBtn.gameObject.SetActive(false);
                 restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(true);
+                detonateBtn.gameObject.SetActive(false);
+                break;
+            case UIActionMode.Detonate:
+                heavyAttackBtn.gameObject.SetActive(false);
+                healBtn.gameObject.SetActive(false);
+                stunBtn.gameObject.SetActive(false);
+                bombBtn.gameObject.SetActive(false);
+                moveBtn.gameObject.SetActive(false);
+                attackBtn.gameObject.SetActive(false);
+                swapBtn.gameObject.SetActive(false);
+                restBtn.gameObject.SetActive(false);
+                readBtn.gameObject.SetActive(false);
+                detonateBtn.gameObject.SetActive(true);
                 break;
         }
         UpdateActionControls(newMode);
@@ -218,6 +249,9 @@ public class ActionUIManager : MonoBehaviour
                 break;
             case UIActionMode.Read:
                 //
+                break;
+            case UIActionMode.Detonate:
+                pm.AttemptDetonate();
                 break;
         }
     }
@@ -271,6 +305,9 @@ public class ActionUIManager : MonoBehaviour
             case "read":
                 btnActionMode = UIActionMode.Read;
                 break;
+            case "detonate":
+                btnActionMode = UIActionMode.Detonate;
+                break;
             default:
                 Debug.LogError("Invalid Button Type Passed Into Action Pressed");
                 break;
@@ -293,5 +330,6 @@ public enum UIActionMode
     Attack,
     Swap,
     Rest,
-    Read
+    Read,
+    Detonate
 }

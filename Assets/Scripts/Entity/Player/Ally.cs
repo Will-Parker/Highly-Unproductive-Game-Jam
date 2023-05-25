@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static Helpers;
+using UnityEngine.Tilemaps;
 
 public class Ally : Entity
 {
@@ -161,6 +162,19 @@ public class Ally : Entity
     {
         Health = Mathf.Min(Health + health, MaxHealth);
         healthbar.SetHealth(Health);
+    }
+
+    internal void StunEnemy(Enemy enemy)
+    {
+        enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, StunStat));
+    }
+
+    public void PlaceBomb(Vector3 bombLocation)
+    {
+        var bombGO = Instantiate(Resources.Load("Prefabs/Bomb", typeof(GameObject)), bombLocation, Quaternion.identity) as GameObject;
+        var bomb = bombGO.GetComponent<Bomb>();
+        bomb.bombRadius = Mathf.FloorToInt((BombStat * 2) + 1);
+        bomb.bombDmg = Attack;
     }
 }
 

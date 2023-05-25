@@ -34,8 +34,17 @@ public class GameStateManager : MonoBehaviour
             case GameState.Enemy:
                 var enemies = new List<Enemy>(FindObjectsOfType<Enemy>()); // probably should not update enemies array every frame
                 enemies.RemoveAll(enemy => !enemy.isActiveAndEnabled);
+                List<Enemy> stunnedEnemies = enemies.FindAll(enemy => enemy.turnsStunned > 0);
+                enemies.RemoveAll(enemy => enemy.turnsStunned > 0);
                 if (enemies.All(enemy => enemy.hasFinishedTurn))
+                {
+                    foreach (Enemy stunnedEnemy in stunnedEnemies)
+                    {
+                        stunnedEnemy.turnsStunned--;
+                    }
                     EndTurn();
+                }
+                    
                 break;
         }
     }
@@ -52,8 +61,11 @@ public class GameStateManager : MonoBehaviour
                 uim.UpdateUI();
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                 {
-                    enemy.UpdateAIState();
-                    enemy.CalculateAction();
+                    if (enemy.turnsStunned == 0)
+                    {
+                        enemy.UpdateAIState();
+                        enemy.CalculateAction();
+                    }
                 }
                 
                 break;

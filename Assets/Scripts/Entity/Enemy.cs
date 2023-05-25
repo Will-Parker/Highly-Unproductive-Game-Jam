@@ -25,6 +25,7 @@ public class Enemy : Entity
     private Vector3 movePoint;
     public bool IsMoving { get; private set; }
     private Ally targetAlly;
+    public int turnsStunned;
 
     //public Transform debug;
 

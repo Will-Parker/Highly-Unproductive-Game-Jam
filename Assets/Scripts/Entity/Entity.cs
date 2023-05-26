@@ -3,9 +3,9 @@ public class Entity : MonoBehaviour
 {
     protected Animator anim;
     [SerializeField] protected Healthbar healthbar = null;
-    [SerializeField] protected float MaxHealth;
+    public float MaxHealth;
     public float Health { get; protected set; }
-    [SerializeField] protected float Attack;
+    public float Attack;
     public Vector2 facingDirection;
     public void UpdateAnim(bool isMoving, Vector2 moveDir)
     {

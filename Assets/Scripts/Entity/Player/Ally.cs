@@ -15,7 +15,53 @@ public class Ally : Entity
     public float HeavyAttackStat { get; private set; } // how much to multiply attack when heavy attacking
     public float StunStat { get; private set; } // how many turns to stun an enemy when stunning
     public float BombStat { get; private set; } // how big the radius of the bomb is
-    public Dictionary<AllyType, Dictionary<StatType, float>> partnerBuffs;
+    public Dictionary<AllyType, Dictionary<StatType, float>> partnerBuffs = new Dictionary<AllyType, Dictionary<StatType, float>>() 
+    {
+        { 
+            AllyType.Apple, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Strawberry, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Lemon, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Blueberry, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        }
+    };
 
     private void Awake()
     {

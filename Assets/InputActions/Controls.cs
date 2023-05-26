@@ -80,6 +80,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""88b669a2-e077-422c-9c0d-92490601908b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +201,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Detonate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5641d0c6-5e2a-42e0-acce-4241e0601336"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -234,6 +254,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Gameplay_Point = m_Gameplay.FindAction("Point", throwIfNotFound: true);
         m_Gameplay_Click = m_Gameplay.FindAction("Click", throwIfNotFound: true);
         m_Gameplay_Detonate = m_Gameplay.FindAction("Detonate", throwIfNotFound: true);
+        m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
@@ -304,6 +325,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Point;
     private readonly InputAction m_Gameplay_Click;
     private readonly InputAction m_Gameplay_Detonate;
+    private readonly InputAction m_Gameplay_Pause;
     public struct GameplayActions
     {
         private @Controls m_Wrapper;
@@ -314,6 +336,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Point => m_Wrapper.m_Gameplay_Point;
         public InputAction @Click => m_Wrapper.m_Gameplay_Click;
         public InputAction @Detonate => m_Wrapper.m_Gameplay_Detonate;
+        public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -341,6 +364,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Detonate.started += instance.OnDetonate;
             @Detonate.performed += instance.OnDetonate;
             @Detonate.canceled += instance.OnDetonate;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -363,6 +389,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Detonate.started -= instance.OnDetonate;
             @Detonate.performed -= instance.OnDetonate;
             @Detonate.canceled -= instance.OnDetonate;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -434,6 +463,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnPoint(InputAction.CallbackContext context);
         void OnClick(InputAction.CallbackContext context);
         void OnDetonate(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

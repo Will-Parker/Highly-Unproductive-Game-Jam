@@ -32,6 +32,7 @@ public class CharacterControl : MonoBehaviour
         controls.Gameplay.SpecialAction.performed += SpecialAction_performed;
         controls.Gameplay.Click.performed += Click_performed;
         controls.Gameplay.Detonate.performed += Detonate_performed;
+        controls.Gameplay.Pause.performed += Pause_performed;
 
         controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
     }
@@ -177,5 +178,30 @@ public class CharacterControl : MonoBehaviour
             auim.UpdateActionUI(UIActionMode.Detonate);
             pm.AttemptDetonate();
         }
+    }
+
+    private void Pause_performed(InputAction.CallbackContext obj)
+    {
+        FindObjectOfType<UIManager>().Pause();
+    }
+
+    public void UnsubFromAllActionsExceptPause()
+    {
+        controls.Gameplay.Move.performed -= Move_performed;
+        controls.Gameplay.SpecialAction.performed -= SpecialAction_performed;
+        controls.Gameplay.Click.performed -= Click_performed;
+        controls.Gameplay.Detonate.performed -= Detonate_performed;
+
+        controls.Gameplay.SpecialAction.canceled -= SpecialAction_canceled;
+    }
+
+    public void SubToAllActionsExceptPause()
+    {
+        controls.Gameplay.Move.performed += Move_performed;
+        controls.Gameplay.SpecialAction.performed += SpecialAction_performed;
+        controls.Gameplay.Click.performed += Click_performed;
+        controls.Gameplay.Detonate.performed += Detonate_performed;
+
+        controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
     }
 }

@@ -190,6 +190,7 @@ public class Enemy : Entity
         Health = Mathf.Max(Health - damage, 0f);
         if (Health == 0)
         {
+            pm.GainExperience(1);
             Destroy(gameObject);
         }
     }

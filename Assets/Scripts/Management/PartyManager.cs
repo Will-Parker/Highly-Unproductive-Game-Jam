@@ -17,6 +17,9 @@ public class PartyManager : MonoBehaviour
     // impassable layer
     [SerializeField] private LayerMask impassableLayer;
     private Vector3 prevTail;
+    private float exp;
+    private float maxExp;
+    [SerializeField] private Experiencebar expBar;
 
     private GameStateManager gsm;
     private void Awake()
@@ -53,6 +56,9 @@ public class PartyManager : MonoBehaviour
         }
 
         prevTail = new Vector3(allies[3].transform.position.x - 1, allies[3].transform.position.y, allies[3].transform.position.z);
+        maxExp = 1;
+        expBar.SetMaxExperience(maxExp);
+        expBar.SetExperience(0);
     }
 
     // Update is called once per frame
@@ -273,6 +279,12 @@ public class PartyManager : MonoBehaviour
             allies[i].facingDirection = Vec3ToVec2(movePoints[i] - allies[i].transform.position);
             allies[i].UpdateAnim(true, allies[i].facingDirection);
         }
+    }
+
+    public void GainExperience(float experienceToAdd)
+    {
+        exp = Mathf.Min(exp + experienceToAdd, maxExp);
+        expBar.SetExperience(exp);
     }
 
     // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html

@@ -105,7 +105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6340023003725942836, guid: 8f18966b4a050064896720404b26ecaa, type: 3}
       propertyPath: m_Name
-      value: Blueberry Group Variant
+      value: Blueberry Group
       objectReference: {fileID: 0}
     - target: {fileID: 6340023003725942837, guid: 8f18966b4a050064896720404b26ecaa, type: 3}
       propertyPath: m_Pivot.x
@@ -327,6 +327,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6340023004739926442, guid: 8f18966b4a050064896720404b26ecaa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1476480110, guid: 38fb1b148d9a72446980dd06fdb83021, type: 3}
     - target: {fileID: 6340023004739926442, guid: 8f18966b4a050064896720404b26ecaa, type: 3}
       propertyPath: m_Color.b
       value: 1

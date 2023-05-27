@@ -27,6 +27,7 @@ public class GameStateManager : MonoBehaviour
 
     private void Update()
     {
+        //Time.timeScale = 0.1f;
         switch (gameState)
         {
             case GameState.Player:

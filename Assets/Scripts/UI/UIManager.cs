@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     private ActionUIManager auim;
     private PauseManager pausem;
+    private MatchManager mm;
     private CharacterControl cc;
 
     private void Awake()
@@ -23,11 +24,14 @@ public class UIManager : MonoBehaviour
 
         auim = FindObjectOfType<ActionUIManager>();
         pausem = FindObjectOfType<PauseManager>();
+        mm = FindObjectOfType<MatchManager>();
         cc = FindObjectOfType<CharacterControl>();
     }
     private void Start()
     {
-        Pause();
+        pausem.gameObject.SetActive(false);
+        mm.gameObject.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void UpdateUI()
@@ -43,11 +47,24 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 1f;
             cc.SubToAllActionsExceptPause();
         }
+        else if (mm.gameObject.activeSelf)
+        {
+            mm.gameObject.SetActive(false);
+            Time.timeScale = 1f;
+            cc.SubToAllActionsExceptPause();
+        }
         else
         {
             pausem.gameObject.SetActive(true);
             Time.timeScale = 0f;
             cc.UnsubFromAllActionsExceptPause();
         }
+    }
+
+    public void BeginMatch()
+    {
+        mm.gameObject.SetActive(true);
+        Time.timeScale = 0f;
+        cc.UnsubFromAllActionsExceptPause();
     }
 }

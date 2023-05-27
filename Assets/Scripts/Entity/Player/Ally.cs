@@ -161,18 +161,18 @@ public class Ally : Entity
         switch (type)
         {
             case AllyType.Apple:
-                MaxHealth = 20f;
+                MaxHealth = 15f;
                 Attack = 2f;
                 HeavyAttackStat = 2f;
                 break;
             case AllyType.Strawberry:
-                MaxHealth = 5f;
-                Attack = 0f;
+                MaxHealth = 6f;
+                Attack = 1f;
                 HealStat = 5f;
                 break;
             case AllyType.Lemon:
                 MaxHealth = 8f;
-                Attack = 0f;
+                Attack = 1f;
                 StunStat = 1f;
                 break;
             case AllyType.Blueberry:

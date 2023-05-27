@@ -53,8 +53,6 @@ public class PartyManager : MonoBehaviour
         }
 
         prevTail = new Vector3(allies[3].transform.position.x - 1, allies[3].transform.position.y, allies[3].transform.position.z);
-
-        //Time.timeScale = 0.1f;
     }
 
     // Update is called once per frame
@@ -98,7 +96,7 @@ public class PartyManager : MonoBehaviour
                         for (int i = 0; i < 4; i++)
                         {
                             allies[i].transform.position = movePoints[i];
-                            //allies[i].UpdateAnim(false);
+                            allies[i].UpdateAnim(false);
                         }
                         moveState = MoveState.NotMoving;
                         gsm.EndTurn();
@@ -153,9 +151,9 @@ public class PartyManager : MonoBehaviour
         {
             
             allies[1].facingDirection = -moveDir;
-            //allies[1].UpdateAnim(true, pm.allies[1].facingDirection);
+            allies[1].UpdateAnim(true, allies[1].facingDirection);
             allies[0].facingDirection = moveDir;
-            //allies[0].UpdateAnim(true, pm.allies[0].facingDirection);
+            allies[0].UpdateAnim(true, allies[0].facingDirection);
 
             Ally temp = allies[0];
             allies[0] = allies[1];
@@ -248,13 +246,13 @@ public class PartyManager : MonoBehaviour
         moveState = MoveState.Moving;
         movePoints[0] += Vec2ToVec3(moveDir);
         allies[0].facingDirection = moveDir;
-        //allies[0].UpdateAnim(true, pm.allies[0].facingDirection);
+        allies[0].UpdateAnim(true, allies[0].facingDirection);
         prevTail = allies[3].transform.position;
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = allies[i - 1].transform.position;
             allies[i].facingDirection = Vec3ToVec2(movePoints[i] - allies[i].transform.position);
-            //allies[i].UpdateAnim(true, allies[i].facingDirection);
+            allies[i].UpdateAnim(true, allies[i].facingDirection);
         }
     }
 
@@ -268,12 +266,12 @@ public class PartyManager : MonoBehaviour
 
         prevTail = allies[3].transform.position;
         allies[0].facingDirection = Vec3ToVec2(movePoints[0] - allies[0].transform.position);
-        //pm.allies[0].UpdateAnim(true, pm.allies[0].facingDirection));
+        allies[0].UpdateAnim(true, allies[0].facingDirection);
         for (int i = 1; i < 4; i++)
         {
             movePoints[i] = allies[i - 1].transform.position;
             allies[i].facingDirection = Vec3ToVec2(movePoints[i] - allies[i].transform.position);
-            //pm.allies[i].UpdateAnim(true, pm.allies[i].facingDirection));
+            allies[i].UpdateAnim(true, allies[i].facingDirection);
         }
     }
 

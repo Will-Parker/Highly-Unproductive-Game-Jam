@@ -15,6 +15,10 @@ PrefabInstance:
       propertyPath: impassableLayer.m_Bits
       value: 256
       objectReference: {fileID: 0}
+    - target: {fileID: 4726922826561997921, guid: 69c78d8d38a4ff84b8f2698355867d1b, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 038b63ff6ad29224db8e5594cc845f3e, type: 2}
     - target: {fileID: 7556322738131457251, guid: 69c78d8d38a4ff84b8f2698355867d1b, type: 3}
       propertyPath: m_Name
       value: Blueberry
@@ -63,6 +67,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7556322738131457253, guid: 69c78d8d38a4ff84b8f2698355867d1b, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1476480110, guid: 38fb1b148d9a72446980dd06fdb83021, type: 3}
     - target: {fileID: 7556322738131457253, guid: 69c78d8d38a4ff84b8f2698355867d1b, type: 3}
       propertyPath: m_Color.g
       value: 0.83137256

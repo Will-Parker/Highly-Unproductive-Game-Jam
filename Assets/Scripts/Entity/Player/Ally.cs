@@ -72,6 +72,7 @@ public class Ally : Entity
     void Start()
     {
         InitializeStats();
+        UpdateAnim(facingDirection);
     }
 
     // Update is called once per frame

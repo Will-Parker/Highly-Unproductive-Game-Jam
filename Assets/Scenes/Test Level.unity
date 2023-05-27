@@ -585,39 +585,19 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: -1, y: 19, z: 0}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741826
-  m_AnimatedTiles:
-  - first: {x: -1, y: 19, z: 0}
-    second:
-      m_AnimatedSprites:
-      - {fileID: -166716908, guid: 63208c9bf9b1b6d48aeaf871b2342897, type: 3}
-      - {fileID: 475431536, guid: 63208c9bf9b1b6d48aeaf871b2342897, type: 3}
-      - {fileID: 2032532887, guid: 63208c9bf9b1b6d48aeaf871b2342897, type: 3}
-      - {fileID: -1299415886, guid: 63208c9bf9b1b6d48aeaf871b2342897, type: 3}
-      m_AnimationSpeed: 6
-      m_AnimationTimeOffset: 0
-      m_IsLooping: 1
+  m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: ed5454c3d914a6047a943654e36c3370, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 2f03821ad086a0b429233f0181feb035, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 1
-    m_Data: {fileID: -166716908, guid: 63208c9bf9b1b6d48aeaf871b2342897, type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 1
     m_Data: {fileID: -995457308, guid: 4d006f8bb42fcae4cb37b2a615059eba, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 2
+  - m_RefCount: 1
     m_Data:
       e00: 1
       e01: 0
@@ -636,7 +616,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 2
+  - m_RefCount: 1
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -63165,18 +63145,34 @@ PrefabInstance:
       propertyPath: healthbar
       value: 
       objectReference: {fileID: 656806422}
+    - target: {fileID: 759267955870245932, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
+      propertyPath: facingDirection.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1246765379942311152, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: healthbar
       value: 
       objectReference: {fileID: 897115709}
+    - target: {fileID: 1246765379942311152, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
+      propertyPath: facingDirection.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3854121804332927805, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: healthbar
       value: 
       objectReference: {fileID: 858423330}
+    - target: {fileID: 3854121804332927805, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
+      propertyPath: facingDirection.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3976297880390001105, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: healthbar
       value: 
       objectReference: {fileID: 2052299513}
+    - target: {fileID: 3976297880390001105, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
+      propertyPath: facingDirection.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4485695870577170445, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -63235,19 +63231,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6716129522939811800, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6874268403440663860, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6959099104347820581, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8887782862567822073, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c3f0f32f042f064c9027d4280361451, type: 3}

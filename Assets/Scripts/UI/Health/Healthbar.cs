@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Healthbar : MonoBehaviour
+public class Healthbar : Valuebar
 {
-    private Slider slider;
-
-    private void Awake()
-    {
-        slider = GetComponent<Slider>();
-    }
-
     public void SetMaxHealth(float maxHealth)
     {
-        slider.maxValue = maxHealth;
-        slider.GetComponent<RectTransform>().sizeDelta = new Vector2(maxHealth * 20, 30);
+        SetMaxValue(maxHealth);
+        string tip = GetComponent<HoverTip>().tipToShow;
+        string[] splitTip = tip.Split('/');
+        splitTip[1] = Mathf.CeilToInt(maxHealth).ToString();
+        GetComponent<HoverTip>().tipToShow = splitTip[0] + "/" + splitTip[1];
     }
 
     public void SetHealth(float health)
     {
-        slider.value = health;
+        SetValue(health);
+        string tip = GetComponent<HoverTip>().tipToShow;
+        string[] splitTip = tip.Split(new char[] { ':', '/' } );
+        splitTip[1] = " " + Mathf.CeilToInt(health).ToString();
+        GetComponent<HoverTip>().tipToShow = splitTip[0] + ":" + splitTip[1] + "/" + splitTip[2];
     }
 }

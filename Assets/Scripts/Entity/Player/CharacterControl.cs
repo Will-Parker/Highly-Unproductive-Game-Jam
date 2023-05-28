@@ -33,8 +33,34 @@ public class CharacterControl : MonoBehaviour
         controls.Gameplay.Click.performed += Click_performed;
         controls.Gameplay.Detonate.performed += Detonate_performed;
         controls.Gameplay.Pause.performed += Pause_performed;
+        controls.Gameplay.TestDialogue.performed += TestDialogue_performed;
 
         controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
+    }
+
+    [SerializeField] private TextAsset inkJSON; // FOR TESTING ONLY
+
+    private void TestDialogue_performed(InputAction.CallbackContext obj)
+    {
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            if (DialogueManager.GetInstance().currentStory.currentChoices.Count == 0)
+                DialogueManager.GetInstance().ContinueStory();
+        }
+        else
+        {
+            DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+        }
+
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            UnsubFromAllActionsExceptPause();
+            controls.Gameplay.TestDialogue.performed += TestDialogue_performed;
+        }
+        else
+        {
+            SubToAllActionsExceptPause();
+        }
     }
 
     private void Move_performed(InputAction.CallbackContext context)

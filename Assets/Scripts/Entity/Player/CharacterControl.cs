@@ -13,6 +13,8 @@ public class CharacterControl : MonoBehaviour
     private ActionUIManager auim;
     private CursorTileDisplay ctd;
 
+    private static bool progressDialoguePressed = false;
+
     private void Awake()
     {
         pm = GetComponent<PartyManager>();
@@ -33,34 +35,10 @@ public class CharacterControl : MonoBehaviour
         controls.Gameplay.Click.performed += Click_performed;
         controls.Gameplay.Detonate.performed += Detonate_performed;
         controls.Gameplay.Pause.performed += Pause_performed;
-        controls.Gameplay.TestDialogue.performed += TestDialogue_performed;
+        // controls.Gameplay.ProgressDialogue.performed += ProgressDialogue_performed;
+        controls.Gameplay.DebugOpenDialogue.performed += DebugOpenDialogue_performed;
 
         controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
-    }
-
-    [SerializeField] private TextAsset inkJSON; // FOR TESTING ONLY
-
-    private void TestDialogue_performed(InputAction.CallbackContext obj)
-    {
-        if (DialogueManager.GetInstance().dialogueIsPlaying)
-        {
-            if (DialogueManager.GetInstance().currentStory.currentChoices.Count == 0)
-                DialogueManager.GetInstance().ContinueStory();
-        }
-        else
-        {
-            DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
-        }
-
-        if (DialogueManager.GetInstance().dialogueIsPlaying)
-        {
-            UnsubFromAllActionsExceptPause();
-            controls.Gameplay.TestDialogue.performed += TestDialogue_performed;
-        }
-        else
-        {
-            SubToAllActionsExceptPause();
-        }
     }
 
     private void Move_performed(InputAction.CallbackContext context)
@@ -206,12 +184,53 @@ public class CharacterControl : MonoBehaviour
         }
     }
 
+    private void ProgressDialogue_performed(InputAction.CallbackContext obj)
+    {
+        progressDialoguePressed = true;
+
+        if (!DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            SubToAllGameplayActions();
+            UnsubFromAllDialogueActions();
+        }
+    }
+
+    private void ProgressDialogue_canceled(InputAction.CallbackContext obj)
+    {
+        progressDialoguePressed = false;
+
+        if (!DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            SubToAllGameplayActions();
+            UnsubFromAllDialogueActions();
+        }
+    }
+
+    public static bool GetProgressDialoguePressed()
+    {
+        bool result = progressDialoguePressed;
+        progressDialoguePressed = false;
+        return result;
+    }
+
+    [SerializeField] private TextAsset inkJSON; // FOR TESTING ONLY
+    private void DebugOpenDialogue_performed(InputAction.CallbackContext obj)
+    {
+        OpenDialogue(inkJSON);
+    }
+    public void OpenDialogue(TextAsset inkJSON)
+    {
+        DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+        UnsubFromAllGameplayActions();
+        SubToAllDialogueActions();
+    }
+
     private void Pause_performed(InputAction.CallbackContext obj)
     {
         FindObjectOfType<UIManager>().Pause();
     }
 
-    public void UnsubFromAllActionsExceptPause()
+    public void UnsubFromAllGameplayActions()
     {
         controls.Gameplay.Move.performed -= Move_performed;
         controls.Gameplay.SpecialAction.performed -= SpecialAction_performed;
@@ -221,7 +240,7 @@ public class CharacterControl : MonoBehaviour
         controls.Gameplay.SpecialAction.canceled -= SpecialAction_canceled;
     }
 
-    public void SubToAllActionsExceptPause()
+    public void SubToAllGameplayActions()
     {
         controls.Gameplay.Move.performed += Move_performed;
         controls.Gameplay.SpecialAction.performed += SpecialAction_performed;
@@ -229,5 +248,17 @@ public class CharacterControl : MonoBehaviour
         controls.Gameplay.Detonate.performed += Detonate_performed;
 
         controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
+    }
+
+    public void UnsubFromAllDialogueActions()
+    {
+        controls.Gameplay.ProgressDialogue.performed -= ProgressDialogue_performed;
+        controls.Gameplay.ProgressDialogue.canceled -= ProgressDialogue_canceled;
+    }
+
+    public void SubToAllDialogueActions()
+    {
+        controls.Gameplay.ProgressDialogue.performed += ProgressDialogue_performed;
+        controls.Gameplay.ProgressDialogue.canceled += ProgressDialogue_canceled;
     }
 }

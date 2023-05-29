@@ -42,4 +42,13 @@ public class DropSlot : MonoBehaviour, IDropHandler
         else
             return null;
     }
+
+    public void EmptySlot()
+    {
+        if (isFilled)
+        {
+            thisTransform.GetChild(0).GetComponent<RectTransform>().SetParent(partyTransform, true);
+            isFilled = false;
+        }
+    }
 }

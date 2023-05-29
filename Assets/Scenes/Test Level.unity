@@ -5597,7 +5597,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180ea4c5e77ed9043a729d33b18b8159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typingSpeed: 0.04
   dialogueMenu: {fileID: 2105315607}
+  continueIcon: {fileID: 1441319584}
   dialogueText: {fileID: 2052833838}
   displayNameText: {fileID: 1832227268}
   characterPortraits: {fileID: 1265493347}
@@ -6954,6 +6956,7 @@ GameObject:
   - component: {fileID: 1441319585}
   - component: {fileID: 1441319587}
   - component: {fileID: 1441319586}
+  - component: {fileID: 1441319588}
   m_Layer: 5
   m_Name: Continue Icon
   m_TagString: Untagged
@@ -7019,6 +7022,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441319584}
   m_CullTransparentMesh: 1
+--- !u!95 &1441319588
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1441319584}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6e58b886778cb3140803003ab2fb436f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1459372482
 GameObject:
   m_ObjectHideFlags: 0
@@ -25007,6 +25031,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slot1: {fileID: 199864374}
   slot2: {fileID: 918622172}
+  inkJSON: {fileID: 4900000, guid: 3a3402a4ec694884494a460d00068acb, type: 3}
 --- !u!1 &1559746623
 GameObject:
   m_ObjectHideFlags: 0

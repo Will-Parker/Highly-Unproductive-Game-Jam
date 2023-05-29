@@ -9,8 +9,12 @@ using System;
 
 public class DialogueManager : MonoBehaviour
 {
+    [Header("Params")]
+    [SerializeField] private float typingSpeed = 0.04f;
+
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialogueMenu;
+    [SerializeField] private GameObject continueIcon;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private TextMeshProUGUI displayNameText;
     [SerializeField] private RectTransform characterPortraits;
@@ -21,10 +25,13 @@ public class DialogueManager : MonoBehaviour
 
     public Story currentStory { get; private set; }
     public bool dialogueIsPlaying { get; private set; }
+    private bool isDialogueInternal = false;
+    private Coroutine displayLineCoroutine;
+    private bool canContinueToNextLine = false;
 
     private static DialogueManager instance;
 
-    private const string SPEAKER_TAG = "speaker"; // speaker:name,isInternal
+    private const string SPEAKER_TAG = "speaker"; // speaker:name,isInternal[optional]
                                                   // sets speaker text, enlarges speaker portrait, and sets text color to corresponding color
     public Participant? speaker { get; set; }
     private const string ENTER_TAG = "enter"; // enter:name,index[optional] 
@@ -35,9 +42,7 @@ public class DialogueManager : MonoBehaviour
                                                     // target with name name switches portrait mood via animation
     private const string SCENE_TAG = "scene"; // scene:anim
                                               // switches scene background via animation
-
     public List<Participant> participants { get; private set; }
-    private bool isDialogueInternal = false;
 
     private void Awake()
     {
@@ -79,7 +84,12 @@ public class DialogueManager : MonoBehaviour
         }
 
         // handle continuing to the next line in the dialogue when submit is pressed
-        // -> IN Character Control.cs
+        if (canContinueToNextLine
+                && currentStory.currentChoices.Count == 0
+                && CharacterControl.GetProgressDialoguePressed())
+        {
+            ContinueStory();
+        }
     }
 
     public void EnterDialogueMode(TextAsset inkJSON)
@@ -105,6 +115,9 @@ public class DialogueManager : MonoBehaviour
         }
         participants.RemoveAll(x => true);
         dialogueText.text = "";
+
+        FindObjectOfType<CharacterControl>().SubToAllGameplayActions();
+        FindObjectOfType<CharacterControl>().UnsubFromAllDialogueActions();
     }
 
     public void ContinueStory()
@@ -116,13 +129,71 @@ public class DialogueManager : MonoBehaviour
             // handle tags
             HandleTags(currentStory.currentTags);
             // set dialogue text to formatted version of next dialogue line
-            dialogueText.text = ItalicFormatText(ColorFormatTextBasedOnActiveSpeaker(unformattedDialogueText));
-            // display choices, if any, for this dialogue line
-            DisplayChoices();
+            string formattedText = ItalicFormatText(ColorFormatTextBasedOnActiveSpeaker(unformattedDialogueText));
+            if (displayLineCoroutine != null)
+            {
+                StopCoroutine(displayLineCoroutine);
+            }
+            displayLineCoroutine = StartCoroutine(DisplayLine(formattedText));
         }
         else
         {
             ExitDialogueMode();
+        }
+    }
+
+    private IEnumerator DisplayLine(string line)
+    {
+        // empty the dialogue text
+        dialogueText.text = "";
+        // hide items while text is typing
+        continueIcon.SetActive(false);
+        HideChoices();
+
+        canContinueToNextLine = false;
+
+        bool isAddingRichTextTag = false;
+
+        // display each letter one at a time
+        foreach (char letter in line.ToCharArray())
+        {
+            // if the submit button is pressed, finish up displaying the line right away
+            if (CharacterControl.GetProgressDialoguePressed())
+            {
+                dialogueText.text = line;
+                break;
+            }
+
+            // check for rich text tag, if founf, add it without waiting
+            if (letter == '<' || isAddingRichTextTag)
+            {
+                isAddingRichTextTag = true;
+                dialogueText.text += letter;
+                if (letter == '>')
+                {
+                    isAddingRichTextTag = false;
+                }
+            }
+            // if not rich text, add the next letter and wait a small time
+            else
+            {
+                dialogueText.text += letter;
+                yield return new WaitForSeconds(typingSpeed);
+            }
+        }
+
+        // actions to take after the entire line has finished displaying
+        continueIcon.SetActive(true);
+        DisplayChoices(); // display choices, if any, for this dialogue line
+
+        canContinueToNextLine = true;
+    }
+
+    private void HideChoices()
+    {
+        foreach (GameObject choiceButton in choices)
+        {
+            choiceButton.SetActive(false);
         }
     }
 
@@ -376,6 +447,7 @@ public class DialogueManager : MonoBehaviour
     {
         currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
+        CharacterControl.GetProgressDialoguePressed();
     }
 
     private AllyType? GetAllyType(string allyString)

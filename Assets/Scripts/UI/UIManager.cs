@@ -45,19 +45,19 @@ public class UIManager : MonoBehaviour
         {
             pausem.gameObject.SetActive(false);
             Time.timeScale = 1f;
-            cc.SubToAllActionsExceptPause();
+            cc.SubToAllGameplayActions();
         }
         else if (mm.gameObject.activeSelf)
         {
             mm.gameObject.SetActive(false);
             Time.timeScale = 1f;
-            cc.SubToAllActionsExceptPause();
+            cc.SubToAllGameplayActions();
         }
         else
         {
             pausem.gameObject.SetActive(true);
             Time.timeScale = 0f;
-            cc.UnsubFromAllActionsExceptPause();
+            cc.UnsubFromAllGameplayActions();
         }
     }
 
@@ -65,6 +65,6 @@ public class UIManager : MonoBehaviour
     {
         mm.gameObject.SetActive(true);
         Time.timeScale = 0f;
-        cc.UnsubFromAllActionsExceptPause();
+        cc.UnsubFromAllGameplayActions();
     }
 }

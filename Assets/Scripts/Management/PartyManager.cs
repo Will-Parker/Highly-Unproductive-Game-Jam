@@ -325,6 +325,13 @@ public class PartyManager : MonoBehaviour
         }
         return false;
     }
+
+    public Ally GetAlly(AllyType type)
+    {
+        List<Ally> temp = new List<Ally>(allies);
+        int index = temp.FindIndex(ally => ally.type == type);
+        return allies[index];
+    }
 }
 public enum MoveState
 {

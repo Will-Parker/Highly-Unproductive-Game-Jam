@@ -62,6 +62,55 @@ public class Ally : Entity
             }
         }
     };
+    public Dictionary<AllyType, Dictionary<StatType, float>> oldPartnerBuffs = new Dictionary<AllyType, Dictionary<StatType, float>>()
+    {
+        {
+            AllyType.Apple, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Strawberry, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Lemon, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Blueberry, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        }
+    };
+
+    public bool isLevelUp = false;
 
     private void Awake()
     {

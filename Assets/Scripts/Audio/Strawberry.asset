@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e272a67666156714aaacbcfb0400fe88, type: 3}
+  m_Name: Strawberry
+  m_EditorClassIdentifier: 
+  id: Strawberry
+  dialogueTypingSoundClips:
+  - {fileID: 8300000, guid: e1a27821bc319ae44859acbf0df4b333, type: 3}
+  frequencyLevel: 2
+  minPitch: 2.39
+  maxPitch: 3
+  stopAudioSource: 1

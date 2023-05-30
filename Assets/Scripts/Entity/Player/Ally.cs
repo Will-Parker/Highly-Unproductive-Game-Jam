@@ -134,10 +134,11 @@ public class Ally : Entity
     public new void TakeDamage(float damage)
     {
         Health = Mathf.Max(Health - damage, 0f);
+        anim.SetTrigger("takeDamage");
         healthbar.SetHealth(Health);
         if (Health == 0)
         {
-            GetComponent<SpriteRenderer>().color = Color.gray;
+            anim.SetBool("isDead", true);
         }
     }
 
@@ -253,8 +254,11 @@ public class Ally : Entity
 
     public void Heal(float health)
     {
-        Health = Mathf.Min(Health + health, MaxHealth);
+        Ally[] neighbors = pm.GetNeighborAllies(this);
+        Health = Mathf.Min(Health + health, MaxHealth + partnerBuffs[neighbors[0].type][StatType.MaxHealth] + partnerBuffs[neighbors[1].type][StatType.MaxHealth]);
         healthbar.SetHealth(Health);
+        anim.SetTrigger("heal");
+        anim.SetBool("isDead", false);
     }
 
     internal void StunEnemy(Enemy enemy)
@@ -262,6 +266,7 @@ public class Ally : Entity
         Ally[] neighbors = pm.GetNeighborAllies(this);
         enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, 
             StunStat + partnerBuffs[neighbors[0].type][StatType.Stun] + partnerBuffs[neighbors[1].type][StatType.Stun]));
+        enemy.anim.SetBool("isStunned", true);
     }
 
     public void PlaceBomb(Vector3 bombLocation)
@@ -271,6 +276,17 @@ public class Ally : Entity
         Ally[] neighbors = pm.GetNeighborAllies(this);
         bomb.bombRadius = Mathf.FloorToInt(((BombStat + partnerBuffs[neighbors[0].type][StatType.Bomb] + partnerBuffs[neighbors[1].type][StatType.Bomb]) * 2) + 1);
         bomb.bombDmg = Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack];
+    }
+
+    public void SetMaxHealth()
+    {
+        Ally[] neighbors = pm.GetNeighborAllies(this);
+        float newMaxHealth = MaxHealth + partnerBuffs[neighbors[0].type][StatType.MaxHealth] + partnerBuffs[neighbors[1].type][StatType.MaxHealth];
+        healthbar.SetMaxHealth(newMaxHealth);
+        if (newMaxHealth < Health)
+        {
+            Health = newMaxHealth;
+        }
     }
 }
 

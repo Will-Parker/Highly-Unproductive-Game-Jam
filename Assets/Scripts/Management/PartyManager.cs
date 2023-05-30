@@ -128,17 +128,6 @@ public class PartyManager : MonoBehaviour
         }
     }
 
-    public void AttemptRotate()
-    {
-        if (moveState == MoveState.NotMoving)
-        {
-            moveState = MoveState.SpecialAction;
-            allies[0].PeformSpecialAction();
-            StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
-            StartCoroutine(WaitToRotate(1f / moveSpeed));
-        }
-    }
-
     public void AttemptAttack(Enemy enemy, Vector2 moveDir)
     {
         if (moveState == MoveState.NotMoving)
@@ -287,6 +276,49 @@ public class PartyManager : MonoBehaviour
         expBar.SetExperience(exp);
     }
 
+    public void LevelUpExperience()
+    {
+        maxExp += 2;
+        exp = 0;
+        expBar.SetMaxExperience(maxExp);
+        expBar.SetExperience(exp);
+    }
+
+    public void SetPartyOrder(AllyType ally1, AllyType ally2, AllyType ally3, AllyType ally4)
+    {
+        Ally newA1 = GetAlly(ally1);
+        Ally newA2 = GetAlly(ally2);
+        Ally newA3 = GetAlly(ally3);
+        Ally newA4 = GetAlly(ally4);
+
+        Vector3 oldA1Pos = allies[0].transform.position;
+        Vector3 oldA2Pos = allies[1].transform.position;
+        Vector3 oldA3Pos = allies[2].transform.position;
+        Vector3 oldA4Pos = allies[3].transform.position;
+
+        Vector2 oldA1FaceDir = allies[0].facingDirection;
+        Vector2 oldA2FaceDir = allies[1].facingDirection;
+        Vector2 oldA3FaceDir = allies[2].facingDirection;
+        Vector2 oldA4FaceDir = allies[3].facingDirection;
+
+        allies[0] = newA1;
+        allies[1] = newA2;
+        allies[2] = newA3;
+        allies[3] = newA4;
+
+        allies[0].transform.position = oldA1Pos;
+        allies[1].transform.position = oldA2Pos;
+        allies[2].transform.position = oldA3Pos;
+        allies[3].transform.position = oldA4Pos;
+
+        allies[0].UpdateAnim(oldA1FaceDir);
+        allies[1].UpdateAnim(oldA2FaceDir);
+        allies[2].UpdateAnim(oldA3FaceDir);
+        allies[3].UpdateAnim(oldA4FaceDir);
+
+        virCam.Follow = allies[0].transform;
+    }
+
     // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html
     private IEnumerator SpriteFadeOutFadeIn(SpriteRenderer sr, float duration)
     {
@@ -324,6 +356,38 @@ public class PartyManager : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    public Ally GetAlly(AllyType type)
+    {
+        List<Ally> temp = new List<Ally>(allies);
+        int index = temp.FindIndex(ally => ally.type == type);
+        return allies[index];
+    }
+
+    public Ally[] GetNeighborAllies(Ally ally)
+    {
+        List<Ally> temp = new List<Ally>(allies);
+        int id = temp.FindIndex(a => a.type == ally.type);
+        Ally upperNeighbor;
+        Ally lowerNeighbor;
+
+        if (id == 0)
+        {
+            upperNeighbor = allies[3];
+            lowerNeighbor = allies[1];
+        }
+        else if (id == 3)
+        {
+            upperNeighbor = allies[2];
+            lowerNeighbor = allies[0];
+        }
+        else
+        {
+            upperNeighbor = allies[id - 1];
+            lowerNeighbor = allies[id + 1];
+        }
+        return new Ally[] { upperNeighbor, lowerNeighbor };
     }
 }
 public enum MoveState

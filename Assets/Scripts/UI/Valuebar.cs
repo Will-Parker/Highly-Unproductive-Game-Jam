@@ -25,10 +25,8 @@ public class Valuebar : MonoBehaviour
         }
         slider.maxValue = maxValue;
         slider.GetComponent<RectTransform>().sizeDelta = new Vector2(maxValue * barSegmentWidth, barSegmentHeight);
-        Debug.Log("Max Health = " + Mathf.CeilToInt(maxValue));
         for (int i = 0; i < Mathf.CeilToInt(maxValue); i++)
         {
-            Debug.Log("   Instatiate " + (i + 1));
             Instantiate(barSegment, barSegments);
         }
     }

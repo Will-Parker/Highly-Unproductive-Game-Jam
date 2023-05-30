@@ -62,10 +62,60 @@ public class Ally : Entity
             }
         }
     };
+    public Dictionary<AllyType, Dictionary<StatType, float>> oldPartnerBuffs = new Dictionary<AllyType, Dictionary<StatType, float>>()
+    {
+        {
+            AllyType.Apple, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Strawberry, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Lemon, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        },
+        {
+            AllyType.Blueberry, new Dictionary<StatType, float>()
+            {
+                { StatType.MaxHealth, 0f },
+                { StatType.Attack, 0f },
+                { StatType.HeavyAttack, 0f },
+                { StatType.Heal, 0f },
+                { StatType.Stun, 0f },
+                { StatType.Bomb, 0f }
+            }
+        }
+    };
+
+    public bool isLevelUp = false;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        pm = FindObjectOfType<PartyManager>();
     }
 
     // Start is called before the first frame update
@@ -89,14 +139,6 @@ public class Ally : Entity
         {
             GetComponent<SpriteRenderer>().color = Color.gray;
         }
-    }
-
-    public void PeformSpecialAction()
-    {
-        // for now just attack enemy if there is an enemy one space ahead.
-        Enemy enemy = GetEnemyInfrontOf();
-        if (enemy != null)
-            enemy.TakeDamage(Attack);
     }
 
     public List<Vector2> GetEmptyNeighbors()
@@ -188,20 +230,24 @@ public class Ally : Entity
 
     public void AttackEnemy(Enemy enemy)
     {
+        Ally[] neighbors = pm.GetNeighborAllies(this);
         if (enemy != null)
-            enemy.TakeDamage(Attack);
+            enemy.TakeDamage(Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack]);
         // do attack anim
     }
 
     internal void HeavyAttackEnemy(Enemy enemy)
     {
+        Ally[] neighbors = pm.GetNeighborAllies(this);
         if (enemy != null)
-            enemy.TakeDamage(Attack * HeavyAttackStat);
+            enemy.TakeDamage((Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack]) 
+                + (HeavyAttackStat + partnerBuffs[neighbors[0].type][StatType.HeavyAttack] + partnerBuffs[neighbors[1].type][StatType.HeavyAttack]));
     }
 
     public void HealAlly(Ally ally)
     {
-        ally.Heal(HealStat);
+        Ally[] neighbors = pm.GetNeighborAllies(this);
+        ally.Heal(HealStat + partnerBuffs[neighbors[0].type][StatType.Heal] + partnerBuffs[neighbors[1].type][StatType.Heal]);
         // do heal anim;
     }
 
@@ -213,15 +259,18 @@ public class Ally : Entity
 
     internal void StunEnemy(Enemy enemy)
     {
-        enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, StunStat));
+        Ally[] neighbors = pm.GetNeighborAllies(this);
+        enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, 
+            StunStat + partnerBuffs[neighbors[0].type][StatType.Stun] + partnerBuffs[neighbors[1].type][StatType.Stun]));
     }
 
     public void PlaceBomb(Vector3 bombLocation)
     {
         var bombGO = Instantiate(Resources.Load("Prefabs/Bomb", typeof(GameObject)), bombLocation, Quaternion.identity) as GameObject;
         var bomb = bombGO.GetComponent<Bomb>();
-        bomb.bombRadius = Mathf.FloorToInt((BombStat * 2) + 1);
-        bomb.bombDmg = Attack;
+        Ally[] neighbors = pm.GetNeighborAllies(this);
+        bomb.bombRadius = Mathf.FloorToInt(((BombStat + partnerBuffs[neighbors[0].type][StatType.Bomb] + partnerBuffs[neighbors[1].type][StatType.Bomb]) * 2) + 1);
+        bomb.bombDmg = Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack];
     }
 }
 

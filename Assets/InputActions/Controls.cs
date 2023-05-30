@@ -89,6 +89,24 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Progress Dialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9e51bf9-c3cf-4751-acd0-4b13acd8af15"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Debug Open Dialogue"",
+                    ""type"": ""Button"",
+                    ""id"": ""771d7a86-200f-4acc-8ca7-7cd8e63ac6cb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -212,32 +230,48 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""UI"",
-            ""id"": ""aa332749-a08a-4e9f-b28e-0cbf6fb8f44e"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""7a9330c7-0316-4ed9-88ac-210c04546a76"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""975a7be2-fd0a-4e2f-8bff-02168737a798"",
-                    ""path"": """",
+                    ""id"": ""7abc739e-208a-4b72-b689-a88e91525552"",
+                    ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Progress Dialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b0a0af3-9ade-4e23-b85b-f30581a5e341"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Progress Dialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28a30502-2306-469a-a8a4-4e9b60667567"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Progress Dialogue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a37c2f1-f34f-400c-bfaa-0eefdc7f6b01"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug Open Dialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -255,9 +289,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Gameplay_Click = m_Gameplay.FindAction("Click", throwIfNotFound: true);
         m_Gameplay_Detonate = m_Gameplay.FindAction("Detonate", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
-        // UI
-        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
-        m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
+        m_Gameplay_ProgressDialogue = m_Gameplay.FindAction("Progress Dialogue", throwIfNotFound: true);
+        m_Gameplay_DebugOpenDialogue = m_Gameplay.FindAction("Debug Open Dialogue", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -326,6 +359,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Click;
     private readonly InputAction m_Gameplay_Detonate;
     private readonly InputAction m_Gameplay_Pause;
+    private readonly InputAction m_Gameplay_ProgressDialogue;
+    private readonly InputAction m_Gameplay_DebugOpenDialogue;
     public struct GameplayActions
     {
         private @Controls m_Wrapper;
@@ -337,6 +372,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Click => m_Wrapper.m_Gameplay_Click;
         public InputAction @Detonate => m_Wrapper.m_Gameplay_Detonate;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
+        public InputAction @ProgressDialogue => m_Wrapper.m_Gameplay_ProgressDialogue;
+        public InputAction @DebugOpenDialogue => m_Wrapper.m_Gameplay_DebugOpenDialogue;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -367,6 +404,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Pause.started += instance.OnPause;
             @Pause.performed += instance.OnPause;
             @Pause.canceled += instance.OnPause;
+            @ProgressDialogue.started += instance.OnProgressDialogue;
+            @ProgressDialogue.performed += instance.OnProgressDialogue;
+            @ProgressDialogue.canceled += instance.OnProgressDialogue;
+            @DebugOpenDialogue.started += instance.OnDebugOpenDialogue;
+            @DebugOpenDialogue.performed += instance.OnDebugOpenDialogue;
+            @DebugOpenDialogue.canceled += instance.OnDebugOpenDialogue;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -392,6 +435,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Pause.started -= instance.OnPause;
             @Pause.performed -= instance.OnPause;
             @Pause.canceled -= instance.OnPause;
+            @ProgressDialogue.started -= instance.OnProgressDialogue;
+            @ProgressDialogue.performed -= instance.OnProgressDialogue;
+            @ProgressDialogue.canceled -= instance.OnProgressDialogue;
+            @DebugOpenDialogue.started -= instance.OnDebugOpenDialogue;
+            @DebugOpenDialogue.performed -= instance.OnDebugOpenDialogue;
+            @DebugOpenDialogue.canceled -= instance.OnDebugOpenDialogue;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -409,52 +458,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         }
     }
     public GameplayActions @Gameplay => new GameplayActions(this);
-
-    // UI
-    private readonly InputActionMap m_UI;
-    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
-    private readonly InputAction m_UI_Newaction;
-    public struct UIActions
-    {
-        private @Controls m_Wrapper;
-        public UIActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_UI_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_UI; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
-        public void AddCallbacks(IUIActions instance)
-        {
-            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        private void UnregisterCallbacks(IUIActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        public void RemoveCallbacks(IUIActions instance)
-        {
-            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IUIActions instance)
-        {
-            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public UIActions @UI => new UIActions(this);
     public interface IGameplayActions
     {
         void OnMove(InputAction.CallbackContext context);
@@ -464,9 +467,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnClick(InputAction.CallbackContext context);
         void OnDetonate(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
-    }
-    public interface IUIActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnProgressDialogue(InputAction.CallbackContext context);
+        void OnDebugOpenDialogue(InputAction.CallbackContext context);
     }
 }

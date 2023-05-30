@@ -7,6 +7,8 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     private ActionUIManager auim;
     private PauseManager pausem;
+    private MatchManager mm;
+    private ReorderPartyManager rpm;
     private CharacterControl cc;
 
     private void Awake()
@@ -23,11 +25,16 @@ public class UIManager : MonoBehaviour
 
         auim = FindObjectOfType<ActionUIManager>();
         pausem = FindObjectOfType<PauseManager>();
+        mm = FindObjectOfType<MatchManager>();
+        rpm = FindObjectOfType<ReorderPartyManager>();
         cc = FindObjectOfType<CharacterControl>();
     }
     private void Start()
     {
-        Pause();
+        pausem.gameObject.SetActive(false);
+        mm.gameObject.SetActive(false);
+        rpm.gameObject.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void UpdateUI()
@@ -41,13 +48,31 @@ public class UIManager : MonoBehaviour
         {
             pausem.gameObject.SetActive(false);
             Time.timeScale = 1f;
-            cc.SubToAllActionsExceptPause();
+            cc.SubToAllGameplayActions();
+        }
+        else if (mm.gameObject.activeSelf)
+        {
+            mm.gameObject.SetActive(false);
+            Time.timeScale = 1f;
+            cc.SubToAllGameplayActions();
         }
         else
         {
             pausem.gameObject.SetActive(true);
             Time.timeScale = 0f;
-            cc.UnsubFromAllActionsExceptPause();
+            cc.UnsubFromAllGameplayActions();
         }
+    }
+
+    public void BeginMatch()
+    {
+        mm.gameObject.SetActive(true);
+        Time.timeScale = 0f;
+        cc.UnsubFromAllGameplayActions();
+    }
+
+    public void OpenReorderPartyMenu()
+    {
+        rpm.gameObject.SetActive(true);
     }
 }

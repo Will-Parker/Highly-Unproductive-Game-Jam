@@ -15,7 +15,6 @@ public class ActionUIManager : MonoBehaviour
     [SerializeField] private Button moveBtn;
     [SerializeField] private Button attackBtn;
     [SerializeField] private Button swapBtn;
-    [SerializeField] private Button restBtn;
     [SerializeField] private Button readBtn;
     [SerializeField] private Button detonateBtn;
     private void Awake()
@@ -66,7 +65,6 @@ public class ActionUIManager : MonoBehaviour
                     moveBtn.gameObject.SetActive(true);
                     attackBtn.gameObject.SetActive(true);
                     swapBtn.gameObject.SetActive(true);
-                    restBtn.gameObject.SetActive(true);
                     readBtn.gameObject.SetActive(false); // for now just always disable read btn since signs are not added yet
                     if (FindObjectsOfType<Bomb>().Length > 0)
                     {
@@ -86,7 +84,6 @@ public class ActionUIManager : MonoBehaviour
                     moveBtn.gameObject.SetActive(false);
                     attackBtn.gameObject.SetActive(false);
                     swapBtn.gameObject.SetActive(false);
-                    restBtn.gameObject.SetActive(false);
                     readBtn.gameObject.SetActive(false);
                     detonateBtn.gameObject.SetActive(false);
                 }
@@ -99,7 +96,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -111,7 +107,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -123,7 +118,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -135,7 +129,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -147,7 +140,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(true);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -159,7 +151,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(true);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -171,7 +162,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(true);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -183,7 +173,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(true);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -195,7 +184,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(true);
                 detonateBtn.gameObject.SetActive(false);
                 break;
@@ -207,7 +195,6 @@ public class ActionUIManager : MonoBehaviour
                 moveBtn.gameObject.SetActive(false);
                 attackBtn.gameObject.SetActive(false);
                 swapBtn.gameObject.SetActive(false);
-                restBtn.gameObject.SetActive(false);
                 readBtn.gameObject.SetActive(false);
                 detonateBtn.gameObject.SetActive(true);
                 break;

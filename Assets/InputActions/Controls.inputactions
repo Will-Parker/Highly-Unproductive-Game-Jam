@@ -67,6 +67,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Progress Dialogue",
+                    "type": "Button",
+                    "id": "a9e51bf9-c3cf-4751-acd0-4b13acd8af15",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Debug Open Dialogue",
+                    "type": "Button",
+                    "id": "771d7a86-200f-4acc-8ca7-7cd8e63ac6cb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -190,32 +208,48 @@
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "UI",
-            "id": "aa332749-a08a-4e9f-b28e-0cbf6fb8f44e",
-            "actions": [
-                {
-                    "name": "New action",
-                    "type": "Button",
-                    "id": "7a9330c7-0316-4ed9-88ac-210c04546a76",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "975a7be2-fd0a-4e2f-8bff-02168737a798",
-                    "path": "",
+                    "id": "7abc739e-208a-4b72-b689-a88e91525552",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Progress Dialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0b0a0af3-9ade-4e23-b85b-f30581a5e341",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Progress Dialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28a30502-2306-469a-a8a4-4e9b60667567",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Progress Dialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1a37c2f1-f34f-400c-bfaa-0eefdc7f6b01",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Debug Open Dialogue",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

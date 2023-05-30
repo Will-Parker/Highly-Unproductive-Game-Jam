@@ -6297,15 +6297,30 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 287bba4669775b74586ec1373423a7cc, type: 2}
   - {fileID: 11400000, guid: 087278d40d109a3438db240ae0d9ffec, type: 2}
   makePredictable: 1
-  AppleBlueberryStories: []
+  AppleBlueberryStories:
+  - {fileID: 4900000, guid: 2d5a5affcae7a8f4aaf951f0872d70e2, type: 3}
+  - {fileID: 4900000, guid: 11761920ff5173449a8b23caed0720b6, type: 3}
+  - {fileID: 4900000, guid: c812181f5faa5894ea0d0e686b3ec4d5, type: 3}
   AppleLemonStories:
   - {fileID: 4900000, guid: dca67f10bdb817d4780c093bc5973d8d, type: 3}
   - {fileID: 4900000, guid: d1d090f302a2cc248abf71fb976430d9, type: 3}
   - {fileID: 4900000, guid: 96951766ca54f5b409bb2095188408d6, type: 3}
-  AppleStrawberryStories: []
-  BlueberryLemonStories: []
-  BlueberryStrawberryStories: []
-  LemonStrawberryStories: []
+  AppleStrawberryStories:
+  - {fileID: 4900000, guid: eca4c37a0247e1b49ba6099728203a7d, type: 3}
+  - {fileID: 4900000, guid: fd2ec45928e248a49acaeb429b81a868, type: 3}
+  - {fileID: 4900000, guid: 6dab748f3a5b35a4e8778045d070a2b8, type: 3}
+  BlueberryLemonStories:
+  - {fileID: 4900000, guid: 824e8de9b5b7f374a974f99e41902f7d, type: 3}
+  - {fileID: 4900000, guid: 46262907f378b8541ac46162b30afaac, type: 3}
+  - {fileID: 4900000, guid: 8d31870b38de1764382f4d3b83983c38, type: 3}
+  BlueberryStrawberryStories:
+  - {fileID: 4900000, guid: b7057e3959e319548b0d807d64bcb3f1, type: 3}
+  - {fileID: 4900000, guid: 4371ffecbc4807d4e8739c70cd32b63d, type: 3}
+  - {fileID: 4900000, guid: 54342059ee7a1844085dc76f9e482b8e, type: 3}
+  LemonStrawberryStories:
+  - {fileID: 4900000, guid: 93e5d9ba2f554c14398e3daf6f68b26a, type: 3}
+  - {fileID: 4900000, guid: a4abce5145e846047848e0a56eb6f3de, type: 3}
+  - {fileID: 4900000, guid: ee7bef55899a79544a17c68241249afa, type: 3}
   alliesInDialogue: 
 --- !u!4 &1191070828
 Transform:

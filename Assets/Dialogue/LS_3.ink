@@ -1,4 +1,4 @@
-#enter:Lemon #enter:Apple
+#enter:Lemon #enter:Strawberry
 -> main
 
 === main ===

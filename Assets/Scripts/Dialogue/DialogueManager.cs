@@ -435,6 +435,26 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private string UnformatColorText(string formattedText)
+    {
+        string a = RemoveSubstring(formattedText, "</color>");
+        string b = RemoveSubstring(a, "<color=#73FF5A>");
+        string c = RemoveSubstring(b, "<color=#FA5961>");
+        string d = RemoveSubstring(c, "<color=#FFE25A>");
+        string e = RemoveSubstring(d, "<color=#5AD4FF>");
+        return e;
+    }
+
+    // credit: https://stackoverflow.com/questions/2201595/c-sharp-simplest-way-to-remove-first-occurrence-of-a-substring-from-another-st
+    private string RemoveSubstring(string sourceString, string removeString)
+    {
+        int index = sourceString.IndexOf(removeString);
+        string cleanPath = (index < 0)
+            ? sourceString
+            : sourceString.Remove(index, removeString.Length);
+        return cleanPath;
+    }
+
     private void HandleTags(List<string> currentTags)
     {
         // loop  through each tag and handle it accordingly
@@ -711,6 +731,16 @@ public class DialogueManager : MonoBehaviour
                 + currentChoices.Count);
         }
 
+
+        // Ordered Choices
+        // DisplayOrderedChoices(currentChoices);
+
+        // Unordered Choices
+        DisplayUnorderedChoices(currentChoices);
+    }
+
+    private void DisplayOrderedChoices(List<Choice> currentChoices)
+    {
         int index = 0;
         // enable and initialize the choices
         foreach (Choice choice in currentChoices)
@@ -724,24 +754,55 @@ public class DialogueManager : MonoBehaviour
         {
             choices[i].gameObject.SetActive(false);
         }
-
-        //StartCoroutine(SelectFirstChoice());
     }
 
-    //private IEnumerator SelectFirstChoice()
-    //{
-    //    // Event System requires we clear it first, then wait
-    //    // for at least one frame before we set the current selected object.
-    //    EventSystem.current.SetSelectedGameObject(null);
-    //    yield return new WaitForEndOfFrame();
-    //    EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
-    //}
+    private void DisplayUnorderedChoices(List<Choice> currentChoices)
+    {
+        // generate list of indices of length of choices in scene
+        List<int> indices = new List<int>();
+        for (int i = 0; i < choices.Length; i++)
+        {
+            indices.Add(i);
+        }
+        
+        // enable and initialize the choices
+        foreach (Choice choice in currentChoices)
+        {
+            int index = indices[UnityEngine.Random.Range(0, indices.Count)];
+            Debug.Log(index);
+            choices[index].gameObject.SetActive(true);
+            choicesText[index].text = ColorFormatTextBasedOnActiveSpeaker(choice.text);
+            indices.Remove(index);
+        }
+        // go through the remaining choices the UI supports and make sure they're hidden
+        foreach (int index in indices)
+        {
+            choices[index].gameObject.SetActive(false);
+        }
+    }
 
     public void MakeChoice(int choiceIndex)
     {
-        currentStory.ChooseChoiceIndex(choiceIndex);
-        ContinueStory();
-        CharacterControl.GetProgressDialoguePressed();
+        //OLD
+        //currentStory.ChooseChoiceIndex(choiceIndex);
+        //ContinueStory();
+        //CharacterControl.GetProgressDialoguePressed();
+
+        //NEW
+        string choiceText = UnformatColorText(choicesText[choiceIndex].text);
+        int idx = 0;
+        foreach (Choice choice in currentStory.currentChoices)
+        {
+            if (choiceText == choice.text)
+            {
+                currentStory.ChooseChoiceIndex(idx);
+                ContinueStory();
+                CharacterControl.GetProgressDialoguePressed();
+                return;
+            }
+            idx++;
+        }
+        Debug.LogError("Choice text did not match. Unformatted Choice Button Text: " + choiceText);
     }
 
     private AllyType? GetAllyType(string allyString)

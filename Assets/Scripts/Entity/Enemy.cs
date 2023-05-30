@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using static Helpers;
-using Utils;
 public enum AIState
 {
     Wander,
@@ -188,6 +187,7 @@ public class Enemy : Entity
     public new void TakeDamage(float damage)
     {
         Health = Mathf.Max(Health - damage, 0f);
+        anim.SetTrigger("takeDamage");
         if (Health == 0)
         {
             pm.GainExperience(1);

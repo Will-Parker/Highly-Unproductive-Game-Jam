@@ -23,8 +23,8 @@ public class Valuebar : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        slider.maxValue = maxValue;
         slider.GetComponent<RectTransform>().sizeDelta = new Vector2(maxValue * barSegmentWidth, barSegmentHeight);
+        slider.maxValue = maxValue;
         for (int i = 0; i < Mathf.CeilToInt(maxValue); i++)
         {
             Instantiate(barSegment, barSegments);

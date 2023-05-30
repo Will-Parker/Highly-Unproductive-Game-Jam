@@ -155,6 +155,11 @@ public class PartyManager : MonoBehaviour
             allies[1] = temp;
             virCam.Follow = allies[0].transform;
 
+            foreach (Ally ally in allies)
+            {
+                ally.SetMaxHealth();
+            }
+
             moveState = MoveState.Swap;
         }
     }
@@ -317,6 +322,11 @@ public class PartyManager : MonoBehaviour
         allies[3].UpdateAnim(oldA4FaceDir);
 
         virCam.Follow = allies[0].transform;
+
+        foreach (Ally ally in allies)
+        {
+            ally.SetMaxHealth();
+        }
     }
 
     // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html

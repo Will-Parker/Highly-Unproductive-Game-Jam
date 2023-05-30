@@ -61,6 +61,10 @@ public class ReorderPartyManager : MonoBehaviour
         AllyType allyType3 = partyGroup.GetChild(2).GetComponent<AllyLevelUpGroup>().allyType;
         AllyType allyType4 = partyGroup.GetChild(3).GetComponent<AllyLevelUpGroup>().allyType;
         FindObjectOfType<PartyManager>().SetPartyOrder(allyType1, allyType2, allyType3, allyType4);
+        foreach (Ally ally in FindObjectOfType<PartyManager>().allies)
+        {
+            ally.Heal(9999999);
+        }
         FindObjectOfType<CharacterControl>().SubToAllGameplayActions();
         gameObject.SetActive(false);
     }

@@ -8,9 +8,6 @@ public class MatchManager : MonoBehaviour
     [SerializeField] private DropSlot slot1;
     [SerializeField] private DropSlot slot2;
 
-    [Header("Testing")]
-    [SerializeField] private TextAsset inkJSON; // FOR TESTING ONLY
-
     private void Start()
     {
         
@@ -20,15 +17,18 @@ public class MatchManager : MonoBehaviour
     {
         if (slot1.GetAllyInSlot() != null && slot2.GetAllyInSlot() != null)
         {
-            // go to dialogue window with slot1.GetAllyInSlot() and slot2.GetAllyInSlot() plugged in
+            FindObjectOfType<PartyManager>().LevelUpExperience();
             Time.timeScale = 1f;
-            DialogueManager.GetInstance().EnterDialogueMode(inkJSON); // temp
+            DialogueManager.GetInstance().BeginDialogueWith(slot1.GetAllyInSlot().Value, slot2.GetAllyInSlot().Value);
             FindObjectOfType<CharacterControl>().UnsubFromAllGameplayActions();
             FindObjectOfType<CharacterControl>().SubToAllDialogueActions();
             slot1.EmptySlot();
             slot2.EmptySlot();
+            foreach (Ally ally in FindObjectOfType<PartyManager>().allies)
+            {
+                ally.Heal(9999999);
+            }
             gameObject.SetActive(false);
-            //FindObjectOfType<CharacterControl>().OpenDialogue(inkJSON);
         }
     }
 }

@@ -1499,7 +1499,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6358671286772269822}
   - component: {fileID: 6358671286772269821}
-  - component: {fileID: 6358671286772269696}
   - component: {fileID: 629692937532000392}
   m_Layer: 5
   m_Name: Apple Level Up Group
@@ -1559,18 +1558,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &6358671286772269696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6358671286772269823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f7d3e9d6acb4d04db91ff70365bd611, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &629692937532000392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1583,6 +1570,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a752020453fe1468a467d16950adcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  healthValue: {fileID: 6358671285117830974}
+  attackValue: {fileID: 6358671285373348037}
+  uniqueValue: {fileID: 6358671286674604908}
+  healthSum: {fileID: 6358671285807663296}
+  attackSum: {fileID: 6358671286498122005}
+  uniqueSum: {fileID: 6358671286845789609}
 --- !u!1 &6358671286845789611
 GameObject:
   m_ObjectHideFlags: 0

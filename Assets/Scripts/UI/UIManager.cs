@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     private ActionUIManager auim;
     private PauseManager pausem;
     private MatchManager mm;
+    private ReorderPartyManager rpm;
     private CharacterControl cc;
 
     private void Awake()
@@ -25,12 +26,14 @@ public class UIManager : MonoBehaviour
         auim = FindObjectOfType<ActionUIManager>();
         pausem = FindObjectOfType<PauseManager>();
         mm = FindObjectOfType<MatchManager>();
+        rpm = FindObjectOfType<ReorderPartyManager>();
         cc = FindObjectOfType<CharacterControl>();
     }
     private void Start()
     {
         pausem.gameObject.SetActive(false);
         mm.gameObject.SetActive(false);
+        rpm.gameObject.SetActive(false);
         Time.timeScale = 1f;
     }
 
@@ -66,5 +69,10 @@ public class UIManager : MonoBehaviour
         mm.gameObject.SetActive(true);
         Time.timeScale = 0f;
         cc.UnsubFromAllGameplayActions();
+    }
+
+    public void OpenReorderPartyMenu()
+    {
+        rpm.gameObject.SetActive(true);
     }
 }

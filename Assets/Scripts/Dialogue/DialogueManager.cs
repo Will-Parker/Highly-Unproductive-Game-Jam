@@ -248,6 +248,9 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueIsPlaying = false;
         dialogueMenu.SetActive(false);
+
+        UIManager.instance.OpenReorderPartyMenu();
+
         speaker = null;
         foreach (Participant participant in participants)
         {
@@ -256,7 +259,6 @@ public class DialogueManager : MonoBehaviour
         participants.RemoveAll(x => true);
         dialogueText.text = "";
 
-        FindObjectOfType<CharacterControl>().SubToAllGameplayActions();
         FindObjectOfType<CharacterControl>().UnsubFromAllDialogueActions();
     }
 

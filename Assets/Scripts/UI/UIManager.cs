@@ -21,8 +21,6 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-
         auim = FindObjectOfType<ActionUIManager>();
         pausem = FindObjectOfType<PauseManager>();
         mm = FindObjectOfType<MatchManager>();

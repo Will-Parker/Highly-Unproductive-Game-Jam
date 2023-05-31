@@ -20,8 +20,6 @@ public class GameStateManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-
         uim = GetComponent<UIManager>();
     }
 

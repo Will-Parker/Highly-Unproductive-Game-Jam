@@ -1,15 +1,18 @@
-#enter:Lemon #enter:Strawberry
+#enter:Strawberry #enter:Lemon
 -> main
 
 === main ===
-+ [Good Choice] # option:good
+This is some sample dialogue #speaker:Strawberry
++ Good Choice # option:good
     -> good
-+ [Bad Choice] # option:bad
++ Bad Choice # option:bad
     -> bad
     
 === good ===
+That was a good choice! #speaker:Lemon
 -> END
 
 === bad ===
+That was a bad choice... #speaker:Lemon
 -> END
 

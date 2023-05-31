@@ -47,7 +47,10 @@ public class CursorTileDisplay : MonoBehaviour
                     cursorMap.SetTile(mousePos, bombTile);
                     var a = (ExtendedRuleTile) cursorMap.GetTile(mousePos);
                     Transform bombRad = a.m_DefaultGameObject.transform.GetChild(0);
-                    bombRad.localScale = Vector3.one * Mathf.FloorToInt((pm.allies[0].BombStat * 2) + 1);
+                    bombRad.localScale = Vector3.one 
+                        * Mathf.FloorToInt(((pm.allies[0].BombStat 
+                        + pm.allies[0].partnerBuffs[pm.allies[3].type][StatType.Bomb] 
+                        + pm.allies[0].partnerBuffs[pm.allies[1].type][StatType.Bomb]) * 2) + 1);
                     previousMousePos = mousePos;
                 }
             }

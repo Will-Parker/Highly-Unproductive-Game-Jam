@@ -48,4 +48,9 @@ public class PauseManager : MonoBehaviour
             Destroy(child.gameObject);
         }
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

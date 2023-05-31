@@ -327,6 +327,8 @@ public class PartyManager : MonoBehaviour
         {
             ally.SetMaxHealth();
         }
+
+        UIManager.instance.UpdateUI();
     }
 
     // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html

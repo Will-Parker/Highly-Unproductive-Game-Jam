@@ -17,8 +17,8 @@ public class Enemy : Entity
     private readonly int maxPursuitTime = 25; // max number of turns the AI is willing to keep pursuing the player before giving up
     private int pursuitTime = 0;
     [SerializeField] private LayerMask impassableLayer;
-    private readonly float detectRadius = 5;
-    private readonly float viewAngle = 120;
+    private readonly float detectRadius = 4;
+    private readonly float viewAngle = 90;
     [HideInInspector] public bool hasFinishedTurn = false;
     private PartyManager pm;
     private Vector3 movePoint;
@@ -187,12 +187,12 @@ public class Enemy : Entity
     public new void TakeDamage(float damage)
     {
         Health = Mathf.Max(Health - damage, 0f);
-        anim.SetTrigger("takeDamage");
         if (Health == 0)
         {
             pm.GainExperience(1);
             Destroy(gameObject);
         }
+        anim.SetTrigger("takeDamage");
     }
 
     private bool AdjacentAttackablesCheck()
@@ -233,9 +233,12 @@ public class Enemy : Entity
 
             if (Vector2.Angle(facingDirection, directionToTarget) < viewAngle / 2)
             {
-                float distanceToTarget = Vector3.Distance(transform.position, ally.transform.position);
-                if (!Physics2D.Raycast(Vec3ToVec2(transform.position), directionToTarget, distanceToTarget, impassableLayer))
-                    viewableAllies.Add(ally);
+                float distanceToTarget = Vector3.Distance(transform.position, ally.transform.position); 
+                if (distanceToTarget < 10)
+                {
+                    if (!Physics2D.Raycast(Vec3ToVec2(transform.position), directionToTarget, distanceToTarget, impassableLayer))
+                        viewableAllies.Add(ally);
+                }
             }
         }
 

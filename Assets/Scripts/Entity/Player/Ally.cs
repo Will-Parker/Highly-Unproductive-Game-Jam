@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using static Helpers;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class Ally : Entity
 {
@@ -139,6 +140,10 @@ public class Ally : Entity
         if (Health == 0)
         {
             anim.SetBool("isDead", true);
+            if (pm.allies[0].Health == 0 && pm.allies[1].Health == 0 && pm.allies[2].Health == 0 && pm.allies[3].Health == 0)
+            {
+                SceneManager.LoadSceneAsync(1);
+            }
         }
     }
 

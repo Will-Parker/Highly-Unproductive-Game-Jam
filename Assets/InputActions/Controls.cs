@@ -98,15 +98,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Debug Open Dialogue"",
-                    ""type"": ""Button"",
-                    ""id"": ""771d7a86-200f-4acc-8ca7-7cd8e63ac6cb"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -263,17 +254,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Progress Dialogue"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1a37c2f1-f34f-400c-bfaa-0eefdc7f6b01"",
-                    ""path"": ""<Keyboard>/m"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Debug Open Dialogue"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -290,7 +270,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Gameplay_Detonate = m_Gameplay.FindAction("Detonate", throwIfNotFound: true);
         m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
         m_Gameplay_ProgressDialogue = m_Gameplay.FindAction("Progress Dialogue", throwIfNotFound: true);
-        m_Gameplay_DebugOpenDialogue = m_Gameplay.FindAction("Debug Open Dialogue", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -360,7 +339,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Detonate;
     private readonly InputAction m_Gameplay_Pause;
     private readonly InputAction m_Gameplay_ProgressDialogue;
-    private readonly InputAction m_Gameplay_DebugOpenDialogue;
     public struct GameplayActions
     {
         private @Controls m_Wrapper;
@@ -373,7 +351,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Detonate => m_Wrapper.m_Gameplay_Detonate;
         public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputAction @ProgressDialogue => m_Wrapper.m_Gameplay_ProgressDialogue;
-        public InputAction @DebugOpenDialogue => m_Wrapper.m_Gameplay_DebugOpenDialogue;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -407,9 +384,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @ProgressDialogue.started += instance.OnProgressDialogue;
             @ProgressDialogue.performed += instance.OnProgressDialogue;
             @ProgressDialogue.canceled += instance.OnProgressDialogue;
-            @DebugOpenDialogue.started += instance.OnDebugOpenDialogue;
-            @DebugOpenDialogue.performed += instance.OnDebugOpenDialogue;
-            @DebugOpenDialogue.canceled += instance.OnDebugOpenDialogue;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -438,9 +412,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @ProgressDialogue.started -= instance.OnProgressDialogue;
             @ProgressDialogue.performed -= instance.OnProgressDialogue;
             @ProgressDialogue.canceled -= instance.OnProgressDialogue;
-            @DebugOpenDialogue.started -= instance.OnDebugOpenDialogue;
-            @DebugOpenDialogue.performed -= instance.OnDebugOpenDialogue;
-            @DebugOpenDialogue.canceled -= instance.OnDebugOpenDialogue;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -468,6 +439,5 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnDetonate(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnProgressDialogue(InputAction.CallbackContext context);
-        void OnDebugOpenDialogue(InputAction.CallbackContext context);
     }
 }

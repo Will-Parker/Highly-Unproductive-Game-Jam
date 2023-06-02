@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
@@ -69,5 +70,13 @@ public class PauseManager : MonoBehaviour
     {
         AudioManager.instance.Play("Button");
         Application.Quit();
+    }
+
+    public void ReturnToTile()
+    {
+        AudioManager.instance.Play("Button");
+        AudioManager.instance.Stop("Gameplay Music");
+        FindObjectOfType<CharacterControl>().UnsubFromEverything();
+        SceneManager.LoadSceneAsync(0);
     }
 }

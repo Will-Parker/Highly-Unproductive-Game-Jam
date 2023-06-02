@@ -13,6 +13,13 @@ public class GameOver : MonoBehaviour
     public void ReturnToTitle()
     {
         AudioManager.instance.Play("Button");
-        SceneManager.LoadSceneAsync(1);
+        AudioManager.instance.Stop("Game Over");
+        SceneManager.LoadSceneAsync(0);
+    }
+
+    public void QuitGame()
+    {
+        AudioManager.instance.Play("Button");
+        Application.Quit();
     }
 }

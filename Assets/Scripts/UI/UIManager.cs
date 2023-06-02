@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
         mm.gameObject.SetActive(false);
         rpm.gameObject.SetActive(false);
         Time.timeScale = 1f;
+        UpdateUI();
     }
 
     public void UpdateUI()
@@ -54,6 +55,10 @@ public class UIManager : MonoBehaviour
             mm.gameObject.SetActive(false);
             Time.timeScale = 1f;
             cc.SubToAllGameplayActions();
+        }
+        else if (rpm.gameObject.activeSelf)
+        {
+            rpm.SetOut();
         }
         else
         {

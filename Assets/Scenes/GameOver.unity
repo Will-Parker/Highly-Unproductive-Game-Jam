@@ -478,7 +478,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: RESET
+  m_text: To Title
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7b148ed21b4eb59489eb86536d7dd0b8, type: 2}
   m_sharedMaterial: {fileID: -8322985593235387028, guid: 7b148ed21b4eb59489eb86536d7dd0b8, type: 2}
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 5.5
+  m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -669,7 +669,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -236}
-  m_SizeDelta: {x: 450, y: 75}
+  m_SizeDelta: {x: 400, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1453435756
 MonoBehaviour:

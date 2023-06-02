@@ -158,6 +158,7 @@ public class Ally : Entity
             if (pm.allies[0].Health == 0 && pm.allies[1].Health == 0 && pm.allies[2].Health == 0 && pm.allies[3].Health == 0)
             {
                 AudioManager.instance.Stop("Gameplay Music");
+                FindObjectOfType<CharacterControl>().UnsubFromEverything();
                 SceneManager.LoadSceneAsync(2);
             }
         }

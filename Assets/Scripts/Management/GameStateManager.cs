@@ -20,9 +20,13 @@ public class GameStateManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-
         uim = GetComponent<UIManager>();
+    }
+
+    private void Start()
+    {
+        AudioManager.instance.Play("Gameplay Music");
+        StartCoroutine(AmbientSounds());
     }
 
     private void Update()
@@ -85,6 +89,30 @@ public class GameStateManager : MonoBehaviour
     public GameState GetGameState()
     {
         return gameState;
+    }
+
+    private IEnumerator AmbientSounds()
+    {
+        while (isActiveAndEnabled)
+        {
+            yield return new WaitForSeconds(Random.Range(10f, 20f));
+            if (Random.Range(0f, 1f) > 0.5f)
+            {
+                float uh = Random.Range(0f, 1f);
+                if (uh < 0.33f)
+                {
+                    AudioManager.instance.Play("Bird 1");
+                }
+                else if (uh < 0.66f)
+                {
+                    AudioManager.instance.Play("Bird 2");
+                }
+                else
+                {
+                    AudioManager.instance.Play("Cricket");
+                }
+            }
+        }
     }
 }
 

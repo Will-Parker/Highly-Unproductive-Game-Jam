@@ -15,6 +15,7 @@ public class MatchManager : MonoBehaviour
 
     public void Match()
     {
+        AudioManager.instance.Play("Button");
         if (slot1.GetAllyInSlot() != null && slot2.GetAllyInSlot() != null)
         {
             FindObjectOfType<PartyManager>().LevelUpExperience();

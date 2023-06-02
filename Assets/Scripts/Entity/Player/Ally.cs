@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using static Helpers;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class Ally : Entity
 {
@@ -135,10 +136,31 @@ public class Ally : Entity
     {
         Health = Mathf.Max(Health - damage, 0f);
         anim.SetTrigger("takeDamage");
+        switch (type)
+        {
+            case AllyType.Apple:
+                AudioManager.instance.Play("Apple Damaged");
+                break;
+            case AllyType.Strawberry:
+                AudioManager.instance.Play("Strawberry Damaged");
+                break;
+            case AllyType.Lemon:
+                AudioManager.instance.Play("Lemon Damaged");
+                break;
+            case AllyType.Blueberry:
+                AudioManager.instance.Play("Blueberry Damaged");
+                break;
+        }
         healthbar.SetHealth(Health);
         if (Health == 0)
         {
             anim.SetBool("isDead", true);
+            if (pm.allies[0].Health == 0 && pm.allies[1].Health == 0 && pm.allies[2].Health == 0 && pm.allies[3].Health == 0)
+            {
+                AudioManager.instance.Stop("Gameplay Music");
+                FindObjectOfType<CharacterControl>().UnsubFromEverything();
+                SceneManager.LoadSceneAsync(2);
+            }
         }
     }
 
@@ -248,6 +270,7 @@ public class Ally : Entity
     public void HealAlly(Ally ally)
     {
         Ally[] neighbors = pm.GetNeighborAllies(this);
+        AudioManager.instance.Play("Heal");
         ally.Heal(HealStat + partnerBuffs[neighbors[0].type][StatType.Heal] + partnerBuffs[neighbors[1].type][StatType.Heal]);
         // do heal anim;
     }
@@ -263,6 +286,7 @@ public class Ally : Entity
 
     internal void StunEnemy(Enemy enemy)
     {
+        AudioManager.instance.Play("Stun");
         Ally[] neighbors = pm.GetNeighborAllies(this);
         enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, 
             StunStat + partnerBuffs[neighbors[0].type][StatType.Stun] + partnerBuffs[neighbors[1].type][StatType.Stun]));

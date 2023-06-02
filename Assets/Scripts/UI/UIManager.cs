@@ -21,8 +21,6 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
-
         auim = FindObjectOfType<ActionUIManager>();
         pausem = FindObjectOfType<PauseManager>();
         mm = FindObjectOfType<MatchManager>();
@@ -35,6 +33,7 @@ public class UIManager : MonoBehaviour
         mm.gameObject.SetActive(false);
         rpm.gameObject.SetActive(false);
         Time.timeScale = 1f;
+        UpdateUI();
     }
 
     public void UpdateUI()
@@ -44,6 +43,7 @@ public class UIManager : MonoBehaviour
 
     public void Pause()
     {
+        AudioManager.instance.Play("Button");
         if (pausem.gameObject.activeSelf)
         {
             pausem.gameObject.SetActive(false);
@@ -56,6 +56,10 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 1f;
             cc.SubToAllGameplayActions();
         }
+        else if (rpm.gameObject.activeSelf)
+        {
+            rpm.SetOut();
+        }
         else
         {
             pausem.gameObject.SetActive(true);
@@ -66,6 +70,7 @@ public class UIManager : MonoBehaviour
 
     public void BeginMatch()
     {
+        AudioManager.instance.Play("Button");
         mm.gameObject.SetActive(true);
         Time.timeScale = 0f;
         cc.UnsubFromAllGameplayActions();

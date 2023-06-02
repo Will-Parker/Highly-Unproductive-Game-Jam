@@ -36,7 +36,7 @@ public class CharacterControl : MonoBehaviour
         controls.Gameplay.Detonate.performed += Detonate_performed;
         controls.Gameplay.Pause.performed += Pause_performed;
         // controls.Gameplay.ProgressDialogue.performed += ProgressDialogue_performed;
-        controls.Gameplay.DebugOpenDialogue.performed += DebugOpenDialogue_performed;
+        // controls.Gameplay.DebugOpenDialogue.performed += DebugOpenDialogue_performed;
 
         controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
     }
@@ -214,10 +214,10 @@ public class CharacterControl : MonoBehaviour
     }
 
     [SerializeField] private TextAsset inkJSON; // FOR TESTING ONLY
-    private void DebugOpenDialogue_performed(InputAction.CallbackContext obj)
-    {
-        OpenDialogue(inkJSON);
-    }
+    //private void DebugOpenDialogue_performed(InputAction.CallbackContext obj)
+    //{
+    //    OpenDialogue(inkJSON);
+    //}
     public void OpenDialogue(TextAsset inkJSON)
     {
         DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
@@ -260,5 +260,17 @@ public class CharacterControl : MonoBehaviour
     {
         controls.Gameplay.ProgressDialogue.performed += ProgressDialogue_performed;
         controls.Gameplay.ProgressDialogue.canceled += ProgressDialogue_canceled;
+    }
+
+    public void UnsubFromEverything()
+    {
+        controls.Gameplay.Move.performed -= Move_performed;
+        controls.Gameplay.SpecialAction.performed -= SpecialAction_performed;
+        controls.Gameplay.Click.performed -= Click_performed;
+        controls.Gameplay.Detonate.performed -= Detonate_performed;
+        controls.Gameplay.Pause.performed -= Pause_performed;
+        controls.Gameplay.ProgressDialogue.performed -= ProgressDialogue_performed;
+        controls.Gameplay.ProgressDialogue.canceled -= ProgressDialogue_canceled;
+        controls.Gameplay.SpecialAction.canceled -= SpecialAction_canceled;
     }
 }

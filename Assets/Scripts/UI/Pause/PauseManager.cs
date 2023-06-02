@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
     [SerializeField] private RectTransform partyGroup;
+    [SerializeField] private GameObject settings;
     private PartyManager pm;
     private void Awake()
     {
@@ -13,6 +15,8 @@ public class PauseManager : MonoBehaviour
 
     private void OnEnable()
     {
+        settings.SetActive(false);
+
         for (int i = 0; i < 4; i++)
         {
             GameObject obj = null;
@@ -47,5 +51,32 @@ public class PauseManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+    }
+
+    public void Settings()
+    {
+        AudioManager.instance.Play("Button");
+        if (settings.activeSelf)
+        {
+            settings.SetActive(false);
+        }
+        else
+        {
+            settings.SetActive(true);
+        }
+    }
+
+    public void QuitGame()
+    {
+        AudioManager.instance.Play("Button");
+        Application.Quit();
+    }
+
+    public void ReturnToTile()
+    {
+        AudioManager.instance.Play("Button");
+        AudioManager.instance.Stop("Gameplay Music");
+        FindObjectOfType<CharacterControl>().UnsubFromEverything();
+        SceneManager.LoadSceneAsync(0);
     }
 }

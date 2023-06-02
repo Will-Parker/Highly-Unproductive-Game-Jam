@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6560934445448299124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6560934445448299126}
+  - component: {fileID: 6560934445448299125}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6560934445448299126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560934445448299124}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6560934445448299125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6560934445448299124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6deb0ea6ee588042ae11ff96e9c84b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Title Music
+    type: 0
+    clip: {fileID: 8300000, guid: 7201db2d70148664f92a608883bc34e2, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Gameplay Music
+    type: 0
+    clip: {fileID: 8300000, guid: 1ba33eded3c2c974badb3f9b88b04fa9, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+  - name: Button
+    type: 1
+    clip: {fileID: 8300000, guid: 1cad9db95aca8a447b79c5b91668cee1, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Mushroom Damaged
+    type: 1
+    clip: {fileID: 8300000, guid: bf9f1f90bd8106b4d8f2fc465976f563, type: 3}
+    volume: 1
+    pitch: 0.7
+    loop: 0
+    source: {fileID: 0}
+  - name: Heal
+    type: 1
+    clip: {fileID: 8300000, guid: f79ebaece1353fe449d2b73310f4da7c, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Stun
+    type: 1
+    clip: {fileID: 8300000, guid: 8a6933a020ad6264da8a08c0719c741d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Explode
+    type: 1
+    clip: {fileID: 8300000, guid: ac8af76a8aeb32945bbaae7e124a0cad, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Bird 1
+    type: 2
+    clip: {fileID: 8300000, guid: 1a0221070e750f840bcf98bf21bb1344, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Bird 2
+    type: 2
+    clip: {fileID: 8300000, guid: 48b1cc2d793ffd048a84297508ac31cd, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Cricket
+    type: 2
+    clip: {fileID: 8300000, guid: 5cbbec36f7c4dee47bfa50a681f0c5fc, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Step
+    type: 1
+    clip: {fileID: 8300000, guid: 3964aa16cc9ae314da384cf90242e54a, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Apple Damaged
+    type: 1
+    clip: {fileID: 8300000, guid: be0c23f3e5ef9434b9dc52f486d92b3f, type: 3}
+    volume: 1
+    pitch: 0.9
+    loop: 0
+    source: {fileID: 0}
+  - name: Strawberry Damaged
+    type: 1
+    clip: {fileID: 8300000, guid: 8cbc9e7ca9b920e41a0da1f788cda51a, type: 3}
+    volume: 1
+    pitch: 2.6
+    loop: 0
+    source: {fileID: 0}
+  - name: Lemon Damaged
+    type: 1
+    clip: {fileID: 8300000, guid: cb65c0d517a0fa34681ef1e9c5dd07cb, type: 3}
+    volume: 1
+    pitch: 1.05
+    loop: 0
+    source: {fileID: 0}
+  - name: Blueberry Damaged
+    type: 1
+    clip: {fileID: 8300000, guid: 27c48915bfa3ac740bb993517c303ea9, type: 3}
+    volume: 1
+    pitch: 1.7
+    loop: 0
+    source: {fileID: 0}
+  - name: Game Over
+    type: 0
+    clip: {fileID: 8300000, guid: d52dac0552ba4e24da2751c5eac87cc3, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}

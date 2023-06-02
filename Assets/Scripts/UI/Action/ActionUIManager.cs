@@ -245,6 +245,7 @@ public class ActionUIManager : MonoBehaviour
 
     public void ActionPressed(string btnType)
     {
+        AudioManager.instance.Play("Button");
         UIActionMode btnActionMode = UIActionMode.None;
         switch (btnType.ToLower().Trim())
         {

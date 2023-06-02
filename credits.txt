@@ -1,4 +1,8 @@
-
+Music by Zane Little (https://linktr.ee/zanelittle)
 Overworld Tilesets by ArMM1998 (https://opengameart.org/content/zelda-like-tilesets-and-sprites)
 Campfire asset by LimeZu (https://limezu.itch.io/serenevillagerevamped)
 Font is by Tiny Worlds (https://tinyworlds.itch.io/free-pixel-font-thaleah)
+Heal SFX by Someoneman (https://opengameart.org/content/cure-magic)
+Explosion SFX by Little Robot Sound Factory (www.littlerobotsoundfactory.com)
+Stun SFX by faxcorp (https://opengameart.org/content/electricity-game-sound-pack)
+Ambient Sounds and Foot Steps SFX by Blender Foundation (https://apricot.blender.org/)

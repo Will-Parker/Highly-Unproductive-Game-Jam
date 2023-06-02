@@ -5,8 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
+    private void Start()
+    {
+        AudioManager.instance.Play("Game Over");
+    }
+
     public void ReturnToTitle()
     {
-        SceneManager.LoadSceneAsync(0);
+        AudioManager.instance.Play("Button");
+        SceneManager.LoadSceneAsync(1);
     }
 }

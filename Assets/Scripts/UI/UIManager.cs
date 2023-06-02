@@ -42,6 +42,7 @@ public class UIManager : MonoBehaviour
 
     public void Pause()
     {
+        AudioManager.instance.Play("Button");
         if (pausem.gameObject.activeSelf)
         {
             pausem.gameObject.SetActive(false);
@@ -64,6 +65,7 @@ public class UIManager : MonoBehaviour
 
     public void BeginMatch()
     {
+        AudioManager.instance.Play("Button");
         mm.gameObject.SetActive(true);
         Time.timeScale = 0f;
         cc.UnsubFromAllGameplayActions();

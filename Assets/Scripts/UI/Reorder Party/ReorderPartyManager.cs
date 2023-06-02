@@ -56,11 +56,13 @@ public class ReorderPartyManager : MonoBehaviour
 
     public void SetOut()
     {
+        AudioManager.instance.Play("Button");
         AllyType allyType1 = partyGroup.GetChild(0).GetComponent<AllyLevelUpGroup>().allyType;
         AllyType allyType2 = partyGroup.GetChild(1).GetComponent<AllyLevelUpGroup>().allyType;
         AllyType allyType3 = partyGroup.GetChild(2).GetComponent<AllyLevelUpGroup>().allyType;
         AllyType allyType4 = partyGroup.GetChild(3).GetComponent<AllyLevelUpGroup>().allyType;
         FindObjectOfType<PartyManager>().SetPartyOrder(allyType1, allyType2, allyType3, allyType4);
+        AudioManager.instance.Play("Heal");
         foreach (Ally ally in FindObjectOfType<PartyManager>().allies)
         {
             ally.Heal(9999999);

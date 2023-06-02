@@ -263,7 +263,7 @@ public class PartyManager : MonoBehaviour
         allies[0].transform.position = prevTail;
 
         RotatePartyOrder();
-
+        AudioManager.instance.Play("Step");
         prevTail = allies[3].transform.position;
         allies[0].facingDirection = Vec3ToVec2(movePoints[0] - allies[0].transform.position);
         allies[0].UpdateAnim(true, allies[0].facingDirection);

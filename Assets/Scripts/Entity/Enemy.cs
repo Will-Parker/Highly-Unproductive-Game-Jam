@@ -187,6 +187,7 @@ public class Enemy : Entity
     public new void TakeDamage(float damage)
     {
         Health = Mathf.Max(Health - damage, 0f);
+        AudioManager.instance.Play("Mushroom Damaged");
         if (Health == 0)
         {
             pm.GainExperience(1);

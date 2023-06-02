@@ -19,6 +19,7 @@ public class Bomb : MonoBehaviour
 
     public void Explode()
     {
+        AudioManager.instance.Play("Explode");
         foreach (Enemy enemy in FindObjectsOfType<Enemy>())
         {
             if (Vector3.Distance(enemy.transform.position, transform.position) < bombRadius)

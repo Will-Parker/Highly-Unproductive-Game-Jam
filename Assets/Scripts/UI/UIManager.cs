@@ -25,13 +25,13 @@ public class UIManager : MonoBehaviour
         pausem = FindObjectOfType<PauseManager>();
         mm = FindObjectOfType<MatchManager>();
         rpm = FindObjectOfType<ReorderPartyManager>();
-        cc = FindObjectOfType<CharacterControl>();
+        cc = CharacterControl.instance;
     }
     private void Start()
     {
         pausem.gameObject.SetActive(false);
         mm.gameObject.SetActive(false);
-        rpm.gameObject.SetActive(false);
+        rpm.gameObject.SetActive(true);
         Time.timeScale = 1f;
         UpdateUI();
     }

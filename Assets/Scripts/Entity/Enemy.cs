@@ -36,12 +36,14 @@ public class Enemy : Entity
     private void Start()
     {
         IsMoving = false;
-        facingDirection = Vector2.up;
+        if (facingDirection == Vector2.zero)
+            facingDirection = Vector2.down;
         Health = MaxHealth;
+        UpdateAnim(facingDirection);
     }
     private void Update()
     {
-        GameStateManager gsm = FindObjectOfType<GameStateManager>();
+        GameStateManager gsm = GameStateManager.instance;
         if (gsm.GetGameState() == GameState.Enemy)
         {
             if (IsMoving)

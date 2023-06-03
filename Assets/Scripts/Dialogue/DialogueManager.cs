@@ -6,6 +6,7 @@ using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
 using System;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -108,11 +109,35 @@ public class DialogueManager : MonoBehaviour
         InitializeAudioInfoDictionary();
 
         unusedAppleBlueberryStories = new List<TextAsset>(AppleBlueberryStories);
+        foreach (TextAsset usedAppleBlueberryStory in GameData.usedAppleBlueberryStories)
+        {
+            unusedAppleBlueberryStories.Remove(usedAppleBlueberryStory);
+        }
         unusedAppleLemonStories = new List<TextAsset>(AppleLemonStories);
+        foreach (TextAsset usedAppleLemonStory in GameData.usedAppleLemonStories)
+        {
+            unusedAppleLemonStories.Remove(usedAppleLemonStory);
+        }
         unusedAppleStrawberryStories = new List<TextAsset>(AppleStrawberryStories);
+        foreach (TextAsset usedAppleStrawberryStory in GameData.usedAppleStrawberryStories)
+        {
+            unusedAppleStrawberryStories.Remove(usedAppleStrawberryStory);
+        }
         unusedBlueberryLemonStories = new List<TextAsset>(BlueberryLemonStories);
+        foreach (TextAsset usedBlueberryLemonStory in GameData.usedBlueberryLemonStories)
+        {
+            unusedBlueberryLemonStories.Remove(usedBlueberryLemonStory);
+        }
         unusedBlueberryStrawberryStories = new List<TextAsset>(BlueberryStrawberryStories);
+        foreach (TextAsset usedBlueberryStrawberryStory in GameData.usedBlueberryStrawberryStories)
+        {
+            unusedBlueberryStrawberryStories.Remove(usedBlueberryStrawberryStory);
+        }
         unusedLemonStrawberryStories = new List<TextAsset>(LemonStrawberryStories);
+        foreach (TextAsset usedLemonStrawberryStory in GameData.usedLemonStrawberryStories)
+        {
+            unusedLemonStrawberryStories.Remove(usedLemonStrawberryStory);
+        }
 
         participants = new List<Participant>();
     }
@@ -172,54 +197,66 @@ public class DialogueManager : MonoBehaviour
         {
             story = unusedAppleBlueberryStories[UnityEngine.Random.Range(0, unusedAppleBlueberryStories.Count)];
             unusedAppleBlueberryStories.Remove(story);
+            GameData.usedAppleBlueberryStories.Add(story);
             if (unusedAppleBlueberryStories.Count <= 0)
             {
                 unusedAppleBlueberryStories = new List<TextAsset>(AppleBlueberryStories);
+                GameData.usedAppleBlueberryStories.Clear();
             }
         }
         else if (isAppleInScene && isLemonInScene)
         {
             story = unusedAppleLemonStories[UnityEngine.Random.Range(0, unusedAppleLemonStories.Count)];
             unusedAppleLemonStories.Remove(story);
+            GameData.usedAppleLemonStories.Add(story);
             if (unusedAppleLemonStories.Count <= 0)
             {
                 unusedAppleLemonStories = new List<TextAsset>(AppleLemonStories);
+                GameData.usedAppleLemonStories.Clear();
             }
         }
         else if (isAppleInScene && isStrawberryInScene)
         {
             story = unusedAppleStrawberryStories[UnityEngine.Random.Range(0, unusedAppleStrawberryStories.Count)];
             unusedAppleStrawberryStories.Remove(story);
+            GameData.usedAppleStrawberryStories.Add(story);
             if (unusedAppleStrawberryStories.Count <= 0)
             {
                 unusedAppleStrawberryStories = new List<TextAsset>(AppleStrawberryStories);
+                GameData.usedAppleStrawberryStories.Clear();
             }
         }
         else if (isBlueberryInScene && isLemonInScene)
         {
             story = unusedBlueberryLemonStories[UnityEngine.Random.Range(0, unusedBlueberryLemonStories.Count)];
             unusedBlueberryLemonStories.Remove(story);
+            GameData.usedBlueberryLemonStories.Add(story);
             if (unusedBlueberryLemonStories.Count <= 0)
             {
                 unusedBlueberryLemonStories = new List<TextAsset>(BlueberryLemonStories);
+                GameData.usedBlueberryLemonStories.Clear();
             }
         }
         else if (isBlueberryInScene && isStrawberryInScene)
         {
             story = unusedBlueberryStrawberryStories[UnityEngine.Random.Range(0, unusedBlueberryStrawberryStories.Count)];
             unusedBlueberryStrawberryStories.Remove(story);
+            GameData.usedBlueberryStrawberryStories.Add(story);
             if (unusedBlueberryStrawberryStories.Count <= 0)
             {
                 unusedBlueberryStrawberryStories = new List<TextAsset>(BlueberryStrawberryStories);
+                GameData.usedBlueberryStrawberryStories.Clear();
             }
         }
         else if (isLemonInScene && isStrawberryInScene)
         {
             story = unusedLemonStrawberryStories[UnityEngine.Random.Range(0, unusedLemonStrawberryStories.Count)];
             unusedLemonStrawberryStories.Remove(story);
+            GameData.usedLemonStrawberryStories.Add(story);
             if (unusedLemonStrawberryStories.Count <= 0)
             {
                 unusedLemonStrawberryStories = new List<TextAsset>(LemonStrawberryStories);
+                GameData.usedLemonStrawberryStories.Clear();
             }
         }
         else
@@ -246,20 +283,22 @@ public class DialogueManager : MonoBehaviour
 
     private void ExitDialogueMode()
     {
-        dialogueIsPlaying = false;
-        dialogueMenu.SetActive(false);
+        //dialogueIsPlaying = false;
+        //dialogueMenu.SetActive(false);
 
-        UIManager.instance.OpenReorderPartyMenu();
+        //UIManager.instance.OpenReorderPartyMenu();
 
-        speaker = null;
-        foreach (Participant participant in participants)
-        {
-            Destroy(participant.GO);
-        }
-        participants.RemoveAll(x => true);
-        dialogueText.text = "";
+        //speaker = null;
+        //foreach (Participant participant in participants)
+        //{
+        //    Destroy(participant.GO);
+        //}
+        //participants.RemoveAll(x => true);
+        //dialogueText.text = "";
 
-        FindObjectOfType<CharacterControl>().UnsubFromAllDialogueActions();
+        CharacterControl.instance.UnsubFromAllDialogueActions();
+
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void ContinueStory()
@@ -623,83 +662,79 @@ public class DialogueManager : MonoBehaviour
     {
         if (tagValues[0] == "good")
         {
-            Ally a1 = FindObjectOfType<PartyManager>().GetAlly(alliesInDialogue[0]);
-            Ally a2 = FindObjectOfType<PartyManager>().GetAlly(alliesInDialogue[1]);
-            a1.isLevelUp = true;
-            a2.isLevelUp = true;
-            a1.partnerBuffs[a2.type][StatType.MaxHealth] += 3;
-            a1.partnerBuffs[a2.type][StatType.Attack] += 1;
-            switch (a1.type)
+            AllyType a1 = alliesInDialogue[0];
+            AllyType a2 = alliesInDialogue[1];
+            GameData.allyStats[a1][a2][StatType.MaxHealth] += 3;
+            GameData.allyStats[a1][a2][StatType.Attack] += 1;
+            switch (a1)
             {
                 case AllyType.Apple:
-                    a1.partnerBuffs[a2.type][StatType.HeavyAttack] += 2;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 2;
                     break;
                 case AllyType.Strawberry:
-                    a1.partnerBuffs[a2.type][StatType.Heal] += 3;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 3;
                     break;
                 case AllyType.Lemon:
-                    a1.partnerBuffs[a2.type][StatType.Stun] += 2;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 2;
                     break;
                 case AllyType.Blueberry:
-                    a1.partnerBuffs[a2.type][StatType.Bomb] += 2;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 2;
                     break;
             }
-            a2.partnerBuffs[a1.type][StatType.MaxHealth] += 3;
-            a2.partnerBuffs[a1.type][StatType.Attack] += 1;
-            switch (a2.type)
+            GameData.allyStats[a2][a1][StatType.MaxHealth] += 3;
+            GameData.allyStats[a2][a1][StatType.Attack] += 1;
+            switch (a2)
             {
                 case AllyType.Apple:
-                    a2.partnerBuffs[a1.type][StatType.HeavyAttack] += 2;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 2;
                     break;
                 case AllyType.Strawberry:
-                    a2.partnerBuffs[a1.type][StatType.Heal] += 3;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 3;
                     break;
                 case AllyType.Lemon:
-                    a2.partnerBuffs[a1.type][StatType.Stun] += 2;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 2;
                     break;
                 case AllyType.Blueberry:
-                    a2.partnerBuffs[a1.type][StatType.Bomb] += 2;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 2;
                     break;
             }
         }
         else if (tagValues[0] == "bad")
         {
-            Ally a1 = FindObjectOfType<PartyManager>().GetAlly(alliesInDialogue[0]);
-            Ally a2 = FindObjectOfType<PartyManager>().GetAlly(alliesInDialogue[1]);
-            a1.isLevelUp = true;
-            a2.isLevelUp = true;
-            a1.partnerBuffs[a2.type][StatType.MaxHealth] += 1;
-            a1.partnerBuffs[a2.type][StatType.Attack] += 0;
-            switch (a1.type)
+            AllyType a1 = alliesInDialogue[0];
+            AllyType a2 = alliesInDialogue[1];
+            GameData.allyStats[a1][a2][StatType.MaxHealth] += 1;
+            GameData.allyStats[a1][a2][StatType.Attack] += 0;
+            switch (a1)
             {
                 case AllyType.Apple:
-                    a1.partnerBuffs[a2.type][StatType.HeavyAttack] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
-                    a1.partnerBuffs[a2.type][StatType.Heal] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Lemon:
-                    a1.partnerBuffs[a2.type][StatType.Stun] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Blueberry:
-                    a1.partnerBuffs[a2.type][StatType.Bomb] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
             }
-            a2.partnerBuffs[a1.type][StatType.MaxHealth] += 1;
-            a2.partnerBuffs[a1.type][StatType.Attack] += 0;
-            switch (a2.type)
+            GameData.allyStats[a2][a1][StatType.MaxHealth] += 1;
+            GameData.allyStats[a2][a1][StatType.Attack] += 0;
+            switch (a2)
             {
                 case AllyType.Apple:
-                    a2.partnerBuffs[a1.type][StatType.HeavyAttack] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
-                    a2.partnerBuffs[a1.type][StatType.Heal] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Lemon:
-                    a2.partnerBuffs[a1.type][StatType.Stun] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Blueberry:
-                    a2.partnerBuffs[a1.type][StatType.Bomb] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
             }
         }

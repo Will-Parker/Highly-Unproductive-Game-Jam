@@ -21,8 +21,8 @@ public class MatchManager : MonoBehaviour
             FindObjectOfType<PartyManager>().LevelUpExperience();
             Time.timeScale = 1f;
             DialogueManager.GetInstance().BeginDialogueWith(slot1.GetAllyInSlot().Value, slot2.GetAllyInSlot().Value);
-            FindObjectOfType<CharacterControl>().UnsubFromAllGameplayActions();
-            FindObjectOfType<CharacterControl>().SubToAllDialogueActions();
+            CharacterControl.instance.UnsubFromAllGameplayActions();
+            CharacterControl.instance.SubToAllDialogueActions();
             slot1.EmptySlot();
             slot2.EmptySlot();
             foreach (Ally ally in FindObjectOfType<PartyManager>().allies)

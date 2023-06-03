@@ -7,7 +7,6 @@ public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager instance;
     [SerializeField] private GameState gameState = GameState.Player;
-    private UIManager uim;
     private int turn = 1;
 
     private void Awake()
@@ -19,14 +18,14 @@ public class GameStateManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        uim = GetComponent<UIManager>();
     }
 
     private void Start()
     {
-        AudioManager.instance.Play("Gameplay Music");
         StartCoroutine(AmbientSounds());
+        CharacterControl.controls.Gameplay.Enable();
+        CharacterControl.instance.SubToAllGameplayActions();
+        CharacterControl.instance.SubToPause();
     }
 
     private void Update()
@@ -39,6 +38,13 @@ public class GameStateManager : MonoBehaviour
             case GameState.Enemy:
                 var enemies = new List<Enemy>(FindObjectsOfType<Enemy>()); // probably should not update enemies array every frame
                 enemies.RemoveAll(enemy => !enemy.isActiveAndEnabled);
+                if (enemies.Count == 0)
+                {
+                    UIManager.instance.BeginMatch();
+                    gameState = GameState.Player;
+                    CharacterControl.controls.Gameplay.Enable();
+                    return;
+                }
                 List<Enemy> stunnedEnemies = enemies.FindAll(enemy => enemy.turnsStunned > 0);
                 enemies.RemoveAll(enemy => enemy.turnsStunned > 0);
                 if (enemies.All(enemy => enemy.hasFinishedTurn))
@@ -65,7 +71,7 @@ public class GameStateManager : MonoBehaviour
                 gameState = GameState.Enemy;
                 turn++;
                 Debug.Log("Turn " + turn);
-                uim.UpdateUI();
+                UIManager.instance.UpdateUI();
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                 {
                     if (enemy.turnsStunned == 0)

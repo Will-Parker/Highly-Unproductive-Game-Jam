@@ -41,42 +41,14 @@ public class AllyPauseGroup : MonoBehaviour
         }
         int healthStat = GetStatTotal(StatType.MaxHealth, thisAlly, upperNeighbor, lowerNeighbor);
         int attackStat = GetStatTotal(StatType.Attack, thisAlly, upperNeighbor, lowerNeighbor);
-        StatType uniqueStatType = GetUniqueStatType(thisAlly);
-        int uniqueStat = GetStatTotal(uniqueStatType, thisAlly, upperNeighbor, lowerNeighbor);
-
-        string thisCT = GetColorTag(thisAlly);
-        string upNeighborCT = GetColorTag(upperNeighbor);
-        string loNeighborCT = GetColorTag(lowerNeighbor);
-        string closeCT = "</color>";
+        int uniqueStat = GetStatTotal(StatType.Unique, thisAlly, upperNeighbor, lowerNeighbor);
 
         healthValue.text = healthStat.ToString();
-        healthSum.text = "(" + thisCT + Mathf.FloorToInt(thisAlly.MaxHealth).ToString() + closeCT 
-            + "+" + upNeighborCT + Mathf.FloorToInt(thisAlly.partnerBuffs[upperNeighbor.type][StatType.MaxHealth]).ToString() + closeCT
-            + "+" + loNeighborCT + Mathf.FloorToInt(thisAlly.partnerBuffs[lowerNeighbor.type][StatType.MaxHealth]).ToString() + closeCT + ")";
+        healthSum.text = GetStatString(StatType.MaxHealth, thisAlly, upperNeighbor, lowerNeighbor);
         attackValue.text = attackStat.ToString();
-        attackSum.text = "(" + thisCT + Mathf.FloorToInt(thisAlly.Attack).ToString() + closeCT
-            + "+" + upNeighborCT + Mathf.FloorToInt(thisAlly.partnerBuffs[upperNeighbor.type][StatType.Attack]).ToString() + closeCT
-            + "+" + loNeighborCT + Mathf.FloorToInt(thisAlly.partnerBuffs[lowerNeighbor.type][StatType.Attack]).ToString() + closeCT + ")";
+        attackSum.text = GetStatString(StatType.Attack, thisAlly, upperNeighbor, lowerNeighbor);
         uniqueValue.text = uniqueStat.ToString();
-        string uniqueSumText = "";
-        switch (thisAlly.type)
-        {
-            case AllyType.Apple:
-                uniqueSumText = "(" + thisCT + Mathf.FloorToInt(thisAlly.HeavyAttackStat).ToString() + closeCT;
-                break;
-            case AllyType.Strawberry:
-                uniqueSumText = "(" + thisCT + Mathf.FloorToInt(thisAlly.HealStat).ToString() + closeCT;
-                break;
-            case AllyType.Lemon:
-                uniqueSumText = "(" + thisCT + Mathf.FloorToInt(thisAlly.StunStat).ToString() + closeCT;
-                break;
-            case AllyType.Blueberry:
-                uniqueSumText = "(" + thisCT + Mathf.FloorToInt(thisAlly.BombStat).ToString() + closeCT;
-                break;
-        }
-        uniqueSumText += "+" + upNeighborCT + Mathf.FloorToInt(thisAlly.partnerBuffs[upperNeighbor.type][StatType.Attack]).ToString() + closeCT
-                       + "+" + loNeighborCT + Mathf.FloorToInt(thisAlly.partnerBuffs[lowerNeighbor.type][StatType.Attack]).ToString() + closeCT + ")";
-        uniqueSum.text = uniqueSumText;
+        uniqueSum.text = GetStatString(StatType.Unique, thisAlly, upperNeighbor, lowerNeighbor);
     }
 
     private string GetColorTag(Ally ally)
@@ -96,45 +68,20 @@ public class AllyPauseGroup : MonoBehaviour
     }
     private int GetStatTotal(StatType statType, Ally thisAlly, Ally upperNeighbor, Ally lowerNeighbor)
     {
-        float runningTotal = 0f;
-        switch (statType)
-        {
-            case StatType.MaxHealth:
-                runningTotal += thisAlly.MaxHealth;
-                break;
-            case StatType.Attack:
-                runningTotal += thisAlly.Attack;
-                break;
-            case StatType.HeavyAttack:
-                runningTotal += thisAlly.HeavyAttackStat;
-                break;
-            case StatType.Heal:
-                runningTotal += thisAlly.HealStat;
-                break;
-            case StatType.Stun:
-                runningTotal += thisAlly.StunStat;
-                break;
-            case StatType.Bomb:
-                runningTotal += thisAlly.BombStat;
-                break;
-        }
-        runningTotal += thisAlly.partnerBuffs[upperNeighbor.type][statType] + thisAlly.partnerBuffs[lowerNeighbor.type][statType];
-        return Mathf.FloorToInt(runningTotal);
+        return Mathf.FloorToInt(GameData.GetStatSum(thisAlly.type, upperNeighbor.type, lowerNeighbor.type, statType));
     }
-    private StatType GetUniqueStatType(Ally ally)
+
+    private string GetStatString(StatType statType, Ally thisAlly, Ally upperNeighbor, Ally lowerNeighbor)
     {
-        switch (ally.type)
-        {
-            case AllyType.Apple:
-                return StatType.HeavyAttack;
-            case AllyType.Strawberry:
-                return StatType.Heal;
-            case AllyType.Lemon:
-                return StatType.Stun;
-            case AllyType.Blueberry:
-                return StatType.Bomb;
-            default:
-                return StatType.MaxHealth; // this should never happen
-        }
+        string thisCT = GetColorTag(thisAlly);
+        string upNeighborCT = GetColorTag(upperNeighbor);
+        string loNeighborCT = GetColorTag(lowerNeighbor);
+        string closeCT = "</color>";
+        return "(" + thisCT + Mathf.FloorToInt(GameData.allyStats[thisAlly.type][thisAlly.type][statType]).ToString() + closeCT
+            + (GameData.allyStats[thisAlly.type][upperNeighbor.type][StatType.MaxHealth] > 0
+            ? "+" + upNeighborCT + Mathf.FloorToInt(GameData.allyStats[thisAlly.type][upperNeighbor.type][statType]).ToString() + closeCT : "")
+            + (GameData.allyStats[thisAlly.type][lowerNeighbor.type][StatType.MaxHealth] > 0
+            ? "+" + loNeighborCT + Mathf.FloorToInt(GameData.allyStats[thisAlly.type][lowerNeighbor.type][statType]).ToString() + closeCT : "")
+            + ")";
     }
 }

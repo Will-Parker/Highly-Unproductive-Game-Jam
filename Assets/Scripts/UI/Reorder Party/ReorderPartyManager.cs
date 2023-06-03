@@ -34,14 +34,11 @@ public class ReorderPartyManager : MonoBehaviour
             if (obj != null)
             {
                 AllyLevelUpGroup alug = obj.GetComponent<AllyLevelUpGroup>();
-                alug.isLevelUp = pm.allies[i].isLevelUp;
                 alug.oldId = i;
                 alug.id = i;
                 alug.allyType = pm.allies[i].type;
                 alug.InitializeText();
                 obj.AddComponent<DragOrderObject>();
-
-                pm.allies[i].isLevelUp = false;
             }
         }
     }
@@ -62,12 +59,12 @@ public class ReorderPartyManager : MonoBehaviour
         AllyType allyType3 = partyGroup.GetChild(2).GetComponent<AllyLevelUpGroup>().allyType;
         AllyType allyType4 = partyGroup.GetChild(3).GetComponent<AllyLevelUpGroup>().allyType;
         FindObjectOfType<PartyManager>().SetPartyOrder(allyType1, allyType2, allyType3, allyType4);
-        AudioManager.instance.Play("Heal");
+        //AudioManager.instance.Play("Heal");
         foreach (Ally ally in FindObjectOfType<PartyManager>().allies)
         {
             ally.Heal(9999999);
         }
-        FindObjectOfType<CharacterControl>().SubToAllGameplayActions();
+        CharacterControl.instance.SubToAllGameplayActions();
         gameObject.SetActive(false);
     }
 

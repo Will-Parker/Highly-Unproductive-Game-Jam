@@ -23,16 +23,16 @@ public class PauseManager : MonoBehaviour
             switch (pm.allies[i].type)
             {
                 case AllyType.Apple:
-                    obj = Instantiate(Resources.Load("Prefabs/UI/Apple Group", typeof(GameObject)), partyGroup) as GameObject;
+                    obj = Instantiate(Resources.Load("Prefabs/UI/Pause/Apple Group", typeof(GameObject)), partyGroup) as GameObject;
                     break;
                 case AllyType.Strawberry:
-                    obj = Instantiate(Resources.Load("Prefabs/UI/Strawberry Group", typeof(GameObject)), partyGroup) as GameObject;
+                    obj = Instantiate(Resources.Load("Prefabs/UI/Pause/Strawberry Group", typeof(GameObject)), partyGroup) as GameObject;
                     break;
                 case AllyType.Lemon:
-                    obj = Instantiate(Resources.Load("Prefabs/UI/Lemon Group", typeof(GameObject)), partyGroup) as GameObject;
+                    obj = Instantiate(Resources.Load("Prefabs/UI/Pause/Lemon Group", typeof(GameObject)), partyGroup) as GameObject;
                     break;
                 case AllyType.Blueberry:
-                    obj = Instantiate(Resources.Load("Prefabs/UI/Blueberry Group", typeof(GameObject)), partyGroup) as GameObject;
+                    obj = Instantiate(Resources.Load("Prefabs/UI/Pause/Blueberry Group", typeof(GameObject)), partyGroup) as GameObject;
                     break;
             }
             if (obj != null)
@@ -76,7 +76,7 @@ public class PauseManager : MonoBehaviour
     {
         AudioManager.instance.Play("Button");
         AudioManager.instance.Stop("Gameplay Music");
-        FindObjectOfType<CharacterControl>().UnsubFromEverything();
+        CharacterControl.instance.UnsubFromEverything();
         SceneManager.LoadSceneAsync(0);
     }
 }

@@ -6,12 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/web/WEB_TitleScreen.unity
-    guid: 68f68352637a25245822b7d7223222b1
+    path: Assets/Scenes/Sprint 1/TitleScreen.unity
+    guid: 16e886df9f2a8af4d90a0f71d24863db
   - enabled: 1
-    path: Assets/Scenes/web/WEB_Test Level.unity
-    guid: 03874fa3c947a2448ae4a85e008eac74
-  - enabled: 1
-    path: Assets/Scenes/GameOver.unity
+    path: Assets/Scenes/Sprint 1/GameOver.unity
     guid: 2e2e78f9d05dd604b8d6ef60293b6b2b
+  - enabled: 1
+    path: Assets/Scenes/Level Template.unity
+    guid: 80cc94724da3ead4e95243c365bc2831
+  - enabled: 1
+    path: Assets/Scenes/Level 1.unity
+    guid: 06ac67a3fa5af1d438e0bd78597ed9bb
+  - enabled: 1
+    path: Assets/Scenes/Level 2.unity
+    guid: f8f7581c279e4ae4eae5631bc3868a99
+  - enabled: 1
+    path: Assets/Scenes/GameCompletion.unity
+    guid: 144565f7a5893a64ea3a9155aa709e1e
   m_configObjects: {}

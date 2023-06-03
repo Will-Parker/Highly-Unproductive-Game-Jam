@@ -14,7 +14,7 @@ public class Valuebar : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        barSegment = Resources.Load("Prefabs/UI/BarSegment") as GameObject;
+        barSegment = Resources.Load("Prefabs/UI/Pause/BarSegment") as GameObject;
     }
 
     protected void SetMaxValue(float maxValue)

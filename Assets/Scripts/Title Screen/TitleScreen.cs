@@ -22,7 +22,8 @@ public class TitleScreen : MonoBehaviour
     public void StartGame()
     {
         AudioManager.instance.Stop("Title Music");
-        SceneManager.LoadSceneAsync(1);
+        AudioManager.instance.Play("Gameplay Music");
+        SceneManager.LoadSceneAsync(2);
     }
 
     public void Credits()

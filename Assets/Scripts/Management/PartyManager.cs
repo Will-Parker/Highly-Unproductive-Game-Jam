@@ -21,14 +21,6 @@ public class PartyManager : MonoBehaviour
     private float maxExp;
     [SerializeField] private Experiencebar expBar;
 
-    private GameStateManager gsm;
-    private void Awake()
-    {
-        gsm = FindObjectOfType<GameStateManager>();
-        if (gsm == null)
-            Debug.LogWarning("No GSM in scene");
-    }
-    // Start is called before the first frame update
     void Start()
     {
         if (allies == null)
@@ -61,7 +53,6 @@ public class PartyManager : MonoBehaviour
         expBar.SetExperience(0);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (moveState != MoveState.NotMoving)
@@ -78,7 +69,11 @@ public class PartyManager : MonoBehaviour
                     allies[1].facingDirection = Vec3ToVec2(allies[1].transform.position - allies[2].transform.position);
                     allies[1].UpdateAnim(false, allies[1].facingDirection);
                     moveState = MoveState.NotMoving;
-                    gsm.EndTurn();
+                    GameStateManager gsm = GameStateManager.instance;
+                    if (gsm == null)
+                        Debug.LogWarning("No GSM in scene");
+                    else
+                        gsm.EndTurn();
                 }
             }
             else
@@ -105,7 +100,11 @@ public class PartyManager : MonoBehaviour
                             allies[i].UpdateAnim(false);
                         }
                         moveState = MoveState.NotMoving;
-                        gsm.EndTurn();
+                        GameStateManager gsm = GameStateManager.instance;
+                        if (gsm == null)
+                            Debug.LogWarning("No GSM in scene");
+                        else
+                            gsm.EndTurn();
                     }
                 }
             }
@@ -197,18 +196,18 @@ public class PartyManager : MonoBehaviour
         }
     }
 
-    public void AttemptHeavyAttack(Enemy enemy, Vector2 moveDir)
-    {
-        if (moveState == MoveState.NotMoving)
-        {
-            moveState = MoveState.HeavyAttack;
-            allies[0].facingDirection = moveDir;
-            allies[0].HeavyAttackEnemy(enemy);
-            gsm.EndTurn();
-            //StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
-            //StartCoroutine(WaitToRotate(1f / moveSpeed));
-        }
-    }
+    //public void AttemptHeavyAttack(Enemy enemy, Vector2 moveDir)
+    //{
+    //    if (moveState == MoveState.NotMoving)
+    //    {
+    //        moveState = MoveState.HeavyAttack;
+    //        allies[0].facingDirection = moveDir;
+    //        allies[0].HeavyAttackEnemy(enemy);
+    //        gsm.EndTurn();
+    //        //StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+    //        //StartCoroutine(WaitToRotate(1f / moveSpeed));
+    //    }
+    //}
 
     public void AttemptDetonate()
     {

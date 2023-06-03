@@ -12,106 +12,6 @@ public class Ally : Entity
     public AllyType type;
     private PartyManager pm;
     [SerializeField] private LayerMask impassableLayer;
-    public float HealStat { get; private set; } // how much HP to heal ally when healing
-    public float HeavyAttackStat { get; private set; } // how much to multiply attack when heavy attacking
-    public float StunStat { get; private set; } // how many turns to stun an enemy when stunning
-    public float BombStat { get; private set; } // how big the radius of the bomb is
-    public Dictionary<AllyType, Dictionary<StatType, float>> partnerBuffs = new Dictionary<AllyType, Dictionary<StatType, float>>() 
-    {
-        { 
-            AllyType.Apple, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        },
-        {
-            AllyType.Strawberry, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        },
-        {
-            AllyType.Lemon, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        },
-        {
-            AllyType.Blueberry, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        }
-    };
-    public Dictionary<AllyType, Dictionary<StatType, float>> oldPartnerBuffs = new Dictionary<AllyType, Dictionary<StatType, float>>()
-    {
-        {
-            AllyType.Apple, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        },
-        {
-            AllyType.Strawberry, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        },
-        {
-            AllyType.Lemon, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        },
-        {
-            AllyType.Blueberry, new Dictionary<StatType, float>()
-            {
-                { StatType.MaxHealth, 0f },
-                { StatType.Attack, 0f },
-                { StatType.HeavyAttack, 0f },
-                { StatType.Heal, 0f },
-                { StatType.Stun, 0f },
-                { StatType.Bomb, 0f }
-            }
-        }
-    };
-
-    public bool isLevelUp = false;
 
     private void Awake()
     {
@@ -119,14 +19,20 @@ public class Ally : Entity
         pm = FindObjectOfType<PartyManager>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         InitializeStats();
         UpdateAnim(facingDirection);
     }
 
-    // Update is called once per frame
+    private void InitializeStats()
+    {
+        Ally[] neighbors = pm.GetNeighborAllies(this);
+        Health = GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.MaxHealth);
+        healthbar.SetMaxHealth(GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.MaxHealth));
+        healthbar.SetHealth(Health);
+    }
+
     void Update()
     {
         
@@ -158,8 +64,8 @@ public class Ally : Entity
             if (pm.allies[0].Health == 0 && pm.allies[1].Health == 0 && pm.allies[2].Health == 0 && pm.allies[3].Health == 0)
             {
                 AudioManager.instance.Stop("Gameplay Music");
-                FindObjectOfType<CharacterControl>().UnsubFromEverything();
-                SceneManager.LoadSceneAsync(2);
+                CharacterControl.instance.UnsubFromEverything();
+                SceneManager.LoadSceneAsync(1);
             }
         }
     }
@@ -210,75 +116,34 @@ public class Ally : Entity
             return null;
     }
 
-    private Enemy GetEnemyInfrontOf()
-    {
-        var enemies = new List<Enemy>(FindObjectsOfType<Enemy>());
-        foreach (Enemy enemy in enemies)
-        {
-            if (Vector2.Distance(Vec3ToVec2(transform.position) + facingDirection, Vec3ToVec2(enemy.transform.position)) <= 0.05f)
-                return enemy;
-        }
-        return null;
-    }
-
-    private void InitializeStats()
-    {
-        switch (type)
-        {
-            case AllyType.Apple:
-                MaxHealth = 15f;
-                Attack = 2f;
-                HeavyAttackStat = 2f;
-                break;
-            case AllyType.Strawberry:
-                MaxHealth = 6f;
-                Attack = 1f;
-                HealStat = 5f;
-                break;
-            case AllyType.Lemon:
-                MaxHealth = 8f;
-                Attack = 1f;
-                StunStat = 1f;
-                break;
-            case AllyType.Blueberry:
-                MaxHealth = 10f;
-                Attack = 3f;
-                BombStat = 1f;
-                break;
-        }
-        Health = MaxHealth;
-        healthbar.SetMaxHealth(MaxHealth);
-        healthbar.SetHealth(Health);
-    }
-
     public void AttackEnemy(Enemy enemy)
     {
         Ally[] neighbors = pm.GetNeighborAllies(this);
         if (enemy != null)
-            enemy.TakeDamage(Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack]);
+            enemy.TakeDamage(GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Attack));
         // do attack anim
     }
 
-    internal void HeavyAttackEnemy(Enemy enemy)
-    {
-        Ally[] neighbors = pm.GetNeighborAllies(this);
-        if (enemy != null)
-            enemy.TakeDamage((Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack]) 
-                + (HeavyAttackStat + partnerBuffs[neighbors[0].type][StatType.HeavyAttack] + partnerBuffs[neighbors[1].type][StatType.HeavyAttack]));
-    }
+    //internal void HeavyAttackEnemy(Enemy enemy)
+    //{
+    //    Ally[] neighbors = pm.GetNeighborAllies(this);
+    //    if (enemy != null)
+    //        enemy.TakeDamage((Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack]) 
+    //            + (HeavyAttackStat + partnerBuffs[neighbors[0].type][StatType.HeavyAttack] + partnerBuffs[neighbors[1].type][StatType.HeavyAttack]));
+    //}
 
     public void HealAlly(Ally ally)
     {
         Ally[] neighbors = pm.GetNeighborAllies(this);
         AudioManager.instance.Play("Heal");
-        ally.Heal(HealStat + partnerBuffs[neighbors[0].type][StatType.Heal] + partnerBuffs[neighbors[1].type][StatType.Heal]);
+        ally.Heal(GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Unique));
         // do heal anim;
     }
 
     public void Heal(float health)
     {
         Ally[] neighbors = pm.GetNeighborAllies(this);
-        Health = Mathf.Min(Health + health, MaxHealth + partnerBuffs[neighbors[0].type][StatType.MaxHealth] + partnerBuffs[neighbors[1].type][StatType.MaxHealth]);
+        Health = Mathf.Min(Health + health, GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.MaxHealth));
         healthbar.SetHealth(Health);
         anim.SetTrigger("heal");
         anim.SetBool("isDead", false);
@@ -288,8 +153,7 @@ public class Ally : Entity
     {
         AudioManager.instance.Play("Stun");
         Ally[] neighbors = pm.GetNeighborAllies(this);
-        enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, 
-            StunStat + partnerBuffs[neighbors[0].type][StatType.Stun] + partnerBuffs[neighbors[1].type][StatType.Stun]));
+        enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Unique)));
         enemy.anim.SetBool("isStunned", true);
     }
 
@@ -298,14 +162,14 @@ public class Ally : Entity
         var bombGO = Instantiate(Resources.Load("Prefabs/Bomb", typeof(GameObject)), bombLocation, Quaternion.identity) as GameObject;
         var bomb = bombGO.GetComponent<Bomb>();
         Ally[] neighbors = pm.GetNeighborAllies(this);
-        bomb.bombRadius = Mathf.FloorToInt(((BombStat + partnerBuffs[neighbors[0].type][StatType.Bomb] + partnerBuffs[neighbors[1].type][StatType.Bomb]) * 2) + 1);
-        bomb.bombDmg = Attack + partnerBuffs[neighbors[0].type][StatType.Attack] + partnerBuffs[neighbors[1].type][StatType.Attack];
+        bomb.bombRadius = Mathf.FloorToInt(((GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Unique)) * 2) + 1);
+        bomb.bombDmg = GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Attack);
     }
 
     public void SetMaxHealth()
     {
         Ally[] neighbors = pm.GetNeighborAllies(this);
-        float newMaxHealth = MaxHealth + partnerBuffs[neighbors[0].type][StatType.MaxHealth] + partnerBuffs[neighbors[1].type][StatType.MaxHealth];
+        float newMaxHealth = GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.MaxHealth);
         healthbar.SetMaxHealth(newMaxHealth);
         if (newMaxHealth < Health)
         {
@@ -326,8 +190,5 @@ public enum StatType
 {
     MaxHealth,
     Attack,
-    HeavyAttack,
-    Heal,
-    Stun,
-    Bomb,
+    Unique
 }

@@ -76,6 +76,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "TestAction",
+                    "type": "Button",
+                    "id": "13ab288d-c8fd-433b-9ba8-a9ed5c4fd581",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -202,6 +211,17 @@
                 },
                 {
                     "name": "",
+                    "id": "64b1c975-413c-48e4-b7c1-6e4faf8c89e2",
+                    "path": "<Keyboard>/equals",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7abc739e-208a-4b72-b689-a88e91525552",
                     "path": "<Keyboard>/enter",
                     "interactions": "",
@@ -230,6 +250,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Progress Dialogue",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9adda446-2384-4eb0-a9ea-f852377d28d2",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TestAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

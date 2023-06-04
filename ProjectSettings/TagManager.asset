@@ -62,6 +62,9 @@ TagManager:
   - name: Cursor
     uniqueID: 138786679
     locked: 0
+  - name: In-Game UI
+    uniqueID: 2300957313
+    locked: 0
   - name: Debug
     uniqueID: 1828315741
     locked: 0

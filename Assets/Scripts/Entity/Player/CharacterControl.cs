@@ -254,12 +254,15 @@ public class CharacterControl : MonoBehaviour
 
     private void ProgressDialogue_performed(InputAction.CallbackContext obj)
     {
-        progressDialoguePressed = true;
-
-        if (!DialogueManager.GetInstance().dialogueIsPlaying)
+        if (!UIManager.instance.pausem.isActiveAndEnabled)
         {
-            SubToAllGameplayActions();
-            UnsubFromAllDialogueActions();
+            progressDialoguePressed = true;
+
+            if (!DialogueManager.GetInstance().dialogueIsPlaying)
+            {
+                SubToAllGameplayActions();
+                UnsubFromAllDialogueActions();
+            }
         }
     }
 

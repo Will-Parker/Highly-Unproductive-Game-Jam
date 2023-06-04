@@ -52,8 +52,12 @@ public class GameStateManager : MonoBehaviour
                     foreach (Enemy stunnedEnemy in stunnedEnemies)
                     {
                         stunnedEnemy.turnsStunned--;
+                        stunnedEnemy.stunText.text = stunnedEnemy.turnsStunned.ToString();
                         if (stunnedEnemy.turnsStunned <= 0)
+                        {
                             stunnedEnemy.anim.SetBool("isStunned", false);
+                            stunnedEnemy.stunText.enabled = false;
+                        }
                     }
                     EndTurn();
                 }

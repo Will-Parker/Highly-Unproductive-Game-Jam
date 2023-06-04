@@ -12,6 +12,8 @@ public class Ally : Entity
     public AllyType type;
     private PartyManager pm;
     [SerializeField] private LayerMask impassableLayer;
+    private readonly float timeToWait = 0.2f;
+    private bool isHover = false;
 
     private void Awake()
     {
@@ -155,6 +157,8 @@ public class Ally : Entity
         Ally[] neighbors = pm.GetNeighborAllies(this);
         enemy.turnsStunned = Mathf.FloorToInt(Mathf.Max(enemy.turnsStunned, GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Unique)));
         enemy.anim.SetBool("isStunned", true);
+        enemy.stunText.enabled = true;
+        enemy.stunText.text = enemy.turnsStunned.ToString();
     }
 
     public void PlaceBomb(Vector3 bombLocation)
@@ -162,7 +166,7 @@ public class Ally : Entity
         var bombGO = Instantiate(Resources.Load("Prefabs/Bomb", typeof(GameObject)), bombLocation, Quaternion.identity) as GameObject;
         var bomb = bombGO.GetComponent<Bomb>();
         Ally[] neighbors = pm.GetNeighborAllies(this);
-        bomb.bombRadius = Mathf.FloorToInt(((GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Unique)) * 2) + 1);
+        bomb.bombRadius = Mathf.FloorToInt(GameData.GetStatSum(pm.allies[0].type, pm.allies[3].type, pm.allies[1].type, StatType.Unique));
         bomb.bombDmg = GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Attack);
     }
 
@@ -175,6 +179,34 @@ public class Ally : Entity
         {
             Health = newMaxHealth;
         }
+    }
+
+    private void OnMouseOver()
+    {
+        if (!isHover)
+        {
+            if (FindObjectOfType<ActionUIManager>().mode == UIActionMode.Heal)
+            {
+                isHover = true;
+                StopAllCoroutines();
+                StartCoroutine(StartTemporaryHealbarTimer());
+            }
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        isHover = false;
+        StopAllCoroutines();
+        healthbar.DisableTemporaryHeal();
+    }
+
+    private IEnumerator StartTemporaryHealbarTimer()
+    {
+        yield return new WaitForSeconds(timeToWait);
+        Ally strawb = pm.GetAlly(AllyType.Strawberry);
+        Ally[] neighbors = pm.GetNeighborAllies(strawb);
+        healthbar.SetTemporaryHeal(GameData.GetStatSum(AllyType.Strawberry, neighbors[0].type, neighbors[1].type, StatType.Unique));
     }
 }
 

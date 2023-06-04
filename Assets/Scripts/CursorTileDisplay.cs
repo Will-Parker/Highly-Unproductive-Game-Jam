@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+using static Helpers;
 
 public class CursorTileDisplay : MonoBehaviour
 {
@@ -46,9 +46,24 @@ public class CursorTileDisplay : MonoBehaviour
                     cursorMap.SetTile(previousMousePos, null); // Remove old bombTile
                     cursorMap.SetTile(mousePos, bombTile);
                     var a = (ExtendedRuleTile) cursorMap.GetTile(mousePos);
+                    int intBombRadius = Mathf.FloorToInt(((GameData.GetStatSum(pm.allies[0].type, pm.allies[3].type, pm.allies[1].type, StatType.Unique)) * 2) + 1);
                     Transform bombRad = a.m_DefaultGameObject.transform.GetChild(0);
-                    bombRad.localScale = Vector3.one 
-                        * Mathf.FloorToInt(((GameData.GetStatSum(pm.allies[0].type, pm.allies[3].type, pm.allies[1].type, StatType.Unique)) * 2) + 1);
+                    bombRad.localScale = Vector3.one  * intBombRadius;
+                    foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+                    {
+                        enemy.healthbar.DisableTemporaryDamage();
+                        if (Vector3.Distance(enemy.transform.position, Vec2IntToVec3(Vec3IntToVec2Int(mousePos))) 
+                            < GameData.GetStatSum(pm.allies[0].type, pm.allies[3].type, pm.allies[1].type, StatType.Unique) + 0.5)
+                        {
+                            enemy.healthbar.gameObject.SetActive(true);
+                            enemy.healthbar.SetTemporaryDamage(GameData.GetStatSum(pm.allies[0].type, pm.allies[3].type, pm.allies[1].type, StatType.Attack));
+                        } 
+                        else
+                        {
+                            enemy.healthbar.gameObject.SetActive(false);
+                            enemy.healthbar.DisableTemporaryDamage();
+                        }
+                    }
                     previousMousePos = mousePos;
                 }
             }

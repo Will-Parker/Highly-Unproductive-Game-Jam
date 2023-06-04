@@ -18,7 +18,6 @@ public class MatchManager : MonoBehaviour
         AudioManager.instance.Play("Button");
         if (slot1.GetAllyInSlot() != null && slot2.GetAllyInSlot() != null)
         {
-            FindObjectOfType<PartyManager>().LevelUpExperience();
             Time.timeScale = 1f;
             DialogueManager.GetInstance().BeginDialogueWith(slot1.GetAllyInSlot().Value, slot2.GetAllyInSlot().Value);
             CharacterControl.instance.UnsubFromAllGameplayActions();

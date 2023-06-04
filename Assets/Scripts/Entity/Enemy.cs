@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using static Helpers;
+using TMPro;
+
 public enum AIState
 {
     Wander,
@@ -26,6 +28,13 @@ public class Enemy : Entity
     private Ally targetAlly;
     public int turnsStunned;
 
+    private readonly float timeToWait = 0.2f;
+    private bool isDefaultHover = false;
+    private bool isAttackHover = false;
+    private bool isStunHover = false;
+
+    public TextMeshProUGUI stunText;
+
     //public Transform debug;
 
     private void Awake()
@@ -39,6 +48,9 @@ public class Enemy : Entity
         if (facingDirection == Vector2.zero)
             facingDirection = Vector2.down;
         Health = MaxHealth;
+        healthbar.SetMaxHealth(MaxHealth);
+        healthbar.SetHealth(Health);
+        healthbar.gameObject.SetActive(false);
         UpdateAnim(facingDirection);
     }
     private void Update()
@@ -189,10 +201,10 @@ public class Enemy : Entity
     public new void TakeDamage(float damage)
     {
         Health = Mathf.Max(Health - damage, 0f);
+        healthbar.SetHealth(Health);
         AudioManager.instance.Play("Mushroom Damaged");
         if (Health == 0)
         {
-            pm.GainExperience(1);
             Destroy(gameObject);
         }
         anim.SetTrigger("takeDamage");
@@ -309,7 +321,94 @@ public class Enemy : Entity
             return null;
     }
 
+    private void OnMouseOver()
+    {
+        switch (FindObjectOfType<ActionUIManager>().mode)
+        {
+            case UIActionMode.Attack:
+            case UIActionMode.None:
+                if (!isAttackHover)
+                {
+                    isAttackHover = true;
+                    isDefaultHover = false;
+                    isStunHover = false;
+                    StopAllCoroutines();
+                    StartCoroutine(StartTemporaryDamagebarTimer());
+                }
+                break;
+            case UIActionMode.Stun:
+                if (!isStunHover)
+                {
+                    isStunHover = true;
+                    isAttackHover = false;
+                    isDefaultHover = false;
+                    StopAllCoroutines();
+                    StartCoroutine(StartStunTextTimer());
+                }
+                break;
+            case UIActionMode.Bomb:
+                break;
+            default:
+                if (!isDefaultHover)
+                {
+                    isDefaultHover = true;
+                    isAttackHover = false;
+                    isStunHover = false;
+                    StopAllCoroutines();
+                    StartCoroutine(StartHealthbarTimer());
+                }
+                break;
+        }
+    }
 
+    private void OnMouseExit()
+    {
+        isAttackHover = false;
+        isDefaultHover = false;
+        isStunHover = false;
+        StopAllCoroutines();
+        healthbar.DisableTemporaryDamage();
+        healthbar.gameObject.SetActive(false);
+        stunText.text = turnsStunned.ToString();
+        if (turnsStunned == 0)
+        {
+            stunText.enabled = false;
+        }
+    }
+
+    private IEnumerator StartHealthbarTimer()
+    {
+        yield return new WaitForSeconds(timeToWait);
+        healthbar.gameObject.SetActive(true);
+        healthbar.DisableTemporaryDamage();
+        stunText.text = turnsStunned.ToString();
+        if (turnsStunned == 0)
+        {
+            stunText.enabled = false;
+        }
+    }
+
+    private IEnumerator StartTemporaryDamagebarTimer()
+    {
+        yield return new WaitForSeconds(timeToWait);
+        healthbar.gameObject.SetActive(true);
+        healthbar.SetTemporaryDamage(GameData.GetStatSum(pm.allies[0].type, pm.allies[3].type, pm.allies[1].type, StatType.Attack));
+        stunText.text = turnsStunned.ToString();
+        if (turnsStunned == 0)
+        {
+            stunText.enabled = false;
+        }
+    }
+
+    private IEnumerator StartStunTextTimer()
+    {
+        yield return new WaitForSeconds(timeToWait);
+        healthbar.gameObject.SetActive(true);
+        healthbar.DisableTemporaryDamage();
+        stunText.enabled = true;
+        stunText.text = turnsStunned.ToString() + ">" + 
+            Mathf.FloorToInt(Mathf.Max(turnsStunned, GameData.GetStatSum(pm.allies[0].type, pm.allies[3].type, pm.allies[1].type, StatType.Unique)));
+    }
 
     private List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
     {

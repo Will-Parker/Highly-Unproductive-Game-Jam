@@ -17,9 +17,6 @@ public class PartyManager : MonoBehaviour
     // impassable layer
     [SerializeField] private LayerMask impassableLayer;
     private Vector3 prevTail;
-    private float exp;
-    private float maxExp;
-    [SerializeField] private Experiencebar expBar;
 
     void Start()
     {
@@ -48,9 +45,6 @@ public class PartyManager : MonoBehaviour
         }
 
         prevTail = new Vector3(allies[3].transform.position.x - 1, allies[3].transform.position.y, allies[3].transform.position.z);
-        maxExp = 1;
-        expBar.SetMaxExperience(maxExp);
-        expBar.SetExperience(0);
     }
 
     void Update()
@@ -272,20 +266,6 @@ public class PartyManager : MonoBehaviour
             allies[i].facingDirection = Vec3ToVec2(movePoints[i] - allies[i].transform.position);
             allies[i].UpdateAnim(true, allies[i].facingDirection);
         }
-    }
-
-    public void GainExperience(float experienceToAdd)
-    {
-        exp = Mathf.Min(exp + experienceToAdd, maxExp);
-        expBar.SetExperience(exp);
-    }
-
-    public void LevelUpExperience()
-    {
-        maxExp += 2;
-        exp = 0;
-        expBar.SetMaxExperience(maxExp);
-        expBar.SetExperience(exp);
     }
 
     public void SetPartyOrder(AllyType ally1, AllyType ally2, AllyType ally3, AllyType ally4)

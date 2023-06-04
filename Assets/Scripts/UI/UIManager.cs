@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     private ActionUIManager auim;
-    private PauseManager pausem;
+    public PauseManager pausem;
     private MatchManager mm;
     private ReorderPartyManager rpm;
     private CharacterControl cc;

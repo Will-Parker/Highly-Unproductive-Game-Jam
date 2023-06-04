@@ -14,7 +14,7 @@ public class Bomb : MonoBehaviour
 
     public void Start()
     {
-        displayRadius.transform.localScale = new Vector3(bombRadius, bombRadius, bombRadius);
+        displayRadius.transform.localScale = new Vector3((bombRadius * 2) + 1, (bombRadius * 2) + 1, (bombRadius * 2) + 1);
     }
 
     public void Explode()
@@ -22,7 +22,7 @@ public class Bomb : MonoBehaviour
         AudioManager.instance.Play("Explode");
         foreach (Enemy enemy in FindObjectsOfType<Enemy>())
         {
-            if (Vector3.Distance(enemy.transform.position, transform.position) < bombRadius)
+            if (Vector3.Distance(enemy.transform.position, transform.position) < bombRadius + 0.5f)
             {
                 enemy.TakeDamage(bombDmg);
             }
@@ -45,11 +45,39 @@ public class Bomb : MonoBehaviour
         isHover = false;
         StopAllCoroutines();
         displayRadius.SetActive(false);
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            enemy.healthbar.DisableTemporaryDamage();
+            enemy.healthbar.gameObject.SetActive(false);
+        }
     }
 
     private IEnumerator StartTimer()
     {
         yield return new WaitForSeconds(timeToWait);
         displayRadius.SetActive(true);
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            enemy.healthbar.DisableTemporaryDamage();
+            if (Vector3.Distance(enemy.transform.position, transform.position) < bombRadius + 0.5f)
+            {
+                enemy.healthbar.gameObject.SetActive(true);
+                enemy.healthbar.SetTemporaryDamage(bombDmg);
+            }
+            else
+            {
+                enemy.healthbar.DisableTemporaryDamage();
+                enemy.healthbar.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void DetonateHover()
+    {
+        displayRadius.SetActive(true);
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            enemy.healthbar.temporaryCumulativeDamage += bombDmg;
+        }
     }
 }

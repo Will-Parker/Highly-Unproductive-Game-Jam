@@ -132,11 +132,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 431268719067684011, guid: 79098f8aed3321040a98938434a08f93, type: 3}
       propertyPath: Attack
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 431268719067684011, guid: 79098f8aed3321040a98938434a08f93, type: 3}
       propertyPath: MaxHealth
-      value: 4
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 431268719067684011, guid: 79098f8aed3321040a98938434a08f93, type: 3}
       propertyPath: facingDirection.x
@@ -478,27 +478,6 @@ MonoBehaviour:
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
---- !u!1 &549591077 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7242708904888230807, guid: eec96d2998ff7844091abf81209389d2, type: 3}
-  m_PrefabInstance: {fileID: 7242708904767721619}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &549591083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 549591077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 685b6df34d061f249a4aa9bdc402cb92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tipToShow: '<size=48px>Detonate<size=36px> <i>(<b>R</b>)</i>
-
-    <size=40px>Detonate
-    all placed bombs'
 --- !u!1 &617320866
 GameObject:
   m_ObjectHideFlags: 0
@@ -3721,10 +3700,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1598076102}
-    - target: {fileID: 7242708904888230805, guid: eec96d2998ff7844091abf81209389d2, type: 3}
-      propertyPath: tipToShow
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 7242708904888230806, guid: eec96d2998ff7844091abf81209389d2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -4137,8 +4112,7 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7242708904888230805, guid: eec96d2998ff7844091abf81209389d2, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eec96d2998ff7844091abf81209389d2, type: 3}
 --- !u!114 &7242708904767721620 stripped
 MonoBehaviour:

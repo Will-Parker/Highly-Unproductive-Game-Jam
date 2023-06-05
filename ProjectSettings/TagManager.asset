@@ -59,6 +59,9 @@ TagManager:
   - name: Bomb
     uniqueID: 489865591
     locked: 0
+  - name: Guidance
+    uniqueID: 3952210887
+    locked: 0
   - name: Cursor
     uniqueID: 138786679
     locked: 0

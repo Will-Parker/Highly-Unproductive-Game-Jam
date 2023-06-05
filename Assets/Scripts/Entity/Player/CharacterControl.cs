@@ -44,7 +44,7 @@ public class CharacterControl : MonoBehaviour
 
     private void TestAction_performed(InputAction.CallbackContext obj)
     {
-        SceneManager.LoadSceneAsync("Level Template");
+        FindObjectOfType<CursorTileDisplay>().SetScreenToNegative();
     }
 
     private void Move_performed(InputAction.CallbackContext context)
@@ -78,14 +78,8 @@ public class CharacterControl : MonoBehaviour
                 {
                     if (Vector2.Distance(Vec3ToVec2(enemy.transform.position), Vec3ToVec2(pm.allies[0].transform.position) + moveDir) <= 0.05)
                     {
-                        if (auim.mode == UIActionMode.HeavyAttack)
-                            Debug.LogWarning("Heavy Attack Removed");
-                            //pm.AttemptHeavyAttack(enemy, moveDir);
-                        else
-                        {
-                            pm.AttemptAttack(enemy, moveDir);
-                            auim.UpdateActionUI(UIActionMode.Attack);
-                        }
+                        auim.UpdateActionUI(UIActionMode.Attack);
+                        pm.AttemptAttack(enemy, moveDir);
                         successfulAttempt = true;
                     }
                 }
@@ -124,7 +118,8 @@ public class CharacterControl : MonoBehaviour
         switch (pm.allies[0].type)
         {
             case AllyType.Apple:
-                auim.UpdateActionUI(UIActionMode.HeavyAttack);
+                auim.UpdateActionUI(UIActionMode.Command);
+                pm.AttemptCommand();
                 break;
             case AllyType.Strawberry:
                 auim.UpdateActionUI(UIActionMode.Heal);
@@ -169,7 +164,7 @@ public class CharacterControl : MonoBehaviour
             Debug.LogWarning("CursorTileDisplay is not in the scene");
             return;
         }
-        if (pm.moveState == MoveState.NotMoving && (auim.mode == UIActionMode.HeavyAttack || auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun || auim.mode == UIActionMode.Bomb || auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack))
+        if (pm.moveState == MoveState.NotMoving && (auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun || auim.mode == UIActionMode.Bomb || auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack))
         {
             Vector3 mousePos = Vec2IntToVec3(Vec3IntToVec2Int(ctd.GetMousePosition()));
             Vector2 moveDir = Vec3ToVec2(mousePos - pm.allies[0].transform.position);
@@ -186,19 +181,6 @@ public class CharacterControl : MonoBehaviour
                             }
                         }
                     }
-                    break;
-                case UIActionMode.HeavyAttack:
-                    Debug.LogWarning("Heavy Attack Removed");
-                    //if (moveDir.magnitude <= 1.05)
-                    //{
-                    //    foreach (Enemy enemy in FindObjectsOfType<Enemy>())
-                    //    {
-                    //        if (Vector3.Distance(enemy.transform.position, mousePos) <= 0.05)
-                    //        {
-                    //            pm.AttemptHeavyAttack(enemy, moveDir);
-                    //        }
-                    //    }
-                    //}
                     break;
                 case UIActionMode.Move:
                     if (moveDir.sqrMagnitude <= 1.05 && moveDir.sqrMagnitude > 0.05)

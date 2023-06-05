@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7242708904419623185}
   - component: {fileID: 7242708904419623187}
   - component: {fileID: 7242708904419623404}
-  - component: {fileID: 7242708904419623186}
+  - component: {fileID: 7568354634872235251}
   m_Layer: 5
   m_Name: Swap
   m_TagString: Untagged
@@ -134,7 +134,7 @@ MonoBehaviour:
           m_StringArgument: Swap
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7242708904419623186
+--- !u!114 &7568354634872235251
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7242708904419623405}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ec57ecfa73ff434baeab0913d76845a, type: 3}
+  m_Script: {fileID: 11500000, guid: 90461869167cb9b4b86b67cd87250ffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tipToShow: '<size=48px>Swap<size=36px> <i>(<b>WASD</b> into ally next in line)</i>
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
-  heavyAttackBtn: {fileID: 7242708906246942506}
+  commandBtn: {fileID: 7242708906246942506}
   healBtn: {fileID: 7242708906486068221}
   stunBtn: {fileID: 7242708905171678874}
   bombBtn: {fileID: 7242708905158269554}
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 7242708904888230810}
   - component: {fileID: 7242708904888230811}
   - component: {fileID: 7242708904888230804}
-  - component: {fileID: 7242708904888230805}
+  - component: {fileID: 5732131562294714425}
   m_Layer: 5
   m_Name: Detonate
   m_TagString: Untagged
@@ -458,7 +458,7 @@ MonoBehaviour:
           m_StringArgument: Detonate
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7242708904888230805
+--- !u!114 &5732131562294714425
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -467,7 +467,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7242708904888230807}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ec57ecfa73ff434baeab0913d76845a, type: 3}
+  m_Script: {fileID: 11500000, guid: 685b6df34d061f249a4aa9bdc402cb92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tipToShow: '<size=48px>Detonate<size=36px> <i>(<b>R</b>)</i>
@@ -1339,9 +1339,9 @@ GameObject:
   - component: {fileID: 7242708906246942511}
   - component: {fileID: 7242708906246942505}
   - component: {fileID: 7242708906246942506}
-  - component: {fileID: 7242708906246942504}
+  - component: {fileID: 1924874631068975720}
   m_Layer: 5
-  m_Name: Heavy Attack
+  m_Name: Command
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1395,7 +1395,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c27c4d72b238b104ab96d4753b9eacc0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7599133e22187834d8d7aafc1381f25f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1458,10 +1458,10 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Heavy Attack
+          m_StringArgument: Command
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &7242708906246942504
+--- !u!114 &1924874631068975720
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1470,14 +1470,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7242708906246942507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ec57ecfa73ff434baeab0913d76845a, type: 3}
+  m_Script: {fileID: 11500000, guid: 33b9128ceddc97f47ad18c488d1a8cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipToShow: '<size=48px>Heavy Attack<size=36px> <i>(Toggle with <b>SHIFT</b> and
-    <b>WASD</b> into enemy)</i>
+  tipToShow: '<size=48px>Command<size=36px> <i>(<b>SHIFT</b>)</i>
 
-    <size=40px>Deal heavy damage to an enemy, but
-    must spend the next turn exhausted before rotating positions.'
+    <size=40px>Command
+    all of your allies to attack all adjacent enemies.'
 --- !u!1 &7242708906486068222
 GameObject:
   m_ObjectHideFlags: 0

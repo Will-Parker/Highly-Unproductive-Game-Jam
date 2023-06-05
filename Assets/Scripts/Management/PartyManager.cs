@@ -115,6 +115,7 @@ public class PartyManager : MonoBehaviour
                 && Vector2.Distance(Vec3ToVec2(allies[0].transform.position) + moveDir, Vec3ToVec2(allies[2].transform.position)) > 0.05f
                 && !WillLandOnEnemy(moveDir))
             {
+                FindObjectOfType<CursorTileDisplay>().ClearOverlay();
                 MoveParty(moveDir);
                 StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             }
@@ -128,6 +129,7 @@ public class PartyManager : MonoBehaviour
             moveState = MoveState.Attack;
             allies[0].facingDirection = moveDir;
             allies[0].AttackEnemy(enemy);
+            FindObjectOfType<CursorTileDisplay>().ClearOverlay();
             StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
@@ -152,7 +154,7 @@ public class PartyManager : MonoBehaviour
             {
                 ally.SetMaxHealth();
             }
-
+            FindObjectOfType<CursorTileDisplay>().ClearOverlay();
             moveState = MoveState.Swap;
         }
     }
@@ -163,6 +165,7 @@ public class PartyManager : MonoBehaviour
         {
             moveState = MoveState.Stun;
             allies[0].StunEnemy(enemy);
+            FindObjectOfType<CursorTileDisplay>().ClearOverlay();
             StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
@@ -174,6 +177,7 @@ public class PartyManager : MonoBehaviour
         {
             moveState = MoveState.Stun;
             allies[0].PlaceBomb(mousePos);
+            FindObjectOfType<CursorTileDisplay>().ClearOverlay();
             StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
@@ -185,6 +189,25 @@ public class PartyManager : MonoBehaviour
         {
             moveState = MoveState.Heal;
             allies[0].HealAlly(ally);
+            FindObjectOfType<CursorTileDisplay>().ClearOverlay();
+            StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
+            StartCoroutine(WaitToRotate(1f / moveSpeed));
+        }
+    }
+
+    internal void AttemptCommand()
+    {
+        if (moveState == MoveState.NotMoving)
+        {
+            moveState = MoveState.Command;
+            float damage = GameData.GetStatSum(allies[0].type, allies[3].type, allies[1].type, StatType.Unique);
+            if (allies[1].Health > 0)
+                allies[1].AttackAllAdjacentEnemies(damage);
+            if (allies[2].Health > 0)
+                allies[2].AttackAllAdjacentEnemies(damage);
+            if (allies[3].Health > 0)
+                allies[3].AttackAllAdjacentEnemies(damage);
+            FindObjectOfType<CursorTileDisplay>().ClearOverlay();
             StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
@@ -212,6 +235,7 @@ public class PartyManager : MonoBehaviour
             {
                 bomb.Explode();
             }
+            FindObjectOfType<CursorTileDisplay>().ClearOverlay();
             StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
             StartCoroutine(WaitToRotate(1f / moveSpeed));
         }
@@ -230,6 +254,7 @@ public class PartyManager : MonoBehaviour
     public void PassTurn()
     {
         moveState = MoveState.PassingTurn;
+        FindObjectOfType<CursorTileDisplay>().ClearOverlay();
         StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
         StartCoroutine(WaitToRotate(1f / moveSpeed));
     }
@@ -390,7 +415,7 @@ public enum MoveState
     PassingTurn,
     Attack,
     Swap,
-    HeavyAttack,
+    Command,
     Heal,
     Stun,
     Detonate

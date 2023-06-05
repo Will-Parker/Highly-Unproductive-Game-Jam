@@ -8,7 +8,7 @@ public class ActionUIManager : MonoBehaviour
 {
     private PartyManager pm;
     public UIActionMode mode;
-    [SerializeField] private Button heavyAttackBtn;
+    [SerializeField] private Button commandBtn;
     [SerializeField] private Button healBtn;
     [SerializeField] private Button stunBtn;
     [SerializeField] private Button bombBtn;
@@ -38,25 +38,25 @@ public class ActionUIManager : MonoBehaviour
                     switch (leader.type)
                     {
                         case AllyType.Apple:
-                            heavyAttackBtn.gameObject.SetActive(true);
+                            commandBtn.gameObject.SetActive(true);
                             healBtn.gameObject.SetActive(false);
                             stunBtn.gameObject.SetActive(false);
                             bombBtn.gameObject.SetActive(false);
                             break;
                         case AllyType.Strawberry:
-                            heavyAttackBtn.gameObject.SetActive(false);
+                            commandBtn.gameObject.SetActive(false);
                             healBtn.gameObject.SetActive(true);
                             stunBtn.gameObject.SetActive(false);
                             bombBtn.gameObject.SetActive(false);
                             break;
                         case AllyType.Lemon:
-                            heavyAttackBtn.gameObject.SetActive(false);
+                            commandBtn.gameObject.SetActive(false);
                             healBtn.gameObject.SetActive(false);
                             stunBtn.gameObject.SetActive(true);
                             bombBtn.gameObject.SetActive(false);
                             break;
                         case AllyType.Blueberry:
-                            heavyAttackBtn.gameObject.SetActive(false);
+                            commandBtn.gameObject.SetActive(false);
                             healBtn.gameObject.SetActive(false);
                             stunBtn.gameObject.SetActive(false);
                             bombBtn.gameObject.SetActive(true);
@@ -77,7 +77,7 @@ public class ActionUIManager : MonoBehaviour
                 }
                 else
                 {
-                    heavyAttackBtn.gameObject.SetActive(false);
+                    commandBtn.gameObject.SetActive(false);
                     healBtn.gameObject.SetActive(false);
                     stunBtn.gameObject.SetActive(false);
                     bombBtn.gameObject.SetActive(false);
@@ -88,8 +88,8 @@ public class ActionUIManager : MonoBehaviour
                     detonateBtn.gameObject.SetActive(false);
                 }
                 break;
-            case UIActionMode.HeavyAttack:
-                heavyAttackBtn.gameObject.SetActive(true);
+            case UIActionMode.Command:
+                commandBtn.gameObject.SetActive(true);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -100,7 +100,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Heal:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(true);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -111,7 +111,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Stun:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(true);
                 bombBtn.gameObject.SetActive(false);
@@ -122,7 +122,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Bomb:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(true);
@@ -133,7 +133,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Move:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -144,7 +144,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Attack:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -155,7 +155,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Swap:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -166,7 +166,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Rest:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -177,7 +177,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Read:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -188,7 +188,7 @@ public class ActionUIManager : MonoBehaviour
                 detonateBtn.gameObject.SetActive(false);
                 break;
             case UIActionMode.Detonate:
-                heavyAttackBtn.gameObject.SetActive(false);
+                commandBtn.gameObject.SetActive(false);
                 healBtn.gameObject.SetActive(false);
                 stunBtn.gameObject.SetActive(false);
                 bombBtn.gameObject.SetActive(false);
@@ -210,8 +210,8 @@ public class ActionUIManager : MonoBehaviour
             case UIActionMode.None:
                 // 
                 break;
-            case UIActionMode.HeavyAttack:
-                //
+            case UIActionMode.Command:
+                pm.AttemptCommand();
                 break;
             case UIActionMode.Heal:
                 //
@@ -241,6 +241,47 @@ public class ActionUIManager : MonoBehaviour
                 pm.AttemptDetonate();
                 break;
         }
+        UpdateOverlayControls();
+    }
+
+    public void UpdateOverlayControls()
+    {
+        switch (mode)
+        {
+            case UIActionMode.None:
+                FindObjectOfType<CursorTileDisplay>().ClearOverlay();
+                break;
+            case UIActionMode.Command:
+                
+                break;
+            case UIActionMode.Heal:
+                FindObjectOfType<CursorTileDisplay>().SetHealOverlay();
+                break;
+            case UIActionMode.Stun:
+                FindObjectOfType<CursorTileDisplay>().SetStunOverlay();
+                break;
+            case UIActionMode.Bomb:
+                FindObjectOfType<CursorTileDisplay>().SetBombOverlay();
+                break;
+            case UIActionMode.Move:
+                FindObjectOfType<CursorTileDisplay>().SetMoveOverlay();
+                break;
+            case UIActionMode.Attack:
+                FindObjectOfType<CursorTileDisplay>().SetAttackOverlay();
+                break;
+            case UIActionMode.Swap:
+                
+                break;
+            case UIActionMode.Rest:
+                //
+                break;
+            case UIActionMode.Read:
+                //
+                break;
+            case UIActionMode.Detonate:
+                
+                break;
+        }
     }
 
     public void ActionPressed(string btnType)
@@ -254,7 +295,9 @@ public class ActionUIManager : MonoBehaviour
             case "heavyatk":
             case "heavy atk":
             case "apple":
-                btnActionMode = UIActionMode.HeavyAttack;
+            case "command":
+            case "cmd":
+                btnActionMode = UIActionMode.Command;
                 break;
             case "heal":
             case "strawberry":
@@ -310,7 +353,7 @@ public class ActionUIManager : MonoBehaviour
 public enum UIActionMode
 {
     None,
-    HeavyAttack,
+    Command,
     Heal,
     Stun,
     Bomb,

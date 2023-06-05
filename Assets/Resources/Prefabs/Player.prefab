@@ -80,7 +80,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4485695870577170445}
-  - component: {fileID: 4485695870577170444}
   - component: {fileID: 4485695870577170442}
   m_Layer: 0
   m_Name: Player
@@ -110,18 +109,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4485695870577170444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4485695870577170447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81bcd3ccf6d92884cb0c07663d22d64b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4485695870577170442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +128,7 @@ MonoBehaviour:
   - {fileID: 759267955870245932}
   virCam: {fileID: 750003564748319698}
   moveSpeed: 5
+  moveState: 0
   impassableLayer:
     serializedVersion: 2
     m_Bits: 256

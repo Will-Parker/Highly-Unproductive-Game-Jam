@@ -14,7 +14,7 @@ public class GameOver : MonoBehaviour
     {
         AudioManager.instance.Play("Button");
         AudioManager.instance.Stop("Game Over");
-        SceneManager.LoadSceneAsync("0");
+        SceneManager.LoadSceneAsync(0);
     }
 
     public void QuitGame()

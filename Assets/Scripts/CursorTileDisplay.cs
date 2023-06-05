@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static Helpers;
@@ -11,7 +14,12 @@ public class CursorTileDisplay : MonoBehaviour
     [SerializeField] private Tile cursorTile = null;
     [SerializeField] private ExtendedRuleTile bombTile = null;
 
+    [SerializeField] private Tilemap guidanceOverlayMap = null;
+    [SerializeField] private Tile positiveTile = null;
+    [SerializeField] private Tile negativeTile = null;
+
     private Vector3Int previousMousePos = new Vector3Int();
+    private Vector3Int previousClosestTilePos = Vector3Int.one * int.MaxValue;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +34,7 @@ public class CursorTileDisplay : MonoBehaviour
     {
         if (pm.moveState == MoveState.NotMoving)
         {
-            if (auim.mode == UIActionMode.HeavyAttack || auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun || auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack)
+            if (auim.mode == UIActionMode.Heal || auim.mode == UIActionMode.Stun)
             {
                 // Mouse over -> highlight tile
                 Vector3Int mousePos = GetMousePosition();
@@ -35,6 +43,26 @@ public class CursorTileDisplay : MonoBehaviour
                     cursorMap.SetTile(previousMousePos, null); // Remove old hoverTile
                     cursorMap.SetTile(mousePos, cursorTile);
                     previousMousePos = mousePos;
+                }
+            }
+            else if (auim.mode == UIActionMode.Move || auim.mode == UIActionMode.Attack)
+            {
+                // Mouse over -> highlight tile adjacent to head
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector3 closestTilePos = Vector3.one * int.MaxValue;
+                var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+                foreach (var dir in dirs)
+                {
+                    Vector3 targetNeighbor = pm.allies[0].transform.position + Vec2ToVec3(dir);
+                    if (Vector3.Distance(targetNeighbor, mousePos) < Vector3.Distance(closestTilePos, mousePos))
+                        closestTilePos = targetNeighbor;
+                }
+                if (!Vec3ToVec3Int(closestTilePos).Equals(previousClosestTilePos))
+                {
+                    cursorMap.SetTile(previousClosestTilePos, null); // Remove old hoverTile
+                    cursorMap.SetTile(Vec3ToVec3Int(closestTilePos), cursorTile);
+                    previousMousePos = grid.WorldToCell(mousePos);
+                    previousClosestTilePos = Vec3ToVec3Int(closestTilePos);
                 }
             }
             else if (auim.mode == UIActionMode.Bomb)
@@ -67,27 +95,19 @@ public class CursorTileDisplay : MonoBehaviour
                     previousMousePos = mousePos;
                 }
             }
-            else if (cursorMap.GetTile(previousMousePos) != null)
+            else if (cursorMap.GetTile(previousMousePos) != null || cursorMap.GetTile(previousClosestTilePos) != null)
             {
                 cursorMap.SetTile(previousMousePos, null);
+                cursorMap.SetTile(previousClosestTilePos, null);
+                previousClosestTilePos = Vector3Int.one * int.MaxValue;
             }
         } 
-        else if (cursorMap.GetTile(previousMousePos) != null)
+        else if (cursorMap.GetTile(previousMousePos) != null || cursorMap.GetTile(previousClosestTilePos) != null)
         {
             cursorMap.SetTile(previousMousePos, null);
+            cursorMap.SetTile(previousClosestTilePos, null);
+            previousClosestTilePos = Vector3Int.one * int.MaxValue;
         }
-
-        //// Left mouse click -> add path tile
-        //if (Input.GetMouseButton(0))
-        //{
-        //    pathMap.SetTile(mousePos, pathTile);
-        //}
-
-        //// Right mouse click -> remove path tile
-        //if (Input.GetMouseButton(1))
-        //{
-        //    pathMap.SetTile(mousePos, null);
-        //}
     }
 
     public Vector3Int GetMousePosition()
@@ -96,4 +116,123 @@ public class CursorTileDisplay : MonoBehaviour
         return grid.WorldToCell(mouseWorldPos);
     }
 
+
+    public void ClearOverlay()
+    {
+        guidanceOverlayMap.ClearAllTiles();
+    }
+
+    public void SetScreenToNegative()
+    {
+        Vector3Int c1 = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Vector3.zero));
+        Vector3Int c2 = grid.WorldToCell(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)));
+        for (int x = c1.x; x <= c2.x; x++)
+        {
+            for (int y = c1.y; y <= c2.y; y++)
+            {
+                guidanceOverlayMap.SetTile(new Vector3Int(x, y), negativeTile);
+            }
+        }
+    }
+
+    public void SetHealOverlay()
+    {
+        //SetScreenToNegative();
+        foreach (Ally ally in pm.allies)
+        {
+            guidanceOverlayMap.SetTile(Vec3ToVec3Int(ally.transform.position), positiveTile);
+        }
+    }
+
+    public void SetStunOverlay()
+    {
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            guidanceOverlayMap.SetTile(Vec3ToVec3Int(enemy.transform.position), positiveTile);
+        }
+    }
+
+    public void SetBombOverlay()
+    {
+        Vector3Int c1 = grid.WorldToCell(Camera.main.ScreenToWorldPoint(Vector3.zero));
+        Vector3Int c2 = grid.WorldToCell(Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0)));
+        for (int x = c1.x; x <= c2.x; x++)
+        {
+            for (int y = c1.y; y <= c2.y; y++)
+            {
+                guidanceOverlayMap.SetTile(new Vector3Int(x, y), positiveTile);
+            }
+        }
+    }
+
+    public void SetMoveOverlay()
+    {
+        List<Vector3> emptyNeighbors = pm.allies[0].GetEmptyNeighbors();
+        if (emptyNeighbors != null)
+        {
+            foreach (Vector3 emptyNeighbor in pm.allies[0].GetEmptyNeighbors())
+            {
+                guidanceOverlayMap.SetTile(Vec3ToVec3Int(emptyNeighbor), positiveTile);
+            }
+        }
+        List<Vector3> enemyNeighbors = pm.allies[0].GetEnemyNeighbors();
+        if (enemyNeighbors != null)
+        {
+            foreach (Vector3 enemyNeighbor in enemyNeighbors)
+            {
+                guidanceOverlayMap.SetTile(Vec3ToVec3Int(enemyNeighbor), negativeTile);
+            }
+        }
+        guidanceOverlayMap.SetTile(Vec3ToVec3Int(pm.allies[1].transform.position), negativeTile);
+    }
+
+    public void SetAttackOverlay()
+    {
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            guidanceOverlayMap.SetTile(Vec3ToVec3Int(enemy.transform.position), negativeTile);
+        }
+
+        List<Vector3> enemyNeighbors = pm.allies[0].GetEnemyNeighbors();
+        if (enemyNeighbors != null)
+        {
+            foreach (Vector3 enemyNeighbor in enemyNeighbors)
+            {
+                guidanceOverlayMap.SetTile(Vec3ToVec3Int(enemyNeighbor), positiveTile);
+            }
+        }
+    }
+
+    public void SetCommandOverlay()
+    {
+        List<Vector3> nonAllyNeighbors = pm.allies[1].GetNonAllyNeighbors();
+        if (nonAllyNeighbors != null)
+        {
+            foreach (Vector3 nonAllyNeighbor in nonAllyNeighbors)
+            {
+                guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), positiveTile);
+            }
+        }
+        nonAllyNeighbors = pm.allies[2].GetNonAllyNeighbors();
+        if (nonAllyNeighbors != null)
+        {
+            foreach (Vector3 nonAllyNeighbor in nonAllyNeighbors)
+            {
+                guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), positiveTile);
+            }
+        }
+        nonAllyNeighbors = pm.allies[3].GetNonAllyNeighbors();
+        if (nonAllyNeighbors != null)
+        {
+            foreach (Vector3 nonAllyNeighbor in nonAllyNeighbors)
+            {
+                guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), positiveTile);
+            }
+        }
+    }
+
+    public void SetSwapOverlay()
+    {
+        guidanceOverlayMap.SetTile(Vec3ToVec3Int(pm.allies[1].transform.position), positiveTile);
+    }
 }

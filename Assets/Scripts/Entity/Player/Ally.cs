@@ -72,21 +72,23 @@ public class Ally : Entity
         }
     }
 
-    public List<Vector2> GetEmptyNeighbors()
+    public List<Vector3> GetEmptyNeighbors()
     {
         var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-        var valid = new List<Vector2>(dirs);
+        var valid = new List<Vector3>();
         foreach (var dir in dirs)
         {
             RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(transform.position), dir, 1f, impassableLayer);
             if (!ray)
             {
                 Vector3 targetNeighbor = transform.position + Vec2ToVec3(dir);
+                valid.Add(targetNeighbor);
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                 {
                     if (enemy.transform.position == targetNeighbor)
                         valid.Remove(targetNeighbor);
                 }
+                valid.Remove(pm.allies[1].transform.position);
             }
         }
         if (valid.Count > 0)
@@ -95,10 +97,10 @@ public class Ally : Entity
             return null;
     }
 
-    public List<Vector2> GetEnemyNeighbors()
+    public List<Vector3> GetEnemyNeighbors()
     {
         var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-        var valid = new List<Vector2>();
+        var valid = new List<Vector3>();
         foreach (var dir in dirs)
         {
             RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(transform.position), dir, 1f, impassableLayer);
@@ -118,12 +120,47 @@ public class Ally : Entity
             return null;
     }
 
+    public List<Vector3> GetNonAllyNeighbors()
+    {
+        var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        var valid = new List<Vector3>();
+        foreach (var dir in dirs)
+        {
+            Vector3 targetNeighbor = transform.position + Vec2ToVec3(dir);
+            valid.Add(targetNeighbor);
+            foreach (Ally ally in pm.allies)
+            {
+                if (ally.transform.position == targetNeighbor)
+                    valid.Remove(targetNeighbor);
+            }
+        }
+        if (valid.Count > 0)
+            return valid;
+        else
+            return null;
+    }
+
     public void AttackEnemy(Enemy enemy)
     {
         Ally[] neighbors = pm.GetNeighborAllies(this);
         if (enemy != null)
             enemy.TakeDamage(GameData.GetStatSum(type, neighbors[0].type, neighbors[1].type, StatType.Attack));
         // do attack anim
+    }
+
+    internal void AttackAllAdjacentEnemies(float damage)
+    {
+        var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        foreach (var dir in dirs)
+        {
+            foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+            {
+                if (enemy.transform.position == transform.position + Vec2ToVec3(dir))
+                {
+                    enemy.TakeDamage(damage);
+                }
+            }
+        }
     }
 
     //internal void HeavyAttackEnemy(Enemy enemy)

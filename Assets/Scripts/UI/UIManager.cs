@@ -43,16 +43,17 @@ public class UIManager : MonoBehaviour
 
     public void Pause()
     {
+        if (mm.gameObject.activeSelf)
+        {
+            return;
+            //mm.gameObject.SetActive(false);
+            //Time.timeScale = 1f;
+            //cc.SubToAllGameplayActions();
+        }
         AudioManager.instance.Play("Button");
         if (pausem.gameObject.activeSelf)
         {
             pausem.gameObject.SetActive(false);
-            Time.timeScale = 1f;
-            cc.SubToAllGameplayActions();
-        }
-        else if (mm.gameObject.activeSelf)
-        {
-            mm.gameObject.SetActive(false);
             Time.timeScale = 1f;
             cc.SubToAllGameplayActions();
         }

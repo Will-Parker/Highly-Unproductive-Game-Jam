@@ -669,16 +669,16 @@ public class DialogueManager : MonoBehaviour
             switch (a1)
             {
                 case AllyType.Apple:
-                    GameData.allyStats[a1][a2][StatType.Unique] += 2;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a1][a2][StatType.Unique] += 3;
                     break;
                 case AllyType.Lemon:
-                    GameData.allyStats[a1][a2][StatType.Unique] += 2;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Blueberry:
-                    GameData.allyStats[a1][a2][StatType.Unique] += 2;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
             }
             GameData.allyStats[a2][a1][StatType.MaxHealth] += 3;
@@ -686,16 +686,16 @@ public class DialogueManager : MonoBehaviour
             switch (a2)
             {
                 case AllyType.Apple:
-                    GameData.allyStats[a2][a1][StatType.Unique] += 2;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a2][a1][StatType.Unique] += 3;
                     break;
                 case AllyType.Lemon:
-                    GameData.allyStats[a2][a1][StatType.Unique] += 2;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Blueberry:
-                    GameData.allyStats[a2][a1][StatType.Unique] += 2;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
             }
         }
@@ -708,16 +708,16 @@ public class DialogueManager : MonoBehaviour
             switch (a1)
             {
                 case AllyType.Apple:
-                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 0;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Lemon:
-                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 0;
                     break;
                 case AllyType.Blueberry:
-                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 0;
                     break;
             }
             GameData.allyStats[a2][a1][StatType.MaxHealth] += 1;
@@ -725,16 +725,16 @@ public class DialogueManager : MonoBehaviour
             switch (a2)
             {
                 case AllyType.Apple:
-                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 0;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Lemon:
-                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 0;
                     break;
                 case AllyType.Blueberry:
-                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 0;
                     break;
             }
         }
@@ -804,7 +804,6 @@ public class DialogueManager : MonoBehaviour
         foreach (Choice choice in currentChoices)
         {
             int index = indices[UnityEngine.Random.Range(0, indices.Count)];
-            Debug.Log(index);
             choices[index].gameObject.SetActive(true);
             choicesText[index].text = ColorFormatTextBasedOnActiveSpeaker(choice.text);
             indices.Remove(index);

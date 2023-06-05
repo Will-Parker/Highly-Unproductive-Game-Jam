@@ -336,7 +336,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Heavy Attack: '
+  m_text: 'Leadership: '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7b148ed21b4eb59489eb86536d7dd0b8, type: 2}
   m_sharedMaterial: {fileID: -8322985593235387028, guid: 7b148ed21b4eb59489eb86536d7dd0b8, type: 2}
@@ -1570,7 +1570,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00a752020453fe1468a467d16950adcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allyType: 0
   id: 0
+  oldId: 0
   healthValue: {fileID: 6358671285117830974}
   attackValue: {fileID: 6358671285373348037}
   uniqueValue: {fileID: 6358671286674604908}

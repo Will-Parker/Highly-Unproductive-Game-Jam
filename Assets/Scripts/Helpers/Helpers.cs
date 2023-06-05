@@ -30,6 +30,15 @@ public static class Helpers
         return new Vector2Int(Mathf.RoundToInt(v.x - 0.5f), Mathf.RoundToInt(v.y - 0.5f));
     }
 
+    public static Vector3Int Vec3ToVec3Int(Vector3 v)
+    {
+        return new Vector3Int(Mathf.RoundToInt(v.x - 0.5f), Mathf.RoundToInt(v.y - 0.5f));
+    }
+    public static Vector3Int Vec2ToVec3Int(Vector2 v)
+    {
+        return new Vector3Int(Mathf.RoundToInt(v.x - 0.5f), Mathf.RoundToInt(v.y - 0.5f));
+    }
+
     public static Vector3 Vec2IntToVec3(Vector2Int v)
     {
         return new Vector3(v.x + 0.5f, v.y + 0.5f, 0f);

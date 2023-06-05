@@ -13,9 +13,9 @@ public static class GameData
                 {
                     AllyType.Apple, new Dictionary<StatType, float>()
                     {
-                        { StatType.MaxHealth, 15f },
-                        { StatType.Attack, 2f },
-                        { StatType.Unique, 2f }
+                        { StatType.MaxHealth, 6f },
+                        { StatType.Attack, 3f },
+                        { StatType.Unique, 1f }
                     }
                 },
                 {
@@ -59,9 +59,9 @@ public static class GameData
                 {
                     AllyType.Strawberry, new Dictionary<StatType, float>()
                     {
-                        { StatType.MaxHealth, 6f },
+                        { StatType.MaxHealth, 2f },
                         { StatType.Attack, 1f },
-                        { StatType.Unique, 5f }
+                        { StatType.Unique, 3f }
                     }
                 },
                 {
@@ -105,7 +105,7 @@ public static class GameData
                 {
                     AllyType.Lemon, new Dictionary<StatType, float>()
                     {
-                        { StatType.MaxHealth, 8f },
+                        { StatType.MaxHealth, 4f },
                         { StatType.Attack, 1f },
                         { StatType.Unique, 1f }
                     }
@@ -151,8 +151,8 @@ public static class GameData
                 {
                     AllyType.Blueberry, new Dictionary<StatType, float>()
                     {
-                        { StatType.MaxHealth, 10f },
-                        { StatType.Attack, 3f },
+                        { StatType.MaxHealth, 5f },
+                        { StatType.Attack, 2f },
                         { StatType.Unique, 1f }
                     }
                 }

@@ -157,3 +157,17 @@ MonoBehaviour:
     pitch: 1
     loop: 1
     source: {fileID: 0}
+  - name: Correct Selection
+    type: 1
+    clip: {fileID: 8300000, guid: 3cceccb2d2b153a468b5991cd10008ab, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Incorrect Selection
+    type: 1
+    clip: {fileID: 8300000, guid: 66d7ebbf60956a34d913d57834097e8d, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}

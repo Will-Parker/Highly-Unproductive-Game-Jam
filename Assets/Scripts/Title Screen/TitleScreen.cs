@@ -17,6 +17,7 @@ public class TitleScreen : MonoBehaviour
     private void Start()
     {
         AudioManager.instance.Play("Title Music");
+        GameData.ResetAllyStats();
     }
 
     public void StartGame()

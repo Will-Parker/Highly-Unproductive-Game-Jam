@@ -1,16 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class MatchManager : MonoBehaviour
 {
+    [Header("Turn Text")]
+    [SerializeField] private TextMeshProUGUI turnText;
     [Header("Drop Slots")]
     [SerializeField] private DropSlot slot1;
     [SerializeField] private DropSlot slot2;
+    [Header("Rank")]
+    [SerializeField] private Image rankBadge;
+    [SerializeField] private TextMeshProUGUI goldRequirements;
+    [SerializeField] private TextMeshProUGUI silverRequirements;
+    [SerializeField] private TextMeshProUGUI bronzeRequirements;
 
     private void Start()
     {
-        
+        goldRequirements.text = GameData.levelRankRequirements[GameStateManager.instance.levelID][0].ToString() + " Turns";
+        silverRequirements.text = GameData.levelRankRequirements[GameStateManager.instance.levelID][1].ToString() + " Turns";
+        bronzeRequirements.text = GameData.levelRankRequirements[GameStateManager.instance.levelID][2].ToString() + " Turns";
+    }
+
+    private void OnEnable()
+    {
+        turnText.text = "Cleared in " + GameStateManager.instance.turn + " Turn" + (GameStateManager.instance.turn != 1 ? "s" : "");
+        if (GameStateManager.instance.turn <= GameData.levelRankRequirements[GameStateManager.instance.levelID][0])
+            rankBadge.color = new Color32(255, 189, 0, 255);
+        else if (GameStateManager.instance.turn <= GameData.levelRankRequirements[GameStateManager.instance.levelID][1])
+            rankBadge.color = new Color32(255, 255, 255, 255);
+        else if (GameStateManager.instance.turn <= GameData.levelRankRequirements[GameStateManager.instance.levelID][2])
+            rankBadge.color = new Color32(190, 105, 0, 255);
+        else
+            rankBadge.color = new Color32(120, 120, 120, 255);
+        if (GameStateManager.instance.turn < GameData.bestLevelClear[GameStateManager.instance.levelID])
+            GameData.bestLevelClear[GameStateManager.instance.levelID] = GameStateManager.instance.turn;
     }
 
     public void Match()
@@ -19,6 +46,7 @@ public class MatchManager : MonoBehaviour
         if (slot1.GetAllyInSlot() != null && slot2.GetAllyInSlot() != null)
         {
             Time.timeScale = 1f;
+            CharacterControl.controls.Gameplay.Enable();
             DialogueManager.GetInstance().BeginDialogueWith(slot1.GetAllyInSlot().Value, slot2.GetAllyInSlot().Value);
             CharacterControl.instance.UnsubFromAllGameplayActions();
             CharacterControl.instance.SubToAllDialogueActions();
@@ -30,5 +58,11 @@ public class MatchManager : MonoBehaviour
             }
             gameObject.SetActive(false);
         }
+    }
+
+    public void Retry()
+    {
+        AudioManager.instance.Play("Button");
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex);
     }
 }

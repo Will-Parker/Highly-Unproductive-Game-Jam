@@ -7,6 +7,7 @@ public class Healthbar : Valuebar
 {
     [SerializeField] private Slider temporaryHealth;
     [HideInInspector] public float temporaryCumulativeDamage = 0f;
+    private float realHealthVal;
 
     public void SetMaxHealth(float maxHealth)
     {
@@ -21,6 +22,7 @@ public class Healthbar : Valuebar
     public void SetHealth(float health)
     {
         temporaryHealth.gameObject.SetActive(false);
+        realHealthVal = health;
         SetValue(health);
         string tip = GetComponent<HoverTip>().tipToShow;
         string[] splitTip = tip.Split(new char[] { ':', '/' } );
@@ -64,7 +66,7 @@ public class Healthbar : Valuebar
     public void DisableTemporaryDamage()
     {
         temporaryCumulativeDamage = 0;
-        slider.value = temporaryHealth.value;
+        slider.value = realHealthVal;
         temporaryHealth.gameObject.SetActive(false);
     }
 }

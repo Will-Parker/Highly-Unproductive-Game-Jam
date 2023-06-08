@@ -77,7 +77,10 @@ public class Bomb : MonoBehaviour
         displayRadius.SetActive(true);
         foreach (Enemy enemy in FindObjectsOfType<Enemy>())
         {
-            enemy.healthbar.temporaryCumulativeDamage += bombDmg;
+            if (Vector3.Distance(enemy.transform.position, transform.position) < bombRadius + 0.5f)
+            {
+                enemy.healthbar.temporaryCumulativeDamage += bombDmg;
+            }
         }
     }
 }

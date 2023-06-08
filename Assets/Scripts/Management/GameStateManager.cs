@@ -7,7 +7,8 @@ public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager instance;
     [SerializeField] private GameState gameState = GameState.Player;
-    private int turn = 1;
+    public int turn = 1;
+    public int levelID;
 
     private void Awake()
     {
@@ -42,7 +43,8 @@ public class GameStateManager : MonoBehaviour
                 {
                     UIManager.instance.BeginMatch();
                     gameState = GameState.Player;
-                    CharacterControl.controls.Gameplay.Enable();
+                    CharacterControl.controls.Gameplay.Disable();
+                    Time.timeScale = 1f;
                     return;
                 }
                 List<Enemy> stunnedEnemies = enemies.FindAll(enemy => enemy.turnsStunned > 0);
@@ -73,8 +75,6 @@ public class GameStateManager : MonoBehaviour
             case GameState.Player:
                 CharacterControl.controls.Gameplay.Disable();
                 gameState = GameState.Enemy;
-                turn++;
-                Debug.Log("Turn " + turn);
                 UIManager.instance.UpdateUI();
                 foreach (Enemy enemy in FindObjectsOfType<Enemy>())
                 {
@@ -88,6 +88,8 @@ public class GameStateManager : MonoBehaviour
                 break;
             case GameState.Enemy:
                 gameState = GameState.Player;
+                turn++;
+                Debug.Log("Turn " + turn);
                 PartyManager pm = FindObjectOfType<PartyManager>();
                 if (pm.allies[0].Health <= 0)
                     pm.PassTurn();

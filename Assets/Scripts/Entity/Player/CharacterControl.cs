@@ -207,7 +207,12 @@ public class CharacterControl : MonoBehaviour
                     }
                     break;
                 case UIActionMode.Bomb:
-                    pm.AttemptPlaceBomb(mousePos);
+                    HoverBombButton hbb = FindObjectOfType<HoverBombButton>();
+                    if (hbb != null)
+                    {
+                        if (!hbb.isMouseOver)
+                            pm.AttemptPlaceBomb(mousePos);
+                    }
                     break;
             }
         }

@@ -662,6 +662,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (tagValues[0] == "good")
         {
+            AudioManager.instance.Play("Correct Selection");
             AllyType a1 = alliesInDialogue[0];
             AllyType a2 = alliesInDialogue[1];
             GameData.allyStats[a1][a2][StatType.MaxHealth] += 3;
@@ -701,6 +702,7 @@ public class DialogueManager : MonoBehaviour
         }
         else if (tagValues[0] == "bad")
         {
+            AudioManager.instance.Play("Incorrect Selection");
             AllyType a1 = alliesInDialogue[0];
             AllyType a2 = alliesInDialogue[1];
             GameData.allyStats[a1][a2][StatType.MaxHealth] += 1;
@@ -740,6 +742,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
+            AudioManager.instance.Play("Button");
             Debug.LogWarning("Tag had invalid option value. Tag: " + ParsedTagLog(tagKey, tagValues));
         }
     }

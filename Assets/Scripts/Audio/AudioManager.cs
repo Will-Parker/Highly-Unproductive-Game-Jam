@@ -47,7 +47,8 @@ public class AudioManager : MonoBehaviour
         volumes = new Dictionary<SoundType, float>()
             {
                 { SoundType.Music, 1f },
-                { SoundType.SFX, 1f }
+                { SoundType.SFX, 1f },
+                { SoundType.Ambient, 1f }
             };
     }
 

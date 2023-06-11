@@ -171,7 +171,9 @@ public static class GameData
     {
         { 0, new int[3] { 0, 0, 0 } },
         { 1, new int[3] { 12, 20, 30 } },
-        { 2, new int[3] { 12, 25, 40 } }
+        { 2, new int[3] { 10, 25, 40 } },
+        { 3, new int[3] { 6, 15, 30 } },
+        { 4, new int[3] { 20, 40, 80 } }
     };
 
     public static Dictionary<int, int> bestLevelClear = new() // key=levelID, value=turnsTaken

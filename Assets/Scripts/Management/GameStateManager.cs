@@ -23,6 +23,7 @@ public class GameStateManager : MonoBehaviour
 
     private void Start()
     {
+        AudioManager.instance.Play("Gameplay Music");
         StartCoroutine(AmbientSounds());
         CharacterControl.controls.Gameplay.Enable();
         CharacterControl.instance.SubToAllGameplayActions();
@@ -81,10 +82,9 @@ public class GameStateManager : MonoBehaviour
                     if (enemy.turnsStunned == 0)
                     {
                         enemy.UpdateAIState();
-                        enemy.CalculateAction();
                     }
                 }
-                
+                StartCoroutine(WaitCalcEnemyAction());
                 break;
             case GameState.Enemy:
                 gameState = GameState.Player;
@@ -105,6 +105,7 @@ public class GameStateManager : MonoBehaviour
 
     private IEnumerator AmbientSounds()
     {
+        yield return new WaitForSeconds(1f);
         while (isActiveAndEnabled)
         {
             yield return new WaitForSeconds(Random.Range(10f, 20f));
@@ -123,6 +124,18 @@ public class GameStateManager : MonoBehaviour
                 {
                     AudioManager.instance.Play("Cricket");
                 }
+            }
+        }
+    }
+
+    private IEnumerator WaitCalcEnemyAction()
+    {
+        foreach (Enemy enemy in FindObjectsOfType<Enemy>())
+        {
+            if (enemy.turnsStunned == 0)
+            {
+                yield return new WaitForSeconds(0.1f);
+                enemy.CalculateAction();
             }
         }
     }

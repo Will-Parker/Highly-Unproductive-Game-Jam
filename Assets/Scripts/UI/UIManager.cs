@@ -71,7 +71,9 @@ public class UIManager : MonoBehaviour
 
     public void BeginMatch()
     {
-        AudioManager.instance.Play("Button");
+        AudioManager.instance.Stop("Gameplay Music");
+        AudioManager.instance.Play("Battle Victory");
+        Destroy(GameStateManager.instance.gameObject);
         mm.gameObject.SetActive(true);
         Time.timeScale = 0f;
         cc.UnsubFromAllGameplayActions();

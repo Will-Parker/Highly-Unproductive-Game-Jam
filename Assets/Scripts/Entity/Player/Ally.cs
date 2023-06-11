@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using static Helpers;
 using UnityEngine.Tilemaps;
-using UnityEngine.SceneManagement;
 
 public class Ally : Entity
 {
@@ -67,7 +66,7 @@ public class Ally : Entity
             {
                 AudioManager.instance.Stop("Gameplay Music");
                 CharacterControl.instance.UnsubFromEverything();
-                SceneManager.LoadSceneAsync(1);
+                SceneChanger.instance.LoadScene("GameOver");
             }
         }
     }

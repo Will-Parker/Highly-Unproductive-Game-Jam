@@ -6,7 +6,6 @@ using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
 using System;
-using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -297,8 +296,8 @@ public class DialogueManager : MonoBehaviour
         //dialogueText.text = "";
 
         CharacterControl.instance.UnsubFromAllDialogueActions();
-
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        AudioManager.instance.Stop("Dialogue");
+        SceneChanger.instance.LoadNextScene();
     }
 
     public void ContinueStory()
@@ -670,6 +669,7 @@ public class DialogueManager : MonoBehaviour
             switch (a1)
             {
                 case AllyType.Apple:
+                    GameData.allyStats[a1][a2][StatType.Attack] += 1;
                     GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
@@ -687,6 +687,7 @@ public class DialogueManager : MonoBehaviour
             switch (a2)
             {
                 case AllyType.Apple:
+                    GameData.allyStats[a1][a2][StatType.Attack] += 1;
                     GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
@@ -710,6 +711,7 @@ public class DialogueManager : MonoBehaviour
             switch (a1)
             {
                 case AllyType.Apple:
+                    GameData.allyStats[a1][a2][StatType.Attack] += 1;
                     GameData.allyStats[a1][a2][StatType.Unique] += 0;
                     break;
                 case AllyType.Strawberry:

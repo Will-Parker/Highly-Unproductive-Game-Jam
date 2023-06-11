@@ -14,12 +14,19 @@ public class GameOver : MonoBehaviour
     {
         AudioManager.instance.Play("Button");
         AudioManager.instance.Stop("Game Over");
-        SceneManager.LoadSceneAsync(0);
+        SceneChanger.instance.ReturnToTitle();
     }
 
     public void QuitGame()
     {
         AudioManager.instance.Play("Button");
         Application.Quit();
+    }
+
+    public void Retry()
+    {
+        AudioManager.instance.Play("Button");
+        AudioManager.instance.Stop("Game Over");
+        SceneChanger.instance.PreviousScene();
     }
 }

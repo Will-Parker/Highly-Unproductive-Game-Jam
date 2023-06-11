@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using static Helpers;
 using TMPro;
+using UnityEngine.Tilemaps;
 
 public enum AIState
 {
@@ -11,9 +12,16 @@ public enum AIState
     Pursue,
     Attack
 }
+public enum EnemyType
+{
+    Basic,
+    Knight,
+    Copy
+}
 
 public class Enemy : Entity
 {
+    public EnemyType enemyType;
     [HideInInspector] public AIState aiState;
     private readonly float moveSpeed = 5; // how quickly it moves to next tile
     private readonly int maxPursuitTime = 25; // max number of turns the AI is willing to keep pursuing the player before giving up
@@ -26,6 +34,7 @@ public class Enemy : Entity
     private Vector3 movePoint;
     public bool IsMoving { get; private set; }
     private Ally targetAlly;
+    private Ally[] targetAllies;
     public int turnsStunned;
 
     private readonly float timeToWait = 0.2f;
@@ -34,6 +43,9 @@ public class Enemy : Entity
     private bool isStunHover = false;
 
     public TextMeshProUGUI stunText;
+
+    [SerializeField] private Grid grid;
+    [SerializeField] private Tilemap impassableMap = null;
 
     //public Transform debug;
 
@@ -52,6 +64,15 @@ public class Enemy : Entity
         healthbar.SetHealth(Health);
         healthbar.gameObject.SetActive(false);
         UpdateAnim(facingDirection);
+        switch (enemyType)
+        {
+            case EnemyType.Basic:
+                aiState = AIState.Wander;
+                break;
+            case EnemyType.Knight:
+                aiState = AIState.Pursue;
+                break;
+        }
     }
     private void Update()
     {
@@ -67,6 +88,7 @@ public class Enemy : Entity
                     transform.position = movePoint;
                     UpdateAnim(false);
                     hasFinishedTurn = true;
+                    Debug.Log(gameObject + " has Finished Turn");
                     IsMoving = false;
                 }
             }
@@ -100,18 +122,31 @@ public class Enemy : Entity
                 }
                 break;
             case AIState.Pursue:
-                // if the player is in front of us attack
-                if (AdjacentAttackablesCheck())
+                switch (enemyType)
                 {
-                    aiState = AIState.Attack;
-                    //Debug.Log("" + gameObject + ": Pursue -> Attack");
-                }
-                // elif pursuit time > max pursuit time return to wander
-                else if (pursuitTime > maxPursuitTime)
-                {
-                    aiState = AIState.Wander;
-                    //Debug.Log("" + gameObject + ": Pursue -> Wander");
-                    pursuitTime = 0;
+                    case EnemyType.Basic:
+                        // if the player is in front of us attack
+                        if (AdjacentAttackablesCheck())
+                        {
+                            aiState = AIState.Attack;
+                            //Debug.Log("" + gameObject + ": Pursue -> Attack");
+                        }
+                        // elif pursuit time > max pursuit time return to wander
+                        else if (pursuitTime > maxPursuitTime)
+                        {
+                            aiState = AIState.Wander;
+                            //Debug.Log("" + gameObject + ": Pursue -> Wander");
+                            pursuitTime = 0;
+                        }
+                        break;
+                    case EnemyType.Knight:
+                        // if the player is in L attack range
+                        if (AdjacentAttackablesCheck())
+                        {
+                            aiState = AIState.Attack;
+                            //Debug.Log("" + gameObject + ": Pursue -> Attack");
+                        }
+                        break;
                 }
                 break;
             case AIState.Attack:
@@ -146,7 +181,11 @@ public class Enemy : Entity
                     UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
                 }
                 else
+                {
                     IsMoving = false;
+                    hasFinishedTurn = true;
+                    Debug.Log(gameObject + " has Finished Turn");
+                }
                 break;
             case AIState.Pursue:
                 // pathfind 
@@ -168,32 +207,70 @@ public class Enemy : Entity
                 if (naiveClosestAlly != null)
                 {
                     var path = AStar(Vec3ToVec2Int(transform.position), Vec3ToVec2Int(naiveClosestAlly.transform.position));
-                    if (path != null)
+                    if (path.Count > 1)
                     {
-                        if (path.Count > 1)
-                        {
-                            // string log = "Path is "; foreach (Vector2Int tile in path) { log += tile + ", "; } Debug.Log(log);
-                            movePoint = Vec2IntToVec3(path[1]);
-                            IsMoving = true;
-                        }
+                        // string log = "Path is "; foreach (Vector2Int tile in path) { log += tile + ", "; } Debug.Log(log);
+                        movePoint = Vec2IntToVec3(path[1]);
+                        IsMoving = true;
+                    }
+                    else
+                    {
+                        IsMoving = false;
+                        hasFinishedTurn = true;
+                        Debug.Log(gameObject + " has Finished Turn");
                     }
                 }
                 if (IsMoving)
                 {
-                    UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
-                    pursuitTime++;
+                    switch (enemyType)
+                    {
+                        case EnemyType.Basic:
+                            UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
+                            pursuitTime++;
+                            break;
+                        case EnemyType.Knight:
+                            Vector3 moveDir = movePoint - transform.position;
+                            Vector2 animDir = Vector2.zero;
+                            if (Mathf.Abs(moveDir.x) > Mathf.Abs(moveDir.y))
+                            {
+                                animDir.x = moveDir.x > 0 ? 1 : -1;
+                                animDir.y = 0;
+                            }
+                            else
+                            {
+                                animDir.x = 0;
+                                animDir.y = moveDir.y > 0 ? 1 : -1;
+                            }
+                            UpdateAnim(animDir);
+                            StartCoroutine(SpriteFadeOutFadeIn(GetComponent<SpriteRenderer>(), 4f / moveSpeed));
+                            break;
+                    }
                 } 
                 else
                 {
                     hasFinishedTurn = true;
+                    Debug.Log(gameObject + " has Finished Turn");
                 }
                 break;
             case AIState.Attack:
                 // damage target ally (may want to wait until animation after that is implemented)
-                targetAlly.TakeDamage(Attack);
+                switch (enemyType)
+                {
+                    case EnemyType.Basic:
+                        targetAlly.TakeDamage(Attack);
+                        break;
+                    case EnemyType.Knight:
+                        foreach (Ally ally in targetAllies)
+                        {
+                            Debug.Log("Ally " + ally.type + " takes " + Attack + " damage");
+                            ally.TakeDamage(Attack);
+                        }
+                        break;
+                }
                 // reset pursuit timer
                 pursuitTime = 0;
                 hasFinishedTurn = true;
+                Debug.Log(gameObject + " has Finished Turn");
                 break;
         }
     }
@@ -212,31 +289,144 @@ public class Enemy : Entity
 
     private bool AdjacentAttackablesCheck()
     {
-        var dict = new Dictionary<Ally, Vector2>();
         var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        switch (enemyType)
+        {
+            case EnemyType.Basic:
+                var dict = new Dictionary<Ally, Vector2>();
+                foreach (Ally ally in pm.allies)
+                {
+                    foreach (Vector2 dir in dirs)
+                    {
+                        if (ally.transform.position.Equals(Vec2ToVec3(dir) + transform.position))
+                            dict.Add(ally, dir);
+                    }
+                }
 
-        foreach (Ally ally in pm.allies)
-        {
-            foreach (Vector2 dir in dirs)
-            {
-                if (ally.transform.position.Equals(Vec2ToVec3(dir) + transform.position))
-                    dict.Add(ally, dir);
-            }
-        }
+                if (dict.Count > 0)
+                {
+                    Ally allyWithMinHealth = GetAllyWithMinHealthFromListExcludingDead(dict.Keys.ToList());
+                    if (allyWithMinHealth == null)
+                        return false;
+                    targetAlly = allyWithMinHealth;
+                    UpdateAnim(dict[allyWithMinHealth]);
+                    return true;
+                }
+                break;
+            case EnemyType.Knight:
+                Vector3 up = Vec2ToVec3(Vector2.up); Vector3 rt = Vec2ToVec3(Vector2.right); Vector3 dn = Vec2ToVec3(Vector2.down); Vector3 lt = Vec2ToVec3(Vector2.left); Vector3 c = transform.position;
+                Vector3[] locs = new Vector3[] 
+                {
+                    c + up,
+                    c + up + up,
+                    c + up + up + lt,
+                    c + up + up + rt,
+                    c + rt,
+                    c + rt + rt,
+                    c + rt + rt + up,
+                    c + rt + rt + dn,
+                    c + dn,
+                    c + dn + dn,
+                    c + dn + dn + lt,
+                    c + dn + dn + rt,
+                    c + lt,
+                    c + lt + lt,
+                    c + lt + lt + up,
+                    c + lt + lt + dn 
+                };
+                var hits = new Dictionary<string, (Vector2 dir, List<Ally> allies)>() 
+                { 
+                    { "upLeftHits", (Vector2.up, new()) },
+                    { "upRightHits", (Vector2.up, new()) },
+                    { "rightUpHits", (Vector2.right, new()) },
+                    { "rightDownHits", (Vector2.right, new()) },
+                    { "downLeftHits", (Vector2.down, new()) },
+                    { "downRightHits", (Vector2.down, new()) },
+                    { "leftUpHits", (Vector2.left, new()) },
+                    { "leftDownHits", (Vector2.left, new()) }
+                };
 
-        if (dict.Count > 0)
-        {
-            Ally allyWithMinHealth = GetAllyWithMinHealthFromListExcludingDead(dict.Keys.ToList());
-            if (allyWithMinHealth == null)
-                return false;
-            targetAlly = allyWithMinHealth;
-            UpdateAnim(dict[allyWithMinHealth]);
-            return true;
+                foreach (Ally ally in pm.allies)
+                {
+                    if (ally.Health > 0)
+                    {
+                        for (int i = 0; i < locs.Length; i++)
+                        {
+                            if (ally.transform.position.Equals(locs[i]))
+                            {
+                                switch (i)
+                                {
+                                    case 0:
+                                    case 1:
+                                        hits["upLeftHits"].allies.Add(ally);
+                                        hits["upRightHits"].allies.Add(ally);
+                                        break;
+                                    case 2:
+                                        hits["upLeftHits"].allies.Add(ally);
+                                        break;
+                                    case 3:
+                                        hits["upRightHits"].allies.Add(ally);
+                                        break;
+                                    case 4:
+                                    case 5:
+                                        hits["rightUpHits"].allies.Add(ally);
+                                        hits["rightDownHits"].allies.Add(ally);
+                                        break;
+                                    case 6:
+                                        hits["rightUpHits"].allies.Add(ally);
+                                        break;
+                                    case 7:
+                                        hits["rightDownHits"].allies.Add(ally);
+                                        break;
+                                    case 8:
+                                    case 9:
+                                        hits["downLeftHits"].allies.Add(ally);
+                                        hits["downRightHits"].allies.Add(ally);
+                                        break;
+                                    case 10:
+                                        hits["downLeftHits"].allies.Add(ally);
+                                        break;
+                                    case 11:
+                                        hits["downRightHits"].allies.Add(ally);
+                                        break;
+                                    case 12:
+                                    case 13:
+                                        hits["leftUpHits"].allies.Add(ally);
+                                        hits["leftDownHits"].allies.Add(ally);
+                                        break;
+                                    case 14:
+                                        hits["leftUpHits"].allies.Add(ally);
+                                        break;
+                                    case 15:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+                var listsOfHitDirsAndAlliesPairs = hits.Values.ToList();
+                listsOfHitDirsAndAlliesPairs.RemoveAll(hitDirsAndAlliesPairs => hitDirsAndAlliesPairs.allies.Count == 0);
+                if (listsOfHitDirsAndAlliesPairs.Count > 0)
+                {
+                    (int maxHits, int index) = (0, int.MinValue);
+                    for (int i = 0; i < listsOfHitDirsAndAlliesPairs.Count; i++)
+                    {
+                        if (listsOfHitDirsAndAlliesPairs[i].allies.Count > maxHits)
+                        {
+                            maxHits = listsOfHitDirsAndAlliesPairs[i].allies.Count;
+                            index = i;
+                        }
+                    }
+                    if (index >= 0 && index < listsOfHitDirsAndAlliesPairs.Count)
+                    {
+                        targetAllies = listsOfHitDirsAndAlliesPairs[index].allies.ToArray();
+                        UpdateAnim(listsOfHitDirsAndAlliesPairs[index].dir);
+                        return true;
+                    }
+                }
+                break;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     private bool FieldOfViewCheck()
@@ -282,12 +472,33 @@ public class Enemy : Entity
 
     private List<Vector2> GetValidNeighbors(Vector2 point)
     {
-        var dirs = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        switch (enemyType)
+        {
+            case EnemyType.Basic:
+                break;
+            case EnemyType.Knight:
+                break;
+        }
+        var dirs = enemyType == EnemyType.Knight 
+            ? new Vector2[] 
+            { 
+                Vector2.up + Vector2.up + Vector2.left,
+                Vector2.up + Vector2.up + Vector2.right,
+                Vector2.right + Vector2.right + Vector2.up,
+                Vector2.right + Vector2.right + Vector2.down,
+                Vector2.down + Vector2.down + Vector2.left,
+                Vector2.down + Vector2.down + Vector2.right,
+                Vector2.left + Vector2.left + Vector2.up,
+                Vector2.left + Vector2.left + Vector2.down,
+            } 
+            : new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+
         var valid = new List<Vector2>();
         foreach (var dir in dirs)
         {
-            RaycastHit2D ray = Physics2D.Raycast(Vec3ToVec2(point), dir, 1f, impassableLayer);
-            if (!ray)
+            bool isImpassable = enemyType == EnemyType.Knight ? impassableMap.GetTile(grid.WorldToCell(Vec2ToVec3(point + dir))) != null 
+                : Physics2D.Raycast(Vec3ToVec2(point), dir, 1f, impassableLayer);
+            if (!isImpassable)
             {
                 Vector3 targetNeighbor = Vec2ToVec3(point + dir);
                 if (pm.allies.All(ally => ally.transform.position != targetNeighbor)) 
@@ -443,19 +654,9 @@ public class Enemy : Entity
         // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
         // how cheap a path could be from start to finish if it goes through n.
         var fScore = new Dictionary<Vector2Int, int> { [start] = ManhattanDistance(start, goal) };
-
-        //int iteration = 0;
+        
         while (openSet.Count > 0)
         {
-            //iteration++;
-            //string log = "Iteration: " + iteration;
-            //log += "\nOpen Set:";
-            //foreach (var kvp in openSet)
-            //{
-            //    log += "\n  Node: " + kvp.Key + ", Distance: " + kvp.Value;
-            //}
-            //Debug.Log(log);
-
             // This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
             var current = openSet.Aggregate((l, r) => l.Value < r.Value ? l : r).Key;
             if (openSet[current] > 5)
@@ -509,8 +710,28 @@ public class Enemy : Entity
         Debug.LogWarning("A* could not find goal in accesible area\n"
             + "Start was " + start + "\n"
             + "Goal was " + goal);
-        return null;
+        return ReconstructPath(cameFrom, fScore.Aggregate((l, r) => l.Value < r.Value ? l : r).Key);
     }
 
-
+    // Credit: https://answers.unity.com/questions/1687634/how-do-i-mathflerp-the-spriterendereralpha.html
+    private IEnumerator SpriteFadeOutFadeIn(SpriteRenderer sr, float duration)
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < duration / 2)
+        {
+            elapsedTime += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(1f, 0f, elapsedTime / (duration / 2));
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, newAlpha);
+            yield return null;
+        }
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0f);
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float newAlpha = Mathf.Lerp(0f, 1f, (elapsedTime - (duration / 2)) / (duration / 2));
+            sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, newAlpha);
+            yield return null;
+        }
+        sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
+    }
 }

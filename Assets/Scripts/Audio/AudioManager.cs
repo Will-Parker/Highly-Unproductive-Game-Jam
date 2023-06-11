@@ -60,7 +60,13 @@ public class AudioManager : MonoBehaviour
             Debug.LogWarning("Sound: " + name + " not found!");
             return;
         }
-        s.source.Play();
+        if (!s.hasIntro)
+            s.source.Play();
+        else
+        {
+            s.source.PlayOneShot(s.introClip);
+            s.source.PlayScheduled(AudioSettings.dspTime + s.introClip.length);
+        }
     }
 
     public void Stop(string name)

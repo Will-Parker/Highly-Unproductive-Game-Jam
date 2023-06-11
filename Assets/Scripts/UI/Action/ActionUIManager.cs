@@ -255,19 +255,24 @@ public class ActionUIManager : MonoBehaviour
                 
                 break;
             case UIActionMode.Heal:
-                FindObjectOfType<CursorTileDisplay>().SetHealOverlay();
+                if (pm.allies[0].Health > 0)
+                    FindObjectOfType<CursorTileDisplay>().SetHealOverlay();
                 break;
             case UIActionMode.Stun:
-                FindObjectOfType<CursorTileDisplay>().SetStunOverlay();
+                if (pm.allies[0].Health > 0)
+                    FindObjectOfType<CursorTileDisplay>().SetStunOverlay();
                 break;
             case UIActionMode.Bomb:
-                FindObjectOfType<CursorTileDisplay>().SetBombOverlay();
+                if (pm.allies[0].Health > 0)
+                    FindObjectOfType<CursorTileDisplay>().SetBombOverlay();
                 break;
             case UIActionMode.Move:
-                FindObjectOfType<CursorTileDisplay>().SetMoveOverlay();
+                if (pm.allies[0].Health > 0)
+                    FindObjectOfType<CursorTileDisplay>().SetMoveOverlay();
                 break;
             case UIActionMode.Attack:
-                FindObjectOfType<CursorTileDisplay>().SetAttackOverlay();
+                if (pm.allies[0].Health > 0)
+                    FindObjectOfType<CursorTileDisplay>().SetAttackOverlay();
                 break;
             case UIActionMode.Swap:
                 

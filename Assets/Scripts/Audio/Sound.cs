@@ -26,6 +26,10 @@ public class Sound
 
     public bool loop = false;
 
+    public bool hasIntro = false;
+
+    public AudioClip introClip;
+
     [HideInInspector]
     public AudioSource source;
 }

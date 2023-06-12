@@ -205,28 +205,34 @@ public class CursorTileDisplay : MonoBehaviour
 
     public void SetCommandOverlay()
     {
+        Tile tile = pm.allies[1].Health > 0 ? positiveTile : negativeTile;
         List<Vector3> nonAllyNeighbors = pm.allies[1].GetNonAllyNeighbors();
         if (nonAllyNeighbors != null)
         {
             foreach (Vector3 nonAllyNeighbor in nonAllyNeighbors)
             {
-                guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), positiveTile);
+                if (guidanceOverlayMap.GetTile(Vec3ToVec3Int(nonAllyNeighbor)) != positiveTile)
+                    guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), tile);
             }
         }
+        tile = pm.allies[2].Health > 0 ? positiveTile : negativeTile;
         nonAllyNeighbors = pm.allies[2].GetNonAllyNeighbors();
         if (nonAllyNeighbors != null)
         {
             foreach (Vector3 nonAllyNeighbor in nonAllyNeighbors)
             {
-                guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), positiveTile);
+                if (guidanceOverlayMap.GetTile(Vec3ToVec3Int(nonAllyNeighbor)) != positiveTile)
+                    guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), tile);
             }
         }
+        tile = pm.allies[3].Health > 0 ? positiveTile : negativeTile;
         nonAllyNeighbors = pm.allies[3].GetNonAllyNeighbors();
         if (nonAllyNeighbors != null)
         {
             foreach (Vector3 nonAllyNeighbor in nonAllyNeighbors)
             {
-                guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), positiveTile);
+                if (guidanceOverlayMap.GetTile(Vec3ToVec3Int(nonAllyNeighbor)) != positiveTile)
+                    guidanceOverlayMap.SetTile(Vec3ToVec3Int(nonAllyNeighbor), tile);
             }
         }
     }

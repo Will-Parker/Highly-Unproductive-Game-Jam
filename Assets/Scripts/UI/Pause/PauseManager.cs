@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
     [SerializeField] private RectTransform partyGroup;
     [SerializeField] private GameObject settings;
+    [SerializeField] private Canvas tutorialCanvas;
     private PartyManager pm;
     private void Awake()
     {
@@ -63,6 +65,24 @@ public class PauseManager : MonoBehaviour
         {
             settings.SetActive(true);
         }
+    }
+
+    public void Help()
+    {
+        AudioManager.instance.Play("Button");
+        Time.timeScale = 1f;
+        CharacterControl.instance.UnsubFromEverything();
+        tutorialCanvas.gameObject.SetActive(true);
+        CharacterControl.instance.SubToAllDialogueActions();
+        StoryMenu sm = FindObjectOfType<StoryMenu>();
+        if (sm != null)
+            sm.StartHelp();
+    }
+
+    public void Retry()
+    {
+        AudioManager.instance.Play("Button");
+        SceneChanger.instance.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void QuitGame()

@@ -169,11 +169,17 @@ public static class GameData
 
     public static Dictionary<int, int[]> levelRankRequirements = new() // key=levelID, value=(index=rank, element=turnRequirement)
     {
-        { 0, new int[3] { 0, 0, 0 } },
+        { 0, new int[3] { 5, 8, 16 } },
         { 1, new int[3] { 12, 20, 30 } },
         { 2, new int[3] { 10, 25, 40 } },
         { 3, new int[3] { 6, 15, 30 } },
-        { 4, new int[3] { 20, 40, 80 } }
+        { 4, new int[3] { 13, 25, 40 } },
+        { 5, new int[3] { 25, 40, 80 } },
+        { 6, new int[3] { 10, 25, 40 } },
+        { 7, new int[3] { 10, 25, 40 } },
+        { 8, new int[3] { 10, 25, 40 } },
+        { 9, new int[3] { 10, 25, 40 } },
+        { 10, new int[3] { 10, 25, 40 } }
     };
 
     public static Dictionary<int, int> bestLevelClear = new() // key=levelID, value=turnsTaken
@@ -183,6 +189,12 @@ public static class GameData
         { 2, int.MaxValue },
         { 3, int.MaxValue },
         { 4, int.MaxValue },
+        { 5, int.MaxValue },
+        { 6, int.MaxValue },
+        { 7, int.MaxValue },
+        { 8, int.MaxValue },
+        { 9, int.MaxValue },
+        { 10, int.MaxValue }
     };
 
     public static float GetStatSum(AllyType thisAllyType, AllyType upAllyType, AllyType loAllyType, StatType statType)

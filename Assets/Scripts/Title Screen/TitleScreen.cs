@@ -70,4 +70,9 @@ public class TitleScreen : MonoBehaviour
             settings.SetActive(true);
         }
     }
+
+    public void OpenURL(string url)
+    {
+        Application.OpenURL(url);
+    }
 }

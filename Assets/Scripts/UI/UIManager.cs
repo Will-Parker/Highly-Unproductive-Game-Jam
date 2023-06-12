@@ -31,7 +31,29 @@ public class UIManager : MonoBehaviour
     {
         pausem.gameObject.SetActive(false);
         mm.gameObject.SetActive(false);
-        rpm.gameObject.SetActive(true);
+        if (GameStateManager.instance.levelID != 0)
+        {
+            rpm.gameObject.SetActive(true);
+            StoryMenu sm = FindObjectOfType<StoryMenu>();
+            if (sm != null)
+                sm.transform.parent.gameObject.SetActive(false);
+            else
+                Debug.LogError("No Tutorial in scene");
+        }
+        else
+        {
+            rpm.gameObject.SetActive(false);
+            StoryMenu sm = FindObjectOfType<StoryMenu>();
+            if (sm != null)
+            {
+                CharacterControl.instance.UnsubFromEverything();
+                sm.transform.parent.gameObject.SetActive(true);
+                CharacterControl.instance.SubToAllDialogueActions();
+                sm.StartHelp();
+            }
+            else
+                Debug.LogError("No Tutorial in scene");
+        }
         Time.timeScale = 1f;
         UpdateUI();
     }

@@ -29,22 +29,22 @@ public class CharacterControl : MonoBehaviour
         // Enable Gameplay controls
         controls = new Controls();
         controls.Gameplay.Enable();
-        controls.Gameplay.Move.performed += Move_performed;
-        controls.Gameplay.SpecialAction.performed += SpecialAction_performed;
-        controls.Gameplay.Click.performed += Click_performed;
-        controls.Gameplay.Detonate.performed += Detonate_performed;
-        controls.Gameplay.Pause.performed += Pause_performed;
+        //controls.Gameplay.Move.performed += Move_performed;
+        //controls.Gameplay.SpecialAction.performed += SpecialAction_performed;
+        //controls.Gameplay.Click.performed += Click_performed;
+        //controls.Gameplay.Detonate.performed += Detonate_performed;
+        //controls.Gameplay.Pause.performed += Pause_performed;
         // controls.Gameplay.ProgressDialogue.performed += ProgressDialogue_performed;
         // controls.Gameplay.DebugOpenDialogue.performed += DebugOpenDialogue_performed;
 
-        controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
+        //controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
 
         controls.Gameplay.TestAction.performed += TestAction_performed;
     }
 
     private void TestAction_performed(InputAction.CallbackContext obj)
     {
-        FindObjectOfType<CursorTileDisplay>().SetScreenToNegative();
+        FindObjectOfType<PartyManager>().PassTurn();
     }
 
     private void Move_performed(InputAction.CallbackContext context)
@@ -245,10 +245,22 @@ public class CharacterControl : MonoBehaviour
         {
             progressDialoguePressed = true;
 
-            if (!DialogueManager.GetInstance().dialogueIsPlaying)
+            if (!DialogueManager.GetInstance().dialogueIsPlaying && FindObjectOfType<StoryMenu>() == null)
             {
                 SubToAllGameplayActions();
                 UnsubFromAllDialogueActions();
+            }
+        }
+        else
+        {
+            if (!DialogueManager.GetInstance().dialogueIsPlaying && FindObjectOfType<StoryMenu>() == null)
+            {
+                SubToAllGameplayActions();
+                UnsubFromAllDialogueActions();
+            }
+            else
+            {
+                progressDialoguePressed = true;
             }
         }
     }
@@ -257,7 +269,7 @@ public class CharacterControl : MonoBehaviour
     {
         progressDialoguePressed = false;
 
-        if (!DialogueManager.GetInstance().dialogueIsPlaying)
+        if (!DialogueManager.GetInstance().dialogueIsPlaying && FindObjectOfType<StoryMenu>() == null)
         {
             SubToAllGameplayActions();
             UnsubFromAllDialogueActions();

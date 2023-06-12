@@ -100,69 +100,83 @@ public class Enemy : Entity
         //foreach (Transform child in debug)
         //    Destroy(child.gameObject);
         hasFinishedTurn = false;
-        switch (aiState)
+        if (enemyType != EnemyType.Copy)
         {
-            case AIState.Wander:
-                pursuitTime = 0;
-                // if the player is one space away of us turn to face & attack
-                if (AdjacentAttackablesCheck())
-                {
-                    aiState = AIState.Attack;
-                    //Debug.Log("" + gameObject + ": Wander -> Attack");
-                }
-                // elif the player is nearby or in line of sight pursue
-                else if (Vector3.Distance(transform.position, pm.allies[0].transform.position) <= detectRadius
-                        || Vector3.Distance(transform.position, pm.allies[1].transform.position) <= detectRadius
-                        || Vector3.Distance(transform.position, pm.allies[2].transform.position) <= detectRadius
-                        || Vector3.Distance(transform.position, pm.allies[3].transform.position) <= detectRadius
-                        || FieldOfViewCheck())
-                {
-                    aiState = AIState.Pursue;
-                    //Debug.Log("" + gameObject + ": Wander -> Pursue");
-                }
-                break;
-            case AIState.Pursue:
-                switch (enemyType)
-                {
-                    case EnemyType.Basic:
-                        // if the player is in front of us attack
-                        if (AdjacentAttackablesCheck())
-                        {
-                            aiState = AIState.Attack;
-                            //Debug.Log("" + gameObject + ": Pursue -> Attack");
-                        }
-                        // elif pursuit time > max pursuit time return to wander
-                        else if (pursuitTime > maxPursuitTime)
-                        {
-                            aiState = AIState.Wander;
-                            //Debug.Log("" + gameObject + ": Pursue -> Wander");
-                            pursuitTime = 0;
-                        }
-                        break;
-                    case EnemyType.Knight:
-                        // if the player is in L attack range
-                        if (AdjacentAttackablesCheck())
-                        {
-                            aiState = AIState.Attack;
-                            //Debug.Log("" + gameObject + ": Pursue -> Attack");
-                        }
-                        break;
-                }
-                break;
-            case AIState.Attack:
-                pursuitTime = 0;
-                // if the player is in front of us attack
-                if (AdjacentAttackablesCheck())
-                {
-                    aiState = AIState.Attack;
-                }
-                // else pursue
-                else
-                {
-                    aiState = AIState.Pursue;
-                    //Debug.Log("" + gameObject + ": Attack -> Pursue");
-                }
-                break;
+            switch (aiState)
+            {
+                case AIState.Wander:
+                    pursuitTime = 0;
+                    // if the player is one space away of us turn to face & attack
+                    if (AdjacentAttackablesCheck())
+                    {
+                        aiState = AIState.Attack;
+                        //Debug.Log("" + gameObject + ": Wander -> Attack");
+                    }
+                    // elif the player is nearby or in line of sight pursue
+                    else if (Vector3.Distance(transform.position, pm.allies[0].transform.position) <= detectRadius
+                            || Vector3.Distance(transform.position, pm.allies[1].transform.position) <= detectRadius
+                            || Vector3.Distance(transform.position, pm.allies[2].transform.position) <= detectRadius
+                            || Vector3.Distance(transform.position, pm.allies[3].transform.position) <= detectRadius
+                            || FieldOfViewCheck())
+                    {
+                        aiState = AIState.Pursue;
+                        //Debug.Log("" + gameObject + ": Wander -> Pursue");
+                    }
+                    break;
+                case AIState.Pursue:
+                    switch (enemyType)
+                    {
+                        case EnemyType.Basic:
+                            // if the player is in front of us attack
+                            if (AdjacentAttackablesCheck())
+                            {
+                                aiState = AIState.Attack;
+                                //Debug.Log("" + gameObject + ": Pursue -> Attack");
+                            }
+                            // elif pursuit time > max pursuit time return to wander
+                            else if (pursuitTime > maxPursuitTime)
+                            {
+                                aiState = AIState.Wander;
+                                //Debug.Log("" + gameObject + ": Pursue -> Wander");
+                                pursuitTime = 0;
+                            }
+                            break;
+                        case EnemyType.Knight:
+                            // if the player is in L attack range
+                            if (AdjacentAttackablesCheck())
+                            {
+                                aiState = AIState.Attack;
+                                //Debug.Log("" + gameObject + ": Pursue -> Attack");
+                            }
+                            break;
+                    }
+                    break;
+                case AIState.Attack:
+                    pursuitTime = 0;
+                    // if the player is in front of us attack
+                    if (AdjacentAttackablesCheck())
+                    {
+                        aiState = AIState.Attack;
+                    }
+                    // else pursue
+                    else
+                    {
+                        aiState = AIState.Pursue;
+                        //Debug.Log("" + gameObject + ": Attack -> Pursue");
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            if (pm.lastActionWasMove)
+            {
+                aiState = AIState.Wander;
+            }
+            else
+            {
+                aiState = AIState.Attack;
+            }
         }
     }
 
@@ -171,14 +185,23 @@ public class Enemy : Entity
         switch (aiState)
         {
             case AIState.Wander:
-                // determine good next point
-                var points = GetValidNeighbors(Vec3ToVec2(transform.position));
-                // random pick good next point
-                if (points != null)
+                if (enemyType != EnemyType.Copy)
                 {
-                    movePoint = Vec2ToVec3(points[Mathf.FloorToInt(Random.Range(0, points.Count))]);
-                    IsMoving = true;
-                    UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
+                    // determine good next point
+                    var points = GetValidNeighbors(Vec3ToVec2(transform.position));
+                    // random pick good next point
+                    if (points != null)
+                    {
+                        movePoint = Vec2ToVec3(points[Mathf.FloorToInt(Random.Range(0, points.Count))]);
+                        IsMoving = true;
+                        UpdateAnim(true, Vec3ToVec2(movePoint - transform.position));
+                    }
+                    else
+                    {
+                        IsMoving = false;
+                        hasFinishedTurn = true;
+                        Debug.Log(gameObject + " has Finished Turn");
+                    }
                 }
                 else
                 {
@@ -261,6 +284,12 @@ public class Enemy : Entity
                         break;
                     case EnemyType.Knight:
                         foreach (Ally ally in targetAllies)
+                        {
+                            ally.TakeDamage(Attack);
+                        }
+                        break;
+                    case EnemyType.Copy:
+                        foreach (Ally ally in pm.allies)
                         {
                             Debug.Log("Ally " + ally.type + " takes " + Attack + " damage");
                             ally.TakeDamage(Attack);

@@ -669,8 +669,9 @@ public class DialogueManager : MonoBehaviour
             switch (a1)
             {
                 case AllyType.Apple:
+                    GameData.allyStats[a1][a2][StatType.MaxHealth] += 2;
                     GameData.allyStats[a1][a2][StatType.Attack] += 1;
-                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 2;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a1][a2][StatType.Unique] += 3;
@@ -687,8 +688,9 @@ public class DialogueManager : MonoBehaviour
             switch (a2)
             {
                 case AllyType.Apple:
-                    GameData.allyStats[a1][a2][StatType.Attack] += 1;
-                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
+                    GameData.allyStats[a2][a1][StatType.MaxHealth] += 2;
+                    GameData.allyStats[a2][a1][StatType.Attack] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 2;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a2][a1][StatType.Unique] += 3;
@@ -711,8 +713,9 @@ public class DialogueManager : MonoBehaviour
             switch (a1)
             {
                 case AllyType.Apple:
+                    GameData.allyStats[a1][a2][StatType.MaxHealth] += 1;
                     GameData.allyStats[a1][a2][StatType.Attack] += 1;
-                    GameData.allyStats[a1][a2][StatType.Unique] += 0;
+                    GameData.allyStats[a1][a2][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a1][a2][StatType.Unique] += 1;
@@ -729,7 +732,9 @@ public class DialogueManager : MonoBehaviour
             switch (a2)
             {
                 case AllyType.Apple:
-                    GameData.allyStats[a2][a1][StatType.Unique] += 0;
+                    GameData.allyStats[a2][a1][StatType.MaxHealth] += 1;
+                    GameData.allyStats[a2][a1][StatType.Attack] += 1;
+                    GameData.allyStats[a2][a1][StatType.Unique] += 1;
                     break;
                 case AllyType.Strawberry:
                     GameData.allyStats[a2][a1][StatType.Unique] += 1;

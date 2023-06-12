@@ -17,6 +17,7 @@ public class PartyManager : MonoBehaviour
     // impassable layer
     [SerializeField] private LayerMask impassableLayer;
     private Vector3 prevTail;
+    public bool lastActionWasMove = false;
 
     void Start()
     {
@@ -115,6 +116,7 @@ public class PartyManager : MonoBehaviour
                 && Vector2.Distance(Vec3ToVec2(allies[0].transform.position) + moveDir, Vec3ToVec2(allies[2].transform.position)) > 0.05f
                 && !WillLandOnEnemy(moveDir))
             {
+                lastActionWasMove = true;
                 FindObjectOfType<CursorTileDisplay>().ClearOverlay();
                 MoveParty(moveDir);
                 StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));
@@ -126,6 +128,7 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState == MoveState.NotMoving)
         {
+            lastActionWasMove = false;
             moveState = MoveState.Attack;
             allies[0].facingDirection = moveDir;
             allies[0].AttackEnemy(enemy);
@@ -139,7 +142,7 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState == MoveState.NotMoving)
         {
-            
+            lastActionWasMove = false;
             allies[1].facingDirection = -moveDir;
             allies[1].UpdateAnim(true, allies[1].facingDirection);
             allies[0].facingDirection = moveDir;
@@ -163,6 +166,7 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState == MoveState.NotMoving)
         {
+            lastActionWasMove = false;
             moveState = MoveState.Stun;
             allies[0].StunEnemy(enemy);
             FindObjectOfType<CursorTileDisplay>().ClearOverlay();
@@ -175,6 +179,7 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState == MoveState.NotMoving)
         {
+            lastActionWasMove = false;
             moveState = MoveState.Stun;
             allies[0].PlaceBomb(mousePos);
             FindObjectOfType<CursorTileDisplay>().ClearOverlay();
@@ -187,6 +192,7 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState == MoveState.NotMoving)
         {
+            lastActionWasMove = false;
             moveState = MoveState.Heal;
             allies[0].HealAlly(ally);
             FindObjectOfType<CursorTileDisplay>().ClearOverlay();
@@ -199,6 +205,7 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState == MoveState.NotMoving)
         {
+            lastActionWasMove = false;
             moveState = MoveState.Command;
             float damage = GameData.GetStatSum(allies[0].type, allies[3].type, allies[1].type, StatType.Unique);
             if (allies[1].Health > 0)
@@ -230,6 +237,7 @@ public class PartyManager : MonoBehaviour
     {
         if (moveState == MoveState.NotMoving)
         {
+            lastActionWasMove = false;
             moveState = MoveState.Detonate;
             foreach (Bomb bomb in FindObjectsOfType<Bomb>())
             {
@@ -253,6 +261,7 @@ public class PartyManager : MonoBehaviour
     }
     public void PassTurn()
     {
+        lastActionWasMove = false;
         moveState = MoveState.PassingTurn;
         FindObjectOfType<CursorTileDisplay>().ClearOverlay();
         StartCoroutine(SpriteFadeOutFadeIn(allies[0].GetComponent<SpriteRenderer>(), 2f / moveSpeed));

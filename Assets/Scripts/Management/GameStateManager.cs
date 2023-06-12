@@ -23,11 +23,18 @@ public class GameStateManager : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.instance.Play("Gameplay Music");
-        StartCoroutine(AmbientSounds());
         CharacterControl.controls.Gameplay.Enable();
-        CharacterControl.instance.SubToAllGameplayActions();
-        CharacterControl.instance.SubToPause();
+        if (levelID != 0)
+        {
+            AudioManager.instance.Play("Gameplay Music");
+            StartCoroutine(AmbientSounds());
+            CharacterControl.instance.SubToAllGameplayActions();
+            CharacterControl.instance.SubToPause();
+        }
+        else
+        {
+            AudioManager.instance.Stop("Gameplay Music");
+        }
     }
 
     private void Update()
@@ -103,8 +110,9 @@ public class GameStateManager : MonoBehaviour
         return gameState;
     }
 
-    private IEnumerator AmbientSounds()
+    public IEnumerator AmbientSounds()
     {
+        Debug.Log("Ambient Sounds Active");
         yield return new WaitForSeconds(1f);
         while (isActiveAndEnabled)
         {

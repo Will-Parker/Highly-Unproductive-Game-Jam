@@ -437,7 +437,7 @@ MonoBehaviour:
   tipToShow: '<size=48px>Detonate<size=36px> <i>(<b>R</b>)</i>
 
     <size=40px>Detonate
-    all placed bombs.'
+    all placed Bluebombs.'
 --- !u!1 &1912136113820147320
 GameObject:
   m_ObjectHideFlags: 0
@@ -1210,28 +1210,28 @@ MonoBehaviour:
     the evil pests led by the starving <color=#FA0000>King Snail</color> came to
     lay waste to their peaceful lives. Hoping to save their home, a brave and courageous
     ragtag team of fruits have assembled to drive king snail out once and for all...
-  - 'This is <color=#73FF5A>Apple</color>. He''s brave and confident as the leader
+  - 'This is <color=#73FF5A>Apple</color>. They''re brave and confident as the leader
     of the team, but can be too self-sacrificing.
 
 
 
-    He''s generally the strongest,
-    and as the leader, he can <color=#73FF5A>command</color> all of his teammates
+    They''re generally the strongest,
+    and as the leader, they can <color=#73FF5A>command</color> all of their teammates
     to attack adjacent enemies.'
-  - 'This is <color=#FA5961>Strawberry</color>. She''s sweet and gentle, but is shy
-    and has trouble speaking up for themselves.
+  - 'This is <color=#FA5961>Strawberry</color>. They''re sweet and gentle, but is
+    shy and has trouble speaking up for themselves.
 
 
 
-    She''s frail in combat but
-    can <color=#FA5961>heal</color> her teammates.'
-  - 'This is <color=#FFE25A>Lemon</color>. He''s friendly, excitable, and the life
-    of the party, but he often acts without considering the consequences.
+    They''re frail in combat
+    but can <color=#FA5961>heal</color> their teammates.'
+  - 'This is <color=#FFE25A>Lemon</color>. They''re friendly, excitable, and the
+    life of the party, but they often act without considering the consequences.
 
 
 
-    He
-    possesses lightning powers that let him <color=#FFE25A>stun</color> and immobolize
+    They
+    possess lightning powers that let them <color=#FFE25A>stun</color> and immobolize
     enemies.'
   - 'This is <color=#5AD4FF>Blueberry</color>. They''re smart, calm, and curious,
     but they can sometimes be oblivious to those around them.
@@ -1378,11 +1378,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ec57ecfa73ff434baeab0913d76845a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipToShow: '<size=48px>Place Bomb<size=36px> <i>(Toggle with <b>SHIFT</b> and select
-    a Tile)</i>
+  tipToShow: '<size=48px>Place Bluebomb<size=36px> <i>(Toggle with <b>SHIFT</b> and
+    select a Tile)</i>
 
     <size=40px>Place a bomb which can be used to damage enemies
-    within its radius. The damage the bomb can do is equivalent to your attack stat.'
+    within its radius. The damage the Bluebomb can do is equivalent to your attack
+    stat.'
 --- !u!1 &1912136114514521868
 GameObject:
   m_ObjectHideFlags: 0

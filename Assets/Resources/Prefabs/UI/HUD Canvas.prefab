@@ -621,7 +621,7 @@ MonoBehaviour:
   tipToShow: '<size=48px>Detonate<size=36px> <i>(<b>R</b>)</i>
 
     <size=40px>Detonate
-    all placed bombs.'
+    all placed Bluebombs.'
 --- !u!1 &7242708905158269555
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,11 +768,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c387d41929724e24a943b7d88fa4bcdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipToShow: '<size=48px>Place Bomb<size=36px> <i>(Toggle with <b>SHIFT</b> and select
-    a Tile)</i>
+  tipToShow: '<size=48px>Place Bluebomb<size=36px> <i>(Toggle with <b>SHIFT</b> and
+    select a Tile)</i>
 
     <size=40px>Place a bomb which can be used to damage enemies
-    within its radius. The damage the bomb can do is equivalent to your attack stat.'
+    within its radius. The damage the Bluebomb can do is equivalent to your attack
+    stat.'
   isMouseOver: 0
 --- !u!1 &7242708905171678875
 GameObject:

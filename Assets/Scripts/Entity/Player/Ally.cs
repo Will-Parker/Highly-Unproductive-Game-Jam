@@ -41,24 +41,28 @@ public class Ally : Entity
 
     public new void TakeDamage(float damage)
     {
-        Health = Mathf.Max(Health - damage, 0f);
-        anim.SetTrigger("takeDamage");
-        switch (type)
+        if (Health > 0)
         {
-            case AllyType.Apple:
-                AudioManager.instance.Play("Apple Damaged");
-                break;
-            case AllyType.Strawberry:
-                AudioManager.instance.Play("Strawberry Damaged");
-                break;
-            case AllyType.Lemon:
-                AudioManager.instance.Play("Lemon Damaged");
-                break;
-            case AllyType.Blueberry:
-                AudioManager.instance.Play("Blueberry Damaged");
-                break;
+            Health = Mathf.Max(Health - damage, 0f);
+            healthbar.SetHealth(Health);
+            anim.SetTrigger("takeDamage");
+            switch (type)
+            {
+                case AllyType.Apple:
+                    AudioManager.instance.Play("Apple Damaged");
+                    break;
+                case AllyType.Strawberry:
+                    AudioManager.instance.Play("Strawberry Damaged");
+                    break;
+                case AllyType.Lemon:
+                    AudioManager.instance.Play("Lemon Damaged");
+                    break;
+                case AllyType.Blueberry:
+                    AudioManager.instance.Play("Blueberry Damaged");
+                    break;
+            }
         }
-        healthbar.SetHealth(Health);
+        
         if (Health == 0)
         {
             anim.SetBool("isDead", true);
@@ -66,9 +70,10 @@ public class Ally : Entity
             {
                 AudioManager.instance.Stop("Gameplay Music");
                 CharacterControl.instance.UnsubFromEverything();
-                SceneChanger.instance.LoadScene("GameOver");
+                if (SceneChanger.instance.sceneHistory.Last() != "GameOver")
+                    SceneChanger.instance.LoadScene("GameOver");
             }
-        }
+        } 
     }
 
     public List<Vector3> GetEmptyNeighbors()

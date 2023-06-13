@@ -24,11 +24,13 @@ public class GameStateManager : MonoBehaviour
     private void Start()
     {
         CharacterControl.controls.Gameplay.Enable();
+        AudioManager.instance.Stop("Gameplay Music");
+        AudioManager.instance.Stop("Dialogue");
         if (levelID != 0)
         {
             AudioManager.instance.Play("Gameplay Music");
             StartCoroutine(AmbientSounds());
-            CharacterControl.instance.SubToAllGameplayActions();
+            //CharacterControl.instance.SubToAllGameplayActions();
             CharacterControl.instance.SubToPause();
         }
         else

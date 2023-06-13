@@ -1336,7 +1336,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 18549851a2fca8b4aa3a949645fff219, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b4c752c0dfc34df4da5dd44c06ef4d62, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2688,6 +2688,22 @@ PrefabInstance:
       propertyPath: choices.Array.data[5]
       value: 
       objectReference: {fileID: 7952082375134069432}
+    - target: {fileID: 8836605122098233706, guid: 47b9476a3c9c09e458a9cbcf0727ebc2, type: 3}
+      propertyPath: BlueberryLemonStories.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8836605122098233706, guid: 47b9476a3c9c09e458a9cbcf0727ebc2, type: 3}
+      propertyPath: AppleStrawberryStories.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8836605122098233706, guid: 47b9476a3c9c09e458a9cbcf0727ebc2, type: 3}
+      propertyPath: LemonStrawberryStories.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8836605122098233706, guid: 47b9476a3c9c09e458a9cbcf0727ebc2, type: 3}
+      propertyPath: BlueberryStrawberryStories.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8836605122098233707, guid: 47b9476a3c9c09e458a9cbcf0727ebc2, type: 3}
       propertyPath: m_Name
       value: Dialogue Manager

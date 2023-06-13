@@ -33,6 +33,7 @@ public class UIManager : MonoBehaviour
         mm.gameObject.SetActive(false);
         if (GameStateManager.instance.levelID != 0)
         {
+            Time.timeScale = 0f;
             rpm.gameObject.SetActive(true);
             StoryMenu sm = FindObjectOfType<StoryMenu>();
             if (sm != null)
@@ -42,6 +43,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            Time.timeScale = 1f;
             rpm.gameObject.SetActive(false);
             StoryMenu sm = FindObjectOfType<StoryMenu>();
             if (sm != null)
@@ -54,7 +56,6 @@ public class UIManager : MonoBehaviour
             else
                 Debug.LogError("No Tutorial in scene");
         }
-        Time.timeScale = 1f;
         UpdateUI();
     }
 
@@ -78,6 +79,8 @@ public class UIManager : MonoBehaviour
             pausem.gameObject.SetActive(false);
             Time.timeScale = 1f;
             cc.SubToAllGameplayActions();
+            if (DialogueManager.GetInstance().dialogueIsPlaying)
+                cc.SubToAllDialogueActions();
         }
         else if (rpm.gameObject.activeSelf)
         {
@@ -88,6 +91,7 @@ public class UIManager : MonoBehaviour
             pausem.gameObject.SetActive(true);
             Time.timeScale = 0f;
             cc.UnsubFromAllGameplayActions();
+            cc.UnsubFromAllDialogueActions();
         }
     }
 

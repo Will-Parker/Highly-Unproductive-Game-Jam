@@ -66,6 +66,7 @@ public class ReorderPartyManager : MonoBehaviour
         }
         CharacterControl.instance.SubToAllGameplayActions();
         gameObject.SetActive(false);
+        Time.timeScale = 1f;
     }
 
     public void UpdateAllAllyText()

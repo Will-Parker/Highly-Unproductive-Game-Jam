@@ -14,7 +14,7 @@ public class SceneChanger : MonoBehaviour
 {
     public static SceneChanger instance;
 
-    private List<string> sceneHistory = new List<string>();  //running history of scenes
+    public List<string> sceneHistory = new List<string>();  //running history of scenes
     //The last string in the list is always the current scene running
 
     void Awake()

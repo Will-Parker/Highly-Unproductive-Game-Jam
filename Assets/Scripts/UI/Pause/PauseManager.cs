@@ -95,6 +95,7 @@ public class PauseManager : MonoBehaviour
     {
         AudioManager.instance.Play("Button");
         AudioManager.instance.Stop("Gameplay Music");
+        AudioManager.instance.Stop("Dialogue");
         CharacterControl.instance.UnsubFromEverything();
         SceneChanger.instance.ReturnToTitle();
     }

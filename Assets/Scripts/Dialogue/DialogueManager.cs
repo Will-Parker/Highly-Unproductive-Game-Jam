@@ -314,7 +314,16 @@ public class DialogueManager : MonoBehaviour
             {
                 StopCoroutine(displayLineCoroutine);
             }
-            displayLineCoroutine = StartCoroutine(DisplayLine(formattedText));
+            Debug.Log("text: " + formattedText + ", length: " + unformattedDialogueText.Length);
+            if (unformattedDialogueText == "\n")
+            {
+                Debug.LogWarning("Empty story text");
+                ContinueStory();
+            }
+            else
+            {
+                displayLineCoroutine = StartCoroutine(DisplayLine(formattedText));
+            }
         }
         else
         {
@@ -358,8 +367,13 @@ public class DialogueManager : MonoBehaviour
             else
             {
                 dialogueText.maxVisibleCharacters++;
-                PlayDialogueSound(dialogueText.maxVisibleCharacters, dialogueText.text[dialogueText.maxVisibleCharacters - 1]);
-                yield return new WaitForSeconds(typingSpeed);
+                PlayDialogueSound(dialogueText.maxVisibleCharacters, letter);// dialogueText.text[dialogueText.maxVisibleCharacters - 1]);
+                float waitTime = typingSpeed;
+                if (letter == '.')
+                    waitTime *= 2f;
+                else if (letter == ',' || letter == '?' || letter == '!' )
+                    waitTime *= 1.5f;
+                yield return new WaitForSeconds(waitTime);
             }
         }
 
@@ -552,7 +566,7 @@ public class DialogueManager : MonoBehaviour
                     speaker.Value.Anim.SetBool("isSpeaking", false);
                 speaker = null;
                 displayNameText.transform.parent.gameObject.SetActive(false);
-                isDialogueInternal = true;
+                //isDialogueInternal = true;
                 currentAudioInfo = GetAudioInfo("default");
             }
             else

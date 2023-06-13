@@ -39,13 +39,13 @@ public class CharacterControl : MonoBehaviour
 
         //controls.Gameplay.SpecialAction.canceled += SpecialAction_canceled;
 
-        controls.Gameplay.TestAction.performed += TestAction_performed;
+        //controls.Gameplay.TestAction.performed += TestAction_performed;
     }
 
-    private void TestAction_performed(InputAction.CallbackContext obj)
-    {
-        FindObjectOfType<PartyManager>().PassTurn();
-    }
+    //private void TestAction_performed(InputAction.CallbackContext obj)
+    //{
+    //    FindObjectOfType<PartyManager>().PassTurn();
+    //}
 
     private void Move_performed(InputAction.CallbackContext context)
     {

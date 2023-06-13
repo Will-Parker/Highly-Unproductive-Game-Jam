@@ -110,7 +110,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 138786679
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -305,6 +305,9 @@ MonoBehaviour:
   cursorMap: {fileID: 5213393382592719980}
   cursorTile: {fileID: 11400000, guid: 5a3ecc9339aacc34f9971ddce16ff6dd, type: 2}
   bombTile: {fileID: 11400000, guid: 8d4669acb4090db4297af4cc23aa22a1, type: 2}
+  guidanceOverlayMap: {fileID: 0}
+  positiveTile: {fileID: 0}
+  negativeTile: {fileID: 0}
 --- !u!1 &4483246306082329696
 GameObject:
   m_ObjectHideFlags: 0

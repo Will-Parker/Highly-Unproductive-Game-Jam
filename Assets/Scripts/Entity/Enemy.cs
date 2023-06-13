@@ -88,6 +88,8 @@ public class Enemy : Entity
                     transform.position = movePoint;
                     UpdateAnim(false);
                     hasFinishedTurn = true;
+                    SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                    sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1f);
                     Debug.Log(gameObject + " has Finished Turn");
                     IsMoving = false;
                 }

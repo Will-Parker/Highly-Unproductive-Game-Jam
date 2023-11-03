@@ -1,4 +1,5 @@
-# Highly-Unproductive-Game-Jam
+# Fruits 'n Brutes Highly-Unproductive-Game-Jam
+Archived
 ## Version Control Instructions
 1. When working on a new feature, first create a new branch.
 2. Either create a new scene or open an existing scene
